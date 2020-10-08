@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />        
+        <link href="#{request.contextPath}/css/intelcom-styles.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="#{request.contextPath}/js/general-validations.js" />
+        <script type="text/javascript" src="#{request.contextPath}/js/primefaces-galleria-custom-override.js" />   
+
+        <style type="text/css">
+            .ui-grid-a div {
+                padding: 0em 0.5em;
+            }
+        </style>
+    </h:head>
+
+    <f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE" />
+
+    <h:body>
+        <div align="center" class="divLogin" >
+            <img src="/vive/images/inmocom.jpg" class="fondoLogin" />
+        </div>
+        <h:form id="visitas-cliente-form" styleClass="formLogin" >
+            <p:messages id="messages" globalOnly="true" autoUpdate="true" showDetail="true"
+                        showSummary="false" closable="true" styleClass="messagesForm"/>
+            <p:growl id="growl" showDetail="true" />
+            <div align="center" >
+                <p:inputText id="username" placeholder="Nombre de usuario" value="#{loginFacesBean.username}" style="width: 50%;" />                        
+                <p:password id="password" placeholder="Contraseña" value="#{loginFacesBean.password}" style="width: 50%" />                        
+                <p:commandButton value="Ingresar" update="growl messages" action="#{loginFacesBean.login}" styleClass="backGIntelcom" />
+            </div>    
+        </h:form>          
+            
+        
+
+
+
+    </h:body>     
+</html>

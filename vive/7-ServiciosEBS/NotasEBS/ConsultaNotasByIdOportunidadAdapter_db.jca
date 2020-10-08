@@ -1,0 +1,13 @@
+<adapter-config name="ConsultaNotasByIdOportunidadAdapter" adapter="Database Adapter" wsdlLocation="ConsultaNotasByIdOportunidadAdapter.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="ConsultaNotasByIdOportunidadAdapter_ptt" operation="ConsultaNotasByIdOportunidadAdapter">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="SELECT JTF_NOTES_TL.JTF_NOTE_ID, JTF_NOTES_TL.NOTES, JTF_NOTES_TL.CREATION_DATE AS CREATION_DATE, JTF_RS_RESOURCE_EXTNS.SOURCE_NAME, 'OPORTUNIDAD', JTF_NOTES_B.SOURCE_OBJECT_CODE FROM JTF_NOTES_B, JTF_NOTES_TL, JTF_RS_RESOURCE_EXTNS WHERE JTF_NOTES_TL.JTF_NOTE_ID = JTF_NOTES_B.JTF_NOTE_ID AND JTF_RS_RESOURCE_EXTNS.USER_ID = JTF_NOTES_TL.CREATED_BY AND JTF_NOTES_TL.LANGUAGE like '%ESA%' AND JTF_NOTES_B.SOURCE_OBJECT_ID like #v_lead_id ORDER BY  JTF_NOTES_TL.CREATION_DATE DESC"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

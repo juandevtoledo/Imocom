@@ -1,0 +1,111 @@
+package com.imocom.intelcom.services.ejb3;
+
+import com.imocom.intelcom.persistence.entities.Lead;
+import com.imocom.intelcom.persistence.entities.Proyecto;
+import com.imocom.intelcom.persistence.util.PersistenceException;
+import com.imocom.intelcom.services.AbstractService;
+import com.imocom.intelcom.services.interfaces.ILeadServiceLocal;
+import com.imocom.intelcom.services.util.ServiceException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.ejb.Stateless;
+import javax.persistence.Query;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author rc
+ */
+@Stateless
+public class LeadServiceBean extends AbstractService<Long, Lead> implements ILeadServiceLocal {
+
+    private static final Logger logger = Logger.getLogger(LeadServiceBean.class);
+
+    public LeadServiceBean() {
+        super(Lead.class);
+    }
+
+    /**
+     * 
+     * @param lead
+     * @return
+     * @throws ServiceException 
+     */
+    public List<Lead> findListByParm(Lead lead) throws ServiceException {
+        
+        try {
+            
+            Map<String, Object> params = new HashMap<String, Object>();                        
+            
+            String sql = "SELECT p FROM Lead p WHERE ( p.estado = 'NUEVO' OR p.estado = 'REASIGANDO' ) ";
+            
+            if( lead.getAsesor() != null && lead.getAsesor().trim().length() > 0 ){          
+                params.put("asesor", lead.getAsesor().trim());
+                sql += " AND p.asesor = :asesor";
+            }
+            if( lead.getCanal() != null && lead.getCanal().trim().length() > 0 ){          
+                params.put("canal", lead.getAsesor().trim());
+                sql += " AND p.canal = :canal";
+            }
+            
+            if( lead.getNit() != null && lead.getNit().trim().length() > 0 ){                
+                sql += " AND UPPER(p.nit) LIKE '%"+lead.getNit().trim().toUpperCase()+"%'";
+            }
+            if( lead.getNombreContacto() != null && lead.getNombreContacto().trim().length() > 0 ){                
+                sql += " AND UPPER(p.nombreContacto) LIKE '%"+lead.getNombreContacto().trim().toUpperCase()+"%'";
+            }
+            if( lead.getApellidoContacto() != null && lead.getApellidoContacto().trim().length() > 0 ){                
+                sql += " AND UPPER(p.apellidoContacto) LIKE '%"+lead.getApellidoContacto().trim().toUpperCase()+"%'";
+            }
+            if( lead.getCorreoContacto()!= null && lead.getCorreoContacto().trim().length() > 0 ){          
+                params.put("correoContacto", lead.getCorreoContacto().trim());
+                sql += " AND p.correoContacto = :correoContacto";
+            }
+            if( lead.getTelefonoContacto() != null && lead.getTelefonoContacto().trim().length() > 0 ){                
+                sql += " AND UPPER(p.telefonoContacto) LIKE '%"+lead.getTelefonoContacto().trim().toUpperCase()+"%'";
+            }
+
+            sql += " ORDER BY p.fechaUltimaActualizacion DESC";
+            
+            return (List<Lead>) findResulQuerytList( sql, params );
+            
+        } catch (PersistenceException ex) {
+            logger.error(ex);
+            throw new ServiceException(ex, Level.ERROR);
+        }
+    }
+
+    /**
+     * 
+     * @param asesor
+     * @return
+     * @throws ServiceException 
+     */
+    public int contarLeadAsesor(String asesor) throws ServiceException {
+        
+        try {
+            
+            Query query = em.createQuery("SELECT count(l) from Lead l WHERE l.asesor = :asesor AND l.estado = :estado ");
+            
+            query.setParameter("asesor", asesor);
+            query.setParameter("estado", "NUEVO");
+            
+            Object valor = query.getSingleResult();
+            
+            if( valor == null ){
+                return 0;
+            }
+            
+            return ((Number)valor).intValue();
+            
+        } catch (Exception ex) {
+            logger.error(ex);
+            throw new ServiceException(ex, Level.ERROR);
+        }
+        
+    }
+
+}

@@ -1,0 +1,49 @@
+/*
+ * Copyright (c) 2014 IMOCOM. All Rights Reserved.
+ * 
+ * This software is the confidential and proprietary information of IMOCOM.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of IMOCOM.
+ */
+
+package com.imocom.intelcom.services.interfaces;
+
+import com.imocom.intelcom.persistence.entities.Lead;
+import com.imocom.intelcom.services.IService;
+import com.imocom.intelcom.services.util.ServiceException;
+import java.util.List;
+import javax.ejb.Local;
+
+/**
+ * <strong>Aplicación</strong>     : IMOCOM Sistema de Inteligancia comercial.
+ * <br/>
+ * <br/>
+ * <strong>Date</strong>           : Mayo 7, 2017
+ * <br/><br/>
+ * <strong>Target</strong>         : 
+ *
+ * @author Rafael Blanco (rblanco) - POINTMIND S.A.S. - rafael.blanco@pointmind.com
+ *
+ */
+@Local
+public interface ILeadServiceLocal extends IService<Long, Lead> {
+    
+
+    /**
+     * 
+     * @param lead
+     * @return
+     * @throws ServiceException 
+     */
+    List<Lead> findListByParm( Lead lead ) throws ServiceException;
+    
+    /**
+     * 
+     * @param asesor
+     * @return
+     * @throws ServiceException 
+     */
+    int contarLeadAsesor( String asesor ) throws ServiceException;
+    
+}

@@ -1,0 +1,13 @@
+<adapter-config name="ConsultaProductosPendietesPorFacturarEBSAdapter" adapter="Database Adapter" wsdlLocation="ConsultaProductosPendietesPorFacturarEBSAdapter.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="ConsultaProductosPendietesPorFacturarEBSAdapter_ptt" operation="ConsultaProductosPendietesPorFacturarEBSAdapter">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="select t.orden_no,t.fecha,t.cod_linea,t.linea,t.cliente,t.articulo descripcion,t.vendedor asesor,t.party_id from imcm_segui_pedidos_vm t, hz_parties p where t.estado_linea like 'SELECCIONADO' and p.PARTY_ID = t.PARTY_ID and p.JGZZ_FISCAL_CODE like #v_nit"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

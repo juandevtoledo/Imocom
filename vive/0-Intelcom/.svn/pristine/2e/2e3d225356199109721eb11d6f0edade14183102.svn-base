@@ -1,0 +1,455 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.imocom.intelcom.view.beans;
+
+import com.imocom.intelcom.persistence.entities.OportunidadVisita;
+import com.imocom.intelcom.persistence.entities.ServiciosEbs;
+import com.imocom.intelcom.persistence.entities.Tipo;
+import com.imocom.intelcom.persistence.entities.Visita;
+import com.imocom.intelcom.services.interfaces.IEventosServiceLocal;
+import com.imocom.intelcom.services.interfaces.IServiciosEBSLocal;
+import com.imocom.intelcom.services.interfaces.ITipoServiceLocal;
+import com.imocom.intelcom.services.util.ServiceException;
+import com.imocom.intelcom.util.exceptions.UtilException;
+import static com.imocom.intelcom.util.utility.Constants.CLIENT_ID_PARAM;
+import static com.imocom.intelcom.util.utility.Constants.EVENT_ID_PARAM;
+import static com.imocom.intelcom.util.utility.Constants.PAGE_EVENTOS_CONSULTA_KEY;
+import static com.imocom.intelcom.util.utility.Constants.PAGE_EVENTOS_DETALLE_KEY;
+import static com.imocom.intelcom.util.utility.Constants.WS_CLIENTE_DETALLE;
+import static com.imocom.intelcom.util.utility.Constants.WS_OPORTUNIDAD_DETALLE;
+import static com.imocom.intelcom.util.utility.Constants.SPECIFIC_CLIENT_ID_PARAM;
+import static com.imocom.intelcom.util.utility.Constants.TIPO_ESTADO_EVENTO;
+import static com.imocom.intelcom.util.utility.Constants.WS_BPM_PROCESS_INVOCATION;
+import static com.imocom.intelcom.util.utility.Constants.WS_PROCESS_ENTITY_RESULTADO_VISITA;
+import com.imocom.intelcom.util.utility.DateUtil;
+import com.imocom.intelcom.util.utility.Utils;
+import com.imocom.intelcom.view.AbstractFacesBean;
+import static com.imocom.intelcom.view.util.JSFUtils.getViewRedirect;
+import com.imocom.intelcom.view.vo.Oportunidad;
+import com.imocom.intelcom.ws.ebs.vo.entities.ClienteVO;
+import com.imocom.intelcom.ws.ebs.vo.entities.OportunidadNotaVO;
+import com.imocom.intelcom.ws.ebs.vo.entities.OportunidadVO;
+import com.imocom.intelcom.ws.ebs.vo.entities.ProductoVO;
+import com.imocom.intelcom.ws.ebs.vo.entities.ResultadoVisitaVO;
+import com.imocom.intelcom.ws.ebs.vo.response.ClienteResponseVO;
+import com.imocom.intelcom.ws.ebs.vo.response.OportunidadResponseVO;
+import com.imocom.intelcom.ws.exception.IntelcomMiddlewareException;
+import com.imocom.intelcom.ws.interfaces.jaxws.MiddlewareServiceRequestVO;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import javax.ejb.EJB;
+import javax.el.ValueExpression;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
+import javax.xml.bind.JAXBException;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author rc
+ */
+@ManagedBean
+@ViewScoped
+public class EventoResultadoFacesBean extends AbstractFacesBean implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(EventoResultadoFacesBean.class);
+    private static final long serialVersionUID = 1L;
+
+    private boolean generaVisita = false;
+    private boolean generaOportunidad = false;
+
+    private Visita evento;
+    private List<Tipo> listaEstados;
+    private String idTipoEstado;
+
+    private MiddlewareServiceRequestVO requestOportunidad;
+    private int numeroParametrosWS_Oportunidad = 0;
+
+    private MiddlewareServiceRequestVO requestCliente;
+    private int numeroParametrosWS_Cliente = 0;
+
+    private MiddlewareServiceRequestVO requestResultadoOportunidad;
+    private int numeroParametrosWS_ResultadoOportunidad = 0;
+
+    @EJB
+    private IEventosServiceLocal iEventoService;
+
+    @EJB
+    private IServiciosEBSLocal iServiciosESB;
+
+    @EJB
+    private ITipoServiceLocal iTipoService;
+
+    @Override
+    protected void build() {
+        try {
+            //Recuperamos el evento de la sesión
+            evento = (Visita) getSessionMap().get(EVENT_ID_PARAM);
+
+            idTipoEstado = "" + evento.getIdEstado().getIdTipo();
+
+            //Consulta de estados de los eventos
+            listaEstados = iTipoService.findByTipoNombre(TIPO_ESTADO_EVENTO);
+
+            //Se verifica si ya hay un cliente especifico
+            if (getRequest().getParameter(SPECIFIC_CLIENT_ID_PARAM) != null) {
+                //Recupera de la sesión la información del cliente 
+                ClienteVO clienteSeleccionado;
+                clienteSeleccionado = (ClienteVO) getSessionMap().get(CLIENT_ID_PARAM);
+                logger.info("El cliente seleccionado es --> " + ((clienteSeleccionado != null) ? clienteSeleccionado.getNombreCliente() : "No seleccionado"));
+                evento.setNombreCliente(clienteSeleccionado.getNombreCliente());
+            } else {
+                //Consultamos la información del cliente
+                armarRequestWSConsultaCliente();
+                evento.setNombreCliente(consultaNombreCliente("" + evento.getIdcliente()));
+            }
+
+            //Se arma el request de resultado oportunidad porque tambien hay registro de resultado de visita en la EBS como nota al cliente.
+            armarRequestWSResultadoOportunidad();
+            List<OportunidadVisita> opVisitaList = iEventoService.finOportunidadesXVisita(evento.getIdvisita());
+            //Consultamos la informacion de los nombres de oportunidades
+            if (opVisitaList != null && !opVisitaList.isEmpty()) {
+                Set<OportunidadVisita> oportunidades = consultarDetalleOportunidades(opVisitaList);
+                evento.setOportunidadVisitaSet(oportunidades);
+            }
+
+        } catch (ServiceException ex) {
+            logger.error(ex.getMessage());
+        }
+
+    }
+
+    private boolean esValidaFechasProximaVisita() {
+        ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{eventoCrearFacesBean}", EventoCrearFacesBean.class);
+        EventoCrearFacesBean eventoCrearFacesBean = (EventoCrearFacesBean) ve.getValue(getELContext());
+        if (eventoCrearFacesBean != null) {
+            performWarningMessages("En Formulario para creación de Visita la hora incial de la visita no debe ser mayor que la hora final.");
+            return DateUtil.validarHorasVisita(eventoCrearFacesBean.getHoraIni(), eventoCrearFacesBean.getHoraFin());
+        }
+        //Se devuelve verdadero en caso de error para no detener la ejecución de la pantalla 
+        return true;
+    }
+
+    private boolean existenProductosOportunidad() {
+        ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{oportunidadesCrearFacesBean}", OportunidadesCrearFacesBean.class);
+        OportunidadesCrearFacesBean oportunidadesCrearFacesBean = (OportunidadesCrearFacesBean) ve.getValue(getELContext());
+
+        if (oportunidadesCrearFacesBean != null && oportunidadesCrearFacesBean.getListaProductosSeleccionados() != null && !oportunidadesCrearFacesBean.getListaProductosSeleccionados().isEmpty()) {
+            String cantidad = oportunidadesCrearFacesBean.getListaProductosSeleccionados().get(0).getCantidad();
+            if (!Utils.isNumeric(cantidad)) {
+                performErrorMessages("Cantidad del Producto de la Oportunidad No es númerica o Contiene espacios.");
+                return false;
+            }
+            return true;
+        } else {
+            performWarningMessages("En Formulario para creación de Oportunidades se debe seleccionar al menos un producto.");
+            return false;
+        }
+
+    }
+
+    public void actualizarAction(ActionEvent actionEvent) {
+        if (generaVisita) {
+            if (!esValidaFechasProximaVisita()) {
+                return;
+            }
+        }
+        if (generaOportunidad) {
+            if (!existenProductosOportunidad()) {
+                return;
+            }
+        }
+
+        try {
+            //se actualiza el resultado del evento
+            evento.setFechamodificacion(new Date());
+            evento.setFecharegistroresultados(new Date());
+            Tipo tipoEstado = new Tipo();
+            tipoEstado.setIdTipo(Long.valueOf(idTipoEstado));
+            evento.setIdEstado(tipoEstado);
+
+            iEventoService.update(evento);
+
+            //se actualizan los resultado por oportunidad
+            actualizarResultadosPorOportunidad();
+
+            //Se verifica si se crea una nueva visita
+            if (generaVisita) {
+                crearNuevaVisita();
+            }
+
+            //Se verifica si se crea una nueva oportunidad
+            if (generaOportunidad) {
+                crearNuevaOportunidad();
+            }
+
+            //se redirecciona a la página de detalle de la visita
+            String outcome = getViewRedirect(PAGE_EVENTOS_DETALLE_KEY);
+            //se verifica si redirecciona a la página de consulta de visitas
+            if (getSessionMap().get(CLIENT_ID_PARAM) != null) {
+                outcome = getViewRedirect(PAGE_EVENTOS_CONSULTA_KEY);
+            }
+
+            redirect(navigationFaces.navigation.get(outcome));
+        } catch (Exception ex) {
+            performErrorMessages("Ha ocurrido un problema al registrar el resultado del evento");
+            logger.error(ex.getMessage());
+        }
+    }
+
+    public void actualizarResultadosPorOportunidad() {
+
+        ResultadoVisitaVO resultadoVisitaVO = new ResultadoVisitaVO();
+        resultadoVisitaVO.setNombreUsuario(userSession.getUserLogin());
+        resultadoVisitaVO.setCreacionProspecto("FALSE");
+        resultadoVisitaVO.setIdClienteVisita("" + evento.getIdcliente());
+        resultadoVisitaVO.setTipoEventoVisita(evento.getIdTipovisita().getTipoValor());
+        resultadoVisitaVO.setEstadoEventoVisita(evento.getIdEstado().getTipoEtiqueta());
+        resultadoVisitaVO.setIdEventoGeneradorVisita("" + evento.getIdvisita());
+        resultadoVisitaVO.setAsuntoEventoVisita(evento.getAsuntovisita());
+        resultadoVisitaVO.setResultadoEventoVisita(evento.getResultadovisita());
+        resultadoVisitaVO.setUbicacionVisita(evento.getUbicacion());
+        resultadoVisitaVO.setFechaCreacionVisita(DateUtil.formatExchangeTime(evento.getFechacreacion()));
+        resultadoVisitaVO.setFechaInicioVisita(DateUtil.formatExchangeTime(evento.getFechainicio()));
+        resultadoVisitaVO.setFechaFinalVisita(DateUtil.formatExchangeTime(evento.getFechafinal()));
+        resultadoVisitaVO.setFechaRegistroResultadosVisita(DateUtil.formatBPMTime(new Date()));
+
+        if (evento.getOportunidadVisitaSet() != null && !evento.getOportunidadVisitaSet().isEmpty()) {
+            List<OportunidadNotaVO> oportunidadesNota = new ArrayList<OportunidadNotaVO>();
+            for (OportunidadVisita oportunidadVisita : evento.getOportunidadVisitaSet()) {
+                if (oportunidadVisita.getResultadoVisita() != null && oportunidadVisita.getResultadoVisita().trim().length() > 0) {
+                    OportunidadNotaVO oportunidadNotaVO = new OportunidadNotaVO();
+                    oportunidadNotaVO.setIdOportunida("" + oportunidadVisita.getIdOportunidad());
+                    oportunidadNotaVO.setNotaOportunidad(oportunidadVisita.getResultadoVisita());
+                    oportunidadesNota.add(oportunidadNotaVO);
+                }
+            }
+            resultadoVisitaVO.setOportunidadNota(oportunidadesNota);
+        }
+
+        try {
+
+            /**/
+            //se convierte el objeto a String
+            String strRequest = Utils.marshal(resultadoVisitaVO);
+
+            //se pasan los unicos 2 parámetros
+            String[] paramsService = new String[numeroParametrosWS_ResultadoOportunidad];
+            paramsService[0] = strRequest;
+            paramsService[1] = WS_PROCESS_ENTITY_RESULTADO_VISITA;
+            requestResultadoOportunidad.setParams(paramsService);
+
+            userSession.getClientWs().consumeService(requestResultadoOportunidad);
+
+        } catch (IntelcomMiddlewareException ex) {
+            logger.error(ex.getMessage());
+        } catch (JAXBException ex) {
+            logger.error(ex.getMessage());
+        }
+
+    }
+
+    public void crearNuevaVisita() {
+        ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{eventoCrearFacesBean}", EventoCrearFacesBean.class);
+        EventoCrearFacesBean eventoCrearFacesBean = (EventoCrearFacesBean) ve.getValue(getELContext());
+        if (eventoCrearFacesBean != null) {
+            eventoCrearFacesBean.crearAction(null);
+        }
+    }
+
+    public void crearNuevaOportunidad() {
+        try {
+            ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{oportunidadesCrearFacesBean}", OportunidadesCrearFacesBean.class);
+            OportunidadesCrearFacesBean oportunidadesCrearFacesBean = (OportunidadesCrearFacesBean) ve.getValue(getELContext());
+
+            Oportunidad oportunidad = oportunidadesCrearFacesBean.getOportunidad();
+            System.out.println("Tipo de Valor tipo Oportunidad: " + oportunidad.getIdTipoOportunidad());
+            Tipo _probalidadExito = iTipoService.findByTipoId(Long.parseLong(oportunidad.getIdProbabilidadExito()));
+            Tipo _probalidadEjecucion = iTipoService.findByTipoId(Long.parseLong(oportunidad.getIdProbabilidadEjecucion()));
+            oportunidad.setIdProbabilidadEjecucion(_probalidadEjecucion.getTipoValor());
+            oportunidad.setIdProbabilidadExito(_probalidadExito.getTipoValor());
+            oportunidadesCrearFacesBean.setOportunidad(oportunidad);
+            if (oportunidadesCrearFacesBean != null) {
+                oportunidadesCrearFacesBean.enviarSolicitud();
+            }
+        } catch (ServiceException ex) {
+            java.util.logging.Logger.getLogger(EventoResultadoFacesBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private Set<OportunidadVisita> consultarDetalleOportunidades(List<OportunidadVisita> oportunidades) {
+        //se arma el request para la consulta de oportunidades
+        armarRequestWSConsultaOportunidad();
+
+        Set<OportunidadVisita> retorno = new HashSet<OportunidadVisita>(oportunidades);
+        if (retorno != null) {
+            for (OportunidadVisita oportunidad : retorno) {
+                String nombreOportunidad = consultaNombreOportunidad("" + oportunidad.getIdOportunidad());
+                oportunidad.setNombreOportunidad(nombreOportunidad);
+            }
+        }
+        return retorno;
+    }
+
+    private void armarRequestWSConsultaCliente() {
+        requestCliente = new MiddlewareServiceRequestVO();
+        numeroParametrosWS_Cliente = cargarInfoRequest(requestCliente, WS_CLIENTE_DETALLE);
+    }
+
+    private void armarRequestWSConsultaOportunidad() {
+        requestOportunidad = new MiddlewareServiceRequestVO();
+        numeroParametrosWS_Oportunidad = cargarInfoRequest(requestOportunidad, WS_OPORTUNIDAD_DETALLE);
+    }
+
+    private void armarRequestWSResultadoOportunidad() {
+        requestResultadoOportunidad = new MiddlewareServiceRequestVO();
+        numeroParametrosWS_ResultadoOportunidad = cargarInfoRequest(requestResultadoOportunidad, WS_BPM_PROCESS_INVOCATION);
+    }
+
+    /**
+     * Metodo que carga los datos de un request y devuelve el número de
+     * parametros asociado a dicho request
+     *
+     * @param middlewareServiceRequestVO objeto request que se quiere cargar con
+     * los datos del servicio EBS
+     * @param nombreServicioEBS nombre del servicio EBS que se quiere consultar
+     */
+    /**
+     * Metodo que carga los datos de un request y devuelve el número de
+     * parametros asociado a dicho request
+     *
+     * @param middlewareServiceRequestVO objeto request que se quiere cargar con
+     * los datos del servicio EBS
+     * @param nombreServicioEBS nombre del servicio EBS que se quiere consultar
+     * @return número de parámetros del servicio
+     */
+    private int cargarInfoRequest(MiddlewareServiceRequestVO middlewareServiceRequestVO, String nombreServicioEBS) {
+        try {
+            ServiciosEbs servicio = iServiciosESB.findByUniqueName(nombreServicioEBS);
+            middlewareServiceRequestVO.setEndpoint(servicio.getInterfazEndpoint());
+            middlewareServiceRequestVO.setMethod(servicio.getMetodo());
+            middlewareServiceRequestVO.setNamespacePort(servicio.getNamespace());
+            middlewareServiceRequestVO.setServiceName(servicio.getQnameServicio());
+            middlewareServiceRequestVO.setWsdlUrl(servicio.getUrlWsdl());
+            middlewareServiceRequestVO.setInterfaceType(servicio.getTipoInterfaz());
+            //Cargamos el número de parametros
+            return servicio.getNumeroParametros();
+
+        } catch (ServiceException ex) {
+            logger.error("Ha ocurrido un error en el metodo cargarInfoRequest con  nombreServicioEBS:" + nombreServicioEBS);
+            logger.error(ex.getMessage());
+        }
+        return 0;
+
+    }
+
+    private String consultaNombreOportunidad(String idOportunidad) {
+        String nombreOportunidad = "Nombre Oportunidad no encontrado";
+        try {
+
+            String[] paramsService = new String[numeroParametrosWS_Oportunidad];
+            paramsService[0] = idOportunidad;
+
+            requestOportunidad.setParams(paramsService);
+
+            String responseStr = userSession.getClientWs().consumeService(requestOportunidad);
+            OportunidadResponseVO oportunidadResponseVO = (OportunidadResponseVO) Utils.unmarshal(OportunidadResponseVO.class, responseStr);
+            if (oportunidadResponseVO != null && oportunidadResponseVO.getOportunidades() != null) {
+                for (OportunidadVO oportunidadVO : oportunidadResponseVO.getOportunidades()) {
+                    nombreOportunidad = oportunidadVO.getNombreOportunidad();
+                }
+
+            }
+
+        } catch (IntelcomMiddlewareException ex) {
+            logger.error(ex.getMessage());
+        } catch (UtilException ex) {
+            logger.error(ex.getMessage());
+        }
+
+        return nombreOportunidad;
+    }
+
+    private String consultaNombreCliente(String nit) {
+        String nombreCliente = "Nombre cliente no encontrado";
+        try {
+
+            String[] paramsService = new String[numeroParametrosWS_Cliente];
+            paramsService[0] = nit;
+
+            requestCliente.setParams(paramsService);
+
+            String responseStr = userSession.getClientWs().consumeService(requestCliente);
+            ClienteResponseVO clienteResponseVO = (ClienteResponseVO) Utils.unmarshal(ClienteResponseVO.class, responseStr);
+            if (clienteResponseVO != null && clienteResponseVO.getClientes() != null) {
+                for (ClienteVO clienteVO : clienteResponseVO.getClientes()) {
+                    nombreCliente = clienteVO.getNombreCliente();
+                }
+
+            }
+
+        } catch (IntelcomMiddlewareException ex) {
+            logger.error(ex.getMessage());
+        } catch (UtilException ex) {
+            logger.error(ex.getMessage());
+        }
+
+        return nombreCliente;
+
+    }
+
+    private void guardarVisitaGenerada() {
+        EventoCrearFacesBean eventoCrearFacesBean = new EventoCrearFacesBean();
+
+    }
+
+    public Visita getEvento() {
+        return evento;
+    }
+
+    public void setEvento(Visita evento) {
+        this.evento = evento;
+    }
+
+    public List<Tipo> getListaEstados() {
+        return listaEstados;
+    }
+
+    public void setListaEstados(List<Tipo> listaEstados) {
+        this.listaEstados = listaEstados;
+    }
+
+    public boolean isGeneraVisita() {
+        return generaVisita;
+    }
+
+    public void setGeneraVisita(boolean generaVisita) {
+        this.generaVisita = generaVisita;
+    }
+
+    public boolean isGeneraOportunidad() {
+        return generaOportunidad;
+    }
+
+    public void setGeneraOportunidad(boolean generaOportunidad) {
+        this.generaOportunidad = generaOportunidad;
+    }
+
+    public String getIdTipoEstado() {
+        return idTipoEstado;
+    }
+
+    public void setIdTipoEstado(String idTipoEstado) {
+        this.idTipoEstado = idTipoEstado;
+    }
+
+}

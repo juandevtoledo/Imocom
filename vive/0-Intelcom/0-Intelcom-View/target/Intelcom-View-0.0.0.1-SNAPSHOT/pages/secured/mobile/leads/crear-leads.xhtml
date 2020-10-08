@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="client-onsultar-doc-form">
+            <p><h1 align="center">Cargar lead</h1></p> 
+            <p:separator style="width:90%" styleClass="separadores"/>   
+
+            <h:panelGrid columns="2" id="grid_nit"  cellpadding="5" width="90%" >
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="(*)" styleClass="requerido" />
+                    <p:outputLabel value="Asesor" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%">
+                    <p:selectOneMenu value="#{leadCrearFacesBean.lead.asesor}" required="true" requiredMessage="Campo asesor es requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{leadCrearFacesBean.listaAsesorDTO}"
+                                       var="typTipo" itemLabel="#{typTipo.valor}" itemValue="#{typTipo.clave}" />
+                    </p:selectOneMenu>                    
+                </h:panelGroup>
+                
+                
+                <h:panelGroup style="width: 100%" id="panel_add_producto" >
+                    <p:outputLabel value="(*)" styleClass="requerido" />
+                    <p:outputLabel value="Producto" styleClass="labelForm" />
+                    <p:commandButton id="btn_add_producto" onclick="PF('consulta_prod').show();" actionListener="#{leadCrearFacesBean.reiniciar_tabla}" 
+                                     value=" " 
+                                     icon="ui-icon-search" 
+                                     immediate="true" 
+                                     style="display: inline-block !important" 
+                                     update=":template:producto_inventario:panel_id_marca">
+                        <f:setPropertyActionListener target="#{eventosConsultaFacesBean.eventoSeleccionado}" value="#{visita}" />
+                    </p:commandButton>
+                </h:panelGroup>
+                <p:dataTable id="tablaProductosSeleccionados" value="#{leadCrearFacesBean.listaProductosSeleccionados}" var="producto" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column headerText="Línea">                        
+                        <h:outputText value="#{producto.linea}"/>
+                    </p:column>
+                    <p:column headerText="Nombre" styleClass="justificarIzquierda">
+                        <h:outputText value="#{producto.nombre}," />
+                    </p:column>                    
+                    <p:column headerText="Marca" styleClass="campoOculto">
+                        <h:outputText value="#{producto.marca}" />
+                    </p:column>
+                    <p:column headerText="Código">
+                        <h:outputText id="labelCodigo" value="Código" styleClass="labelRows "/>
+                        <h:outputText value="#{producto.codigo}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_id_cantidad" headerText="Cantidad">
+                        <h:outputText id="labelCantidad" value="Cantidad" styleClass="labelRows "/>
+                        <h:inputText id="ipt_cantidad" value="#{producto.cantidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton action="#{leadCrearFacesBean.borrarProducto}" value="Borrar" icon="ui-icon-trash" process="@this" update="tablaProductosSeleccionados,:template:client-onsultar-doc-form:panel_add_producto">
+                            <f:setPropertyActionListener target="#{leadCrearFacesBean.productoAgregar}" value="#{producto}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="(*)" styleClass="requerido" />
+                    <p:outputLabel value="Canal" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%">
+                    <p:selectOneMenu id="selectTipocl" value="#{leadCrearFacesBean.lead.canal}" required="true" requiredMessage="Campo canal es requerido">
+                        <p:ajax process="selectTipocl" immediate="true" partialSubmit="true" event="valueChange" listener="#{leadCrearFacesBean.cargarListaEmpleadosEBS}"  update="id_pg_ld_empleados_lables,id_pg_ld_empleados_values" />
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{leadCrearFacesBean.listaCanalDTO}"
+                                       var="typTipo" itemLabel="#{typTipo.valor}" itemValue="#{typTipo.clave}" />
+                    </p:selectOneMenu>                    
+                </h:panelGroup>
+                
+                <h:panelGroup style="width: 100%" id="id_pg_ld_empleados_lables">
+                    <p:outputLabel value="(*)" styleClass="requerido" rendered="#{leadCrearFacesBean.lead.canal eq 'PROGRAMA 80/20'}" />
+                    <p:outputLabel value="Quien reporta" styleClass="labelForm" rendered="#{leadCrearFacesBean.lead.canal eq 'PROGRAMA 80/20'}" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="id_pg_ld_empleados_values">
+                    <p:selectOneMenu value="#{leadCrearFacesBean.lead.quienReporta}" required="true" requiredMessage="Campo quien reporta es requerido" rendered="#{leadCrearFacesBean.lead.canal eq 'PROGRAMA 80/20'}">                        
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{leadCrearFacesBean.listaEmpleadosEBSDTO}"
+                                       var="typTipo" itemLabel="#{typTipo.valor}" itemValue="#{typTipo.clave}" />
+                    </p:selectOneMenu>                    
+                </h:panelGroup>
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="(*)" styleClass="requerido" />
+                    <p:outputLabel value="NIT" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText onkeypress="return validaN(event)" value="#{leadCrearFacesBean.lead.nit}" required="true" requiredMessage="Campo nit es requerido" maxlength="90" />
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="(*)" styleClass="requerido" />
+                    <p:outputLabel value="Empresa" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText value="#{leadCrearFacesBean.lead.empresa}" required="true" requiredMessage="Campo empresa es requerido" maxlength="90" />
+                
+                <p:outputLabel value="Nombre contacto" styleClass="labelForm" />
+                <p:inputText value="#{leadCrearFacesBean.lead.nombreContacto}" maxlength="90" />
+                
+                <p:outputLabel value="Apellido contacto" styleClass="labelForm" />
+                <p:inputText value="#{leadCrearFacesBean.lead.apellidoContacto}" maxlength="90" />
+                
+                <p:outputLabel value="Teléfono contacto" styleClass="labelForm" />
+                <p:inputText value="#{leadCrearFacesBean.lead.telefonoContacto}" maxlength="90" />
+                
+                <p:outputLabel value="Correo contacto" styleClass="labelForm" />
+                <p:inputText value="#{leadCrearFacesBean.lead.correoContacto}" maxlength="90" />
+                
+                <p:outputLabel value="Observaciones" styleClass="labelForm"/>
+                <p:inputTextarea id="btn_observacion" value="#{leadCrearFacesBean.lead.observacion}" maxlength="400" />      
+                
+            </h:panelGrid>
+            
+            <p:separator style="width:90%" />
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+            
+            <h:panelGrid columns="2" id="matchGrid-btn-foot" cellpadding="5" styleClass="panelBotones" >  
+                <p:commandButton value="Guardar"  onclick="this.disabled=true;" oncomplete="this.disabled=false;" onerror="this.disabled=false;"
+                                 update="client-onsultar-doc-form" actionListener="#{leadCrearFacesBean.crearAction}" styleClass="backGIntelcom" />
+                <p:commandButton  value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:leads-consulta" />
+                </p:commandButton>
+            </h:panelGrid>
+
+        </h:form>
+        
+        
+        <p:dialog header="Añadir Producto" widgetVar="consulta_prod" showEffect="pop" closeOnEscape="true"  >
+            <h:form id="producto_inventario">  
+                <h:panelGrid  columns="2" id="grid_consulta_inventario" cellpadding="5" width="90%" >
+                    
+                    <p:outputLabel value="Línea" styleClass="labelForm"/>
+                    <p:selectOneMenu id="selectLinea" value="#{leadCrearFacesBean.lead.lineaProducto}" >
+                        <p:ajax process="selectLinea"  listener="#{leadCrearFacesBean.listaMarcaPorLinea}" event="valueChange" update="panel_id_marca" />
+                        <f:selectItem itemLabel="" itemValue=""/>
+                        <f:selectItems value="#{cotizacionesCrearBean.contadorCotLinea}"  
+                                       var="linea" itemLabel="#{linea.idlinea}"  
+                                       itemValue="#{linea.idlinea}"/> 
+                    </p:selectOneMenu>
+
+                    <p:outputLabel id="ol_tipo" value="Tipo de Producto" styleClass="labelForm" /> 
+                    <p:selectOneMenu id="sor_tipo" value="#{leadCrearFacesBean.tipoProducto}">
+                        <p:ajax process="@this" partialSubmit="true"/>
+                        <f:selectItem itemLabel="" itemValue=""/>
+                        <f:selectItems value="#{leadCrearFacesBean.listaTiposProducto}" var="typProd" itemLabel="#{typProd.tipoEtiqueta}" itemValue="#{typProd.tipoValor}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel id="ol_marca" value="Marca" styleClass="labelForm" />
+                    <h:panelGroup style="width: 100%" id="panel_id_marca">
+                        <p:selectOneMenu id="selectMarca" value="#{leadCrearFacesBean.marcaProducto}" >
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <p:ajax process="selectMarca"  event="valueChange" listener="#{leadCrearFacesBean.listaModeloXMarcas}" update="panel_id_modelo"/>
+                            <f:selectItems value="#{leadCrearFacesBean.listaMarcas}"  
+                                           var="tipo" itemLabel="#{tipo.nombre}"  
+                                           itemValue="#{tipo.nombre}"/> 
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+
+
+                    <p:outputLabel id="ol_modelo" value="Modelo" styleClass="labelForm" />
+                    <h:panelGroup style="width: 100%" id="panel_id_modelo">
+                        <p:selectOneMenu id="selectModelo" value="#{leadCrearFacesBean.modeloProducto}" >
+                            <p:ajax process="selectModelo"  event="valueChange"/>
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <f:selectItems value="#{leadCrearFacesBean.listaModelos}"  
+                                           var="tipo" itemLabel="#{tipo.nombre}"  
+                                           itemValue="#{tipo.nombre}"/> 
+                        </p:selectOneMenu>
+
+                    </h:panelGroup>
+
+                    <p:outputLabel id="ol_descripcion" value="Descripción" styleClass="labelForm" />
+                    <p:inputText id="it_descripcion" value="#{leadCrearFacesBean.descripcionProducto}"  />
+                    <input type="hidden" name="hidden1" value="crear-oportunidad" />
+
+                </h:panelGrid>
+
+                <p:messages id="messagesPopup" showDetail="true" showSummary="false" autoUpdate="true" styleClass="messagesForm" />       
+
+
+                <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                    <p:commandButton id="btn_buscar" onclick="this.disabled=true;" oncomplete="this.disabled=false;" 
+                                     onerror="this.disabled=false;" value="Buscar" 
+                                     update="tablaProductosConsultados,btn_buscar"  
+                                     actionListener="#{leadCrearFacesBean.buscarAction}" styleClass="backGIntelcom" />
+                </h:panelGrid>
+
+
+                <p:separator style="width:90%" />
+                <p><h1>Lista de Productos</h1></p> 
+                <p:dataTable  id="tablaProductosConsultados" var="producto" value="#{leadCrearFacesBean.listaProductos}" emptyMessage="Sin registros"  styleClass="tablaresultados" tableStyleClass="detailTable">
+
+
+                    <p:column id="col_nombre" headerText="Nombre producto" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_t_nombre" value="#{producto.nombre}" />
+                    </p:column>
+
+                    <p:column id="col_precioLista" headerText="Precio Lista DDP">
+                        <h:outputText id="labelPrecio" value="Precio Lista DDP" styleClass="labelRows"/>
+                        <h:outputText id="ot_t_precioLista" value="#{producto.precioLista}" styleClass="detailRows"/>
+                    </p:column>
+
+                    <p:column id="col_division" headerText="Moneda">
+                        <h:outputText id="labelBodega" value="Moneda" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_division" value="#{producto.moneda}" styleClass="detailRows"/>
+                    </p:column>
+
+                    <p:column id="col_cantidad" headerText="Cantidad">
+                        <h:outputText id="labelCantidad" value="Cantidad" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_cantidad" value="#{producto.cantidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_unidad" headerText="Unidad">
+                        <h:outputText id="labelUnidad" value="Unidad" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_unidad" value="#{producto.unidad}" styleClass="detailRows"/>
+                    </p:column>
+
+                    <p:column headerText="Accion">
+                        <p:commandButton action="#{leadCrearFacesBean.agregarProducto}" onclick="PF('consulta_prod').hide();" 
+                                         value="Agregar" process="@all" 
+                                         update=":template:client-onsultar-doc-form:tablaProductosSeleccionados" styleClass="backGIntelcom"  >
+                            <f:setPropertyActionListener target="#{leadCrearFacesBean.productoAgregar}" value="#{producto}"   />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+    </ui:define>
+</ui:composition>  

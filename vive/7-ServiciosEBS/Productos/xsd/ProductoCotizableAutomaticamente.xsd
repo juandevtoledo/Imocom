@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ProductoCotizableAutomaticamente" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ProductoCotizableAutomaticamente" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ProductoCotizableAutomaticamenteInput" type="ProductoCotizableAutomaticamenteInput"/>
+   <xs:complexType name="ProductoCotizableAutomaticamenteInput">
+      <xs:sequence>
+         <xs:element name="v_inventory_item_id" type="xs:decimal" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ProductoCotizableAutomaticamenteOutputCollection" type="ProductoCotizableAutomaticamenteOutputCollection"/>
+   <xs:complexType name="ProductoCotizableAutomaticamenteOutputCollection">
+      <xs:sequence>
+         <xs:element name="ProductoCotizableAutomaticamenteOutput" type="ProductoCotizableAutomaticamenteOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ProductoCotizableAutomaticamenteOutput">
+      <xs:sequence>
+         <xs:element name="DESCRIPTION" type="xs:string" nillable="true"/>
+         <xs:element name="CENTRO_COSTOS_DESC" type="xs:string" nillable="true"/>
+         <xs:element name="PRECIO_LISTA" type="xs:string" nillable="true"/>
+         <xs:element name="UNIDAD" type="xs:string" nillable="true"/>
+         <xs:element name="MARCA" type="xs:string" nillable="true"/>
+         <xs:element name="MODELO" type="xs:string" nillable="true"/>
+         <xs:element name="FAMILIA" type="xs:string" nillable="true"/>
+         <xs:element name="REFERENCIA" type="xs:string" nillable="true"/>
+         <xs:element name="INVENTORY_ITEM_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="SALDO" type="xs:string" nillable="true"/>
+         <xs:element name="BODEGA" type="xs:string" nillable="true"/>
+         <xs:element name="ORGANIZATION_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="COTIZABLE" type="xs:string" nillable="true"/>
+         <xs:element name="LINK_CARACTERISTICAS" type="xs:string" nillable="true"/>
+         <xs:element name="LINK_ACCESORIOS" type="xs:string" nillable="true"/>
+         <xs:element name="LINK_VIDEO" type="xs:string" nillable="true"/>
+         <xs:element name="LINK_IMG" type="xs:string" nillable="true"/>
+         <xs:element name="SUBINVENTARIO" type="xs:string" nillable="true"/>
+         <xs:element name="PRECIO_LISTA_DDP" type="xs:string" nillable="true"/>
+         <xs:element name="CATALOGO" type="xs:string" nillable="true"/>
+         <xs:element name="MONEDA_ORIGEN" type="xs:string" nillable="true"/>
+         <xs:element name="COTIZABLE_AUTOMATICAMENTE" type="xs:string" nillable="true"/>
+         <xs:element name="TIPO_PRODUCTO" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

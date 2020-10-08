@@ -1,0 +1,37 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaClienteNit" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaClienteNit" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsultaClienteNitInput" type="ConsultaClienteNitInput"/>
+   <xs:complexType name="ConsultaClienteNitInput">
+      <xs:sequence>
+         <xs:element name="v_nombreEmpresa" type="xs:string" nillable="true"/>
+         <xs:element name="v_nit" type="xs:string" nillable="true"/>
+         <xs:element name="v_tipo_cliente" type="xs:string" nillable="true"/>
+         <xs:element name="v_semaforo" type="xs:string" nillable="true"/>
+         <xs:element name="v_asesor" type="xs:string" nillable="true"/>
+         <xs:element name="v_asesor1" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsultaClienteNitOutputCollection" type="ConsultaClienteNitOutputCollection"/>
+   <xs:complexType name="ConsultaClienteNitOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsultaClienteNitOutput" type="ConsultaClienteNitOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsultaClienteNitOutput">
+      <xs:sequence>
+         <xs:element name="PARTY_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="PARTY_NUMBER" type="xs:string" nillable="true"/>
+         <xs:element name="NOMBRE" type="xs:string" nillable="true"/>
+         <xs:element name="fecha_creacion" type="xs:dateTime" nillable="true"/>
+         <xs:element name="NIT" type="xs:string" nillable="true"/>
+         <xs:element name="DIRECCION" type="xs:string" nillable="true"/>
+         <xs:element name="CIUDAD" type="xs:string" nillable="true"/>
+         <xs:element name="DEPARTAMENTO" type="xs:string" nillable="true"/>
+         <xs:element name="URL" type="xs:string" nillable="true"/>
+         <xs:element name="CORREO" type="xs:string" nillable="true"/>
+         <xs:element name="TELEFONO" type="xs:string" nillable="true"/>
+         <xs:element name="TIPO_CLIENTE" type="xs:string" nillable="true"/>
+         <xs:element name="diasSinVisiat" type="xs:decimal" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

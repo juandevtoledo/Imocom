@@ -1,0 +1,49 @@
+package com.imocom.intelcom.services.ejb3;
+
+import com.imocom.intelcom.persistence.entities.HabeasDataContacto;
+import com.imocom.intelcom.persistence.util.PersistenceException;
+import com.imocom.intelcom.services.AbstractService;
+import com.imocom.intelcom.services.interfaces.IHabeasDataContactoEBSLocal;
+import com.imocom.intelcom.services.util.ServiceException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.ejb.Stateless;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author rc
+ */
+@Stateless
+public class HabeasDataContactoServiceBean extends AbstractService<String, HabeasDataContacto> implements IHabeasDataContactoEBSLocal {
+
+    private static final Logger logger = Logger.getLogger(HabeasDataContactoServiceBean.class);
+
+    public HabeasDataContactoServiceBean() {
+        super(HabeasDataContacto.class);
+    }
+
+    /**
+     * 
+     * @param identificacion
+     * @return
+     * @throws ServiceException 
+     */
+     public List<HabeasDataContacto> findAllByIdentificacion(String identificacion) throws ServiceException {
+        
+        try {
+            
+            Map<String, Object> params = new HashMap<String, Object>();     
+            params.put("correoContacto", identificacion);
+            
+            return (List<HabeasDataContacto>) findResultObjectList("HabeasDataContacto.findAllByIdentificacion", params );
+            
+        } catch (PersistenceException ex) {
+            logger.error(ex);
+            throw new ServiceException(ex, Level.ERROR);
+        }
+    }
+
+}

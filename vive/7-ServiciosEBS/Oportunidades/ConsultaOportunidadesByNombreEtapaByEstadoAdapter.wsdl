@@ -1,0 +1,25 @@
+<?binding.jca ConsultaOportunidadesByNombreEtapaByEstadoAdapter_db.jca?>
+<wsdl:definitions name="ConsultaOportunidadesByNombreEtapaByEstadoAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsultaOportunidadesByNombreEtapaByEstadoAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesByNombreEtapaByEstadoAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsultaOportunidadesByNombreEtapaByEstadoAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsultaOportunidadesByNombreEtapaByEstadoAdapter_plt">
+        <plt:role name="ConsultaOportunidadesByNombreEtapaByEstadoAdapter_role">
+            <plt:portType name="tns:ConsultaOportunidadesByNombreEtapaByEstadoAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesByNombreEtapaByEstadoAdapter" schemaLocation="xsd/ConsultaOportunidadesByNombreEtapaByEstadoAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterInput_msg">
+        <wsdl:part name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterInput_msg" element="db:ConsultaOportunidadesByNombreEtapaByEstadoAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutputCollection_msg">
+        <wsdl:part name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutputCollection" element="db:ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsultaOportunidadesByNombreEtapaByEstadoAdapter_ptt">
+        <wsdl:operation name="ConsultaOportunidadesByNombreEtapaByEstadoAdapter">
+            <wsdl:input message="tns:ConsultaOportunidadesByNombreEtapaByEstadoAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

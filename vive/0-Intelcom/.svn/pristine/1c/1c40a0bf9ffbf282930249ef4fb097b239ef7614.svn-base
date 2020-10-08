@@ -1,0 +1,543 @@
+/*
+ * Copyright (c) 2014 IMOCOM. All Rights Reserved.
+ * 
+ * This software is the confidential and proprietary information of IMOCOM.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of IMOCOM.
+ */
+package com.imocom.intelcom.view.beans;
+
+import com.imocom.intelcom.persistence.entities.Lead;
+import com.imocom.intelcom.persistence.entities.RolUsuario;
+import com.imocom.intelcom.persistence.entities.ServiciosEbs;
+import com.imocom.intelcom.persistence.entities.Tipo;
+import com.imocom.intelcom.services.interfaces.ILeadServiceLocal;
+import com.imocom.intelcom.services.interfaces.IRolesServiceLocal;
+import com.imocom.intelcom.services.interfaces.IServiciosEBSLocal;
+import com.imocom.intelcom.services.interfaces.ITipoServiceLocal;
+import com.imocom.intelcom.util.exceptions.UtilException;
+import com.imocom.intelcom.util.utility.Constants;
+import static com.imocom.intelcom.util.utility.Constants.TIPO_PRODUCTO;
+import static com.imocom.intelcom.util.utility.Constants.WS_EBS_WS_MARCA_X_LINEA;
+import static com.imocom.intelcom.util.utility.Constants.WS_EBS_WS_MODEL_X_MARCA;
+import static com.imocom.intelcom.util.utility.Constants.WS_INVENTARIO_CONSULTA;
+import static com.imocom.intelcom.util.utility.Constants.WS_INVENTARIO_CONSULTA_SIN_BODEGA;
+import com.imocom.intelcom.util.utility.Utils;
+import com.imocom.intelcom.view.AbstractFacesBean;
+import static com.imocom.intelcom.view.util.JSFUtils.getViewRedirect;
+import com.imocom.intelcom.util.dtos.ClaveValorDTO;
+import com.imocom.intelcom.ws.ebs.vo.entities.ProductoVO;
+import com.imocom.intelcom.ws.ebs.vo.entities.TipoVO;
+import com.imocom.intelcom.ws.ebs.vo.response.ProductosResponseVO;
+import com.imocom.intelcom.ws.ebs.vo.response.TipoResponseVO;
+import com.imocom.intelcom.ws.exception.IntelcomMiddlewareException;
+import com.imocom.intelcom.ws.interfaces.jaxws.MiddlewareServiceRequestVO;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.ejb.EJB;
+import javax.el.ValueExpression;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author Rafael Guillermo Blanco Banquez <rafaelg.blancob@gmail.com>
+ */
+@ManagedBean
+@ViewScoped
+public class LeadCrearFacesBean  extends AbstractFacesBean implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(LeadCrearFacesBean.class);
+    private static final long serialVersionUID = 1L;
+
+    @EJB
+    private ILeadServiceLocal iLeadServiceLocal;
+    
+    @EJB
+    private ITipoServiceLocal iTipoService;
+    
+    @EJB
+    private IRolesServiceLocal iRolesServiceLocal;
+    
+    private Lead lead;
+    
+    private List<ClaveValorDTO> listaAsesorDTO;
+    private List<ClaveValorDTO> listaCanalDTO;
+    
+    private String tipoProducto;
+    private String marcaProducto;
+    private String modeloProducto;
+    private String descripcionProducto;
+    private List<ProductoVO> listaProductos;   
+    private List<Tipo> listaTiposProducto;
+    
+    private List<ProductoVO> listaProductosSeleccionados;
+    
+    private MiddlewareServiceRequestVO request;
+    
+    private ProductoVO productoAgregar;
+    
+    @EJB
+    private IServiciosEBSLocal iServiciosESB;
+    
+    private void armarRequestWS() {
+        try {
+            request = new MiddlewareServiceRequestVO();
+            ServiciosEbs servicio = iServiciosESB.findByUniqueName(WS_INVENTARIO_CONSULTA);
+            request.setEndpoint(servicio.getInterfazEndpoint());
+            request.setMethod(servicio.getMetodo());
+            request.setNamespacePort(servicio.getNamespace());
+            request.setServiceName(servicio.getQnameServicio());
+            request.setWsdlUrl(servicio.getUrlWsdl());
+            request.setInterfaceType(servicio.getTipoInterfaz());
+            //Cargamos el número de parametros
+            numeroParametrosWS = servicio.getNumeroParametros();
+
+            requestConsultaInventario = new MiddlewareServiceRequestVO();
+            servicio = iServiciosESB.findByUniqueName(WS_INVENTARIO_CONSULTA_SIN_BODEGA);
+            requestConsultaInventario.setEndpoint(servicio.getInterfazEndpoint());
+            requestConsultaInventario.setMethod(servicio.getMetodo());
+            requestConsultaInventario.setNamespacePort(servicio.getNamespace());
+            requestConsultaInventario.setServiceName(servicio.getQnameServicio());
+            requestConsultaInventario.setWsdlUrl(servicio.getUrlWsdl());
+            requestConsultaInventario.setInterfaceType(servicio.getTipoInterfaz());
+            //Cargamos el número de parametros
+            numeroParametrosConsultaInventarioWS = servicio.getNumeroParametros();
+
+            requestMarcas = new MiddlewareServiceRequestVO();
+            ServiciosEbs servicioMarca = iServiciosESB.findByUniqueName(WS_EBS_WS_MARCA_X_LINEA);
+            requestMarcas.setEndpoint(servicioMarca.getInterfazEndpoint());
+            requestMarcas.setMethod(servicioMarca.getMetodo());
+            requestMarcas.setNamespacePort(servicioMarca.getNamespace());
+            requestMarcas.setServiceName(servicioMarca.getQnameServicio());
+            requestMarcas.setWsdlUrl(servicioMarca.getUrlWsdl());
+            requestMarcas.setInterfaceType(servicioMarca.getTipoInterfaz());
+            //Cargamos el número de parametros
+            numeroParametrosWSMarcas = servicioMarca.getNumeroParametros();
+
+            requestModelos = new MiddlewareServiceRequestVO();
+            ServiciosEbs servicioModelo = iServiciosESB.findByUniqueName(WS_EBS_WS_MODEL_X_MARCA);
+            requestModelos.setEndpoint(servicioModelo.getInterfazEndpoint());
+            requestModelos.setMethod(servicioModelo.getMetodo());
+            requestModelos.setNamespacePort(servicioModelo.getNamespace());
+            requestModelos.setServiceName(servicioModelo.getQnameServicio());
+            requestModelos.setWsdlUrl(servicioModelo.getUrlWsdl());
+            requestModelos.setInterfaceType(servicioModelo.getTipoInterfaz());
+            //Cargamos el número de ServiciosEbs
+            numeroParametrosWSModelos = servicioModelo.getNumeroParametros();
+
+        } catch (Exception ex) {
+            logger.error(ex.getMessage());
+        }
+
+    }
+    
+    @Override
+    protected void build() {
+        
+        try {
+            
+            lead = new Lead();
+            
+            listaProductosSeleccionados = new ArrayList<ProductoVO>();
+            
+            if( getSessionMap().get("LEAD_SELECCIONADO_EDITAR") != null ){
+                lead = (Lead) getSessionMap().get("LEAD_SELECCIONADO_EDITAR");                
+                productoAgregar = new ProductoVO();
+                try {
+                    productoAgregar.setCantidad( lead.getCantidadProducto()+"" );
+                } catch (NumberFormatException e) {
+                    productoAgregar.setCantidad( "1" );
+                    logger.error(e);
+                }                
+                productoAgregar.setCodigo( lead.getCodigoProducto() );
+                productoAgregar.setNombre( lead.getNombreProducto() );
+                productoAgregar.setLinea( lead.getLineaProducto() );
+                productoAgregar.setMarca( lead.getMarcaProducto() );
+                productoAgregar.setModelo( lead.getModeloProducto() );
+                
+                agregarProducto();
+            }
+            
+            getSessionMap().remove("LEAD_SELECCIONADO_EDITAR");
+            
+            listaAsesorDTO = new ArrayList<ClaveValorDTO>();           
+            List listaG = iRolesServiceLocal.listaDeUsuariosRolUno();
+            for (Object tipo : listaG) {
+                Object[] valores = (Object[])tipo;
+                listaAsesorDTO.add( new ClaveValorDTO( valores[0] , valores[0] + " - " + valores[1] ));
+            }
+            
+            List<Tipo> lista = iTipoService.findByTipoNombre( Constants.TIPO_LEAD_CANAL );            
+            listaCanalDTO = new ArrayList<ClaveValorDTO>();           
+            for (Tipo tipo : lista) {
+                listaCanalDTO.add( new ClaveValorDTO( tipo.getTipoValor(), tipo.getTipoEtiqueta()));
+            }
+            
+            listaTiposProducto = iTipoService.findByTipoNombre(TIPO_PRODUCTO);
+            
+            productoAgregar = null;
+            
+            armarRequestWS();
+            
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+    
+    private int numeroParametrosWSMarcas = 0;
+    private int numeroParametrosWSModelos = 0;
+    private MiddlewareServiceRequestVO requestMarcas;
+    private MiddlewareServiceRequestVO requestModelos;
+    private List<TipoVO> listaMarcas;
+    private List<TipoVO> listaModelos;
+    /**
+     * Metodo que carga las marcas por lineas
+     */
+    public void listaMarcaPorLinea() {
+        try {
+            if (lead.getLineaProducto() == null) {
+                ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{cotizacionesCrearBean}", CotizacionesCrearBean.class);
+                CotizacionesCrearBean cotizacionesCrearBean = (CotizacionesCrearBean) ve.getValue(getELContext());
+                lead.setLineaProducto( cotizacionesCrearBean.getContadorCotLinea().get(0).getIdlinea() );
+            }
+            String[] paramsService = new String[numeroParametrosWSMarcas];
+            paramsService[0] = lead.getLineaProducto();
+            requestMarcas.setParams(paramsService);
+            String responseStr = userSession.getClientWs().consumeService(requestMarcas);
+            logger.info("responseStr: " + responseStr);
+            TipoResponseVO response = (TipoResponseVO) Utils.unmarshal(TipoResponseVO.class, responseStr);
+            if (response != null) {
+                listaMarcas = response.getTipos();
+            }
+            this.listaModelos = null;
+            
+        } catch (UtilException ex) {
+            logger.error(ex.getMessage());
+        } catch (IntelcomMiddlewareException ex) {
+            logger.error(ex.getMessage());
+        }
+    }
+    
+    /**
+     * Metodo que carga las modelos por marcas
+     */
+    public void listaModeloXMarcas() {
+        try {
+            if (lead.getLineaProducto() == null) {
+                ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{cotizacionesCrearBean}", CotizacionesCrearBean.class);
+                CotizacionesCrearBean cotizacionesCrearBean = (CotizacionesCrearBean) ve.getValue(getELContext());
+                lead.setLineaProducto( cotizacionesCrearBean.getContadorCotLinea().get(0).getIdlinea() );
+            }
+            String[] paramsService = new String[numeroParametrosWSModelos];
+            paramsService[0] = this.marcaProducto;
+            paramsService[1] = lead.getLineaProducto();
+            requestModelos.setParams(paramsService);
+            String responseStr = userSession.getClientWs().consumeService(requestModelos);
+            logger.info("responseStr: " + responseStr);
+            TipoResponseVO response = (TipoResponseVO) Utils.unmarshal(TipoResponseVO.class, responseStr);
+            if (response != null) {
+                listaModelos = response.getTipos();
+            }
+        } catch (UtilException ex) {
+            logger.error(ex.getMessage());
+        } catch (IntelcomMiddlewareException ex) {
+            logger.error(ex.getMessage());
+        }
+    }
+    
+    
+    /**
+     * Se reinicia tabla de listado de oportunidades
+     */
+    public void reiniciar_tabla() {
+        
+        this.marcaProducto = null;
+        this.modeloProducto = null;
+        this.descripcionProducto = null;
+        this.listaProductos = null;
+        this.tipoProducto = null;
+    }
+    
+    /**
+     * 
+     * @param actionEvent 
+     */
+    public void crearAction(ActionEvent actionEvent) {
+        
+        try{
+            
+            if( listaProductosSeleccionados == null || listaProductosSeleccionados.isEmpty()){
+                performErrorMessages("Debe seleccionar un producto");
+                return;
+            }
+            
+            lead.setFechaUltimaActualizacion( new Date() );
+            if( lead.getIdLead() == null ){
+                lead.setEstado( Constants.LEAD_ESTADO_NUEVO );
+                iLeadServiceLocal.save(lead);
+            }else{
+                iLeadServiceLocal.update(lead);
+            }
+            String outcome = getViewRedirect(Constants.PAGE_LEAD_CONSULTAR_KEY);
+            redirect(navigationFaces.navigation.get(outcome));
+            
+        }catch(Exception ex){
+            
+            logger.error("Error creando lead: ",ex);
+            performErrorMessages("Error al crear lead");
+        }
+        
+    }
+    
+    private int numeroParametrosConsultaInventarioWS = 0;
+    private MiddlewareServiceRequestVO requestConsultaInventario;
+    private int numeroParametrosWS = 0;
+    
+    public String agregarProducto() {
+        
+        if( productoAgregar != null ){
+            
+            productoAgregar.setCantidad("1");
+            if (!listaProductosSeleccionados.contains(productoAgregar)) {
+
+                String lineaSeleccionada = productoAgregar.getLinea();
+                lineaSeleccionada = Utils.remove1(lineaSeleccionada);
+                productoAgregar.setLinea(lineaSeleccionada);                    
+                
+                listaProductosSeleccionados.add(productoAgregar);
+                
+                //ACTUALIZAMOS LOS CAMPOS DEL PRODUCTO
+                lead.setCodigoProducto( productoAgregar.getCodigo() );
+                lead.setNombreProducto( productoAgregar.getNombre() );
+                lead.setLineaProducto( productoAgregar.getLinea() );                
+                lead.setMarcaProducto( productoAgregar.getMarca() );
+                lead.setModeloProducto( productoAgregar.getModelo() );
+                try {
+                    lead.setCantidadProducto( Integer.parseInt( productoAgregar.getCantidad().trim() ) );
+                } catch (NumberFormatException e) {
+                    lead.setCantidadProducto( 1 );
+                    logger.error(e);
+                }
+                
+            }
+            
+            productoAgregar = null;
+            
+        }
+        
+        return null;
+    }
+    
+    public void buscarAction(ActionEvent actionEvent) {
+        try {
+            String value = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hidden1");
+            //Variable que determine que el producto a buscar es cotizable.
+            //Esto aplica si los productos son consultados desde la vista Cotizaciones
+            String cotizable = "";
+            String organizationId = "";
+            //String subinventario = "A.REALIZAB";
+            String subinventario = "";
+            String linea = "";
+            String catalago = "";
+            Boolean consultaInevtario = true;
+            ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{cotizacionesCrearBean}", CotizacionesCrearBean.class);
+            CotizacionesCrearBean cotizacionesCrearBean = (CotizacionesCrearBean) ve.getValue(getELContext());
+            logger.info("Hidden cotizable crear-cotizacion: " + value);
+            if (value != null && value.equals("crear-cotizacion")) {
+                logger.info("Requerire Aprobacion: " + cotizacionesCrearBean.getRequeiereAprobacion());
+                if (!cotizacionesCrearBean.getRequeiereAprobacion()) {
+                    cotizable = "Y";                    
+                }
+                linea = cotizacionesCrearBean.getLinea();                
+                catalago = "Y";
+            } else if (value != null && value.equals("crear-oportunidad")) {
+                linea = this.lead.getLineaProducto();
+                catalago = "Y";
+            } else {
+                consultaInevtario = false;
+            }
+            if (!consultaInevtario) {
+                String[] paramsService = new String[numeroParametrosConsultaInventarioWS];
+                //paramsService[0] = tipoProducto;
+                paramsService[0] = tipoProducto != null ? tipoProducto : "";
+                paramsService[1] = marcaProducto != null ? marcaProducto : "";
+                paramsService[2] = modeloProducto != null ? modeloProducto : "";
+                paramsService[3] = descripcionProducto != null ? descripcionProducto : "";
+                requestConsultaInventario.setParams(paramsService);
+
+                String responseStr = userSession.getClientWs().consumeService(requestConsultaInventario);
+                logger.info("responseStr: " + responseStr);
+                ProductosResponseVO response = (ProductosResponseVO) Utils.unmarshal(ProductosResponseVO.class, responseStr);
+
+                if (response != null) {
+                    if (Boolean.parseBoolean(response.getStatus())) {
+                        listaProductos = response.getProductos();
+                    } else {
+                        listaProductos = null;
+                        performWarningMessages("La consulta contiene demasiados registros, por favor realice una nueva consulta con un filtro más especifico.");
+                        logger.info("Consulta contiene demasiados registros");
+                    }
+
+                }
+            } else {
+                if (linea != null && consultaInevtario) {
+                    String[] paramsService = new String[numeroParametrosWS];
+                    //paramsService[0] = tipoProducto;
+                    paramsService[0] = tipoProducto != null ? tipoProducto : "";
+                    paramsService[1] = marcaProducto != null ? marcaProducto : "";
+                    paramsService[2] = modeloProducto != null ? modeloProducto : "";
+                    paramsService[3] = descripcionProducto != null ? descripcionProducto : "";
+                    paramsService[4] = cotizable;
+                    paramsService[5] = organizationId;
+                    paramsService[6] = subinventario;
+                    paramsService[7] = linea;
+                    paramsService[8] = catalago;
+
+                    request.setParams(paramsService);
+
+                    String responseStr = userSession.getClientWs().consumeService(request);
+                    logger.info("responseStr: " + responseStr);
+                    ProductosResponseVO response = (ProductosResponseVO) Utils.unmarshal(ProductosResponseVO.class, responseStr);
+
+                    if (response != null) {
+                        if (Boolean.parseBoolean(response.getStatus())) {
+                            listaProductos = response.getProductos();
+                        } else {
+                            listaProductos = null;
+                            performWarningMessages("La consulta contiene demasiados registros, por favor realice una nueva consulta con un filtro más especifico.");
+                            logger.info("Consulta contiene demasiados registros");
+                        }
+
+                    }
+                } else {
+                    performWarningMessages("No existe un Línea asociada a la oportunidad");
+                }
+            }
+            logger.info("Consulta de inventario terminada");
+
+        } catch (UtilException ex) {
+            logger.error(ex);
+        } catch (IntelcomMiddlewareException ex) {
+            logger.error(ex);
+        }
+
+    }
+
+    public String borrarProducto() {
+        listaProductosSeleccionados.remove(productoAgregar);
+        return null;
+    }
+    
+    public Lead getLead() {
+        return lead;
+    }
+
+    public void setLead(Lead lead) {
+        this.lead = lead;
+    }
+
+    public List<ClaveValorDTO> getListaAsesorDTO() {
+        return listaAsesorDTO;
+    }
+
+    public void setListaAsesorDTO(List<ClaveValorDTO> listaAsesorDTO) {
+        this.listaAsesorDTO = listaAsesorDTO;
+    }
+
+    public List<ClaveValorDTO> getListaCanalDTO() {
+        return listaCanalDTO;
+    }
+
+    public void setListaCanalDTO(List<ClaveValorDTO> listaCanalDTO) {
+        this.listaCanalDTO = listaCanalDTO;
+    }
+
+    public String getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(String tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
+    public String getMarcaProducto() {
+        return marcaProducto;
+    }
+
+    public void setMarcaProducto(String marcaProducto) {
+        this.marcaProducto = marcaProducto;
+    }
+
+    public String getModeloProducto() {
+        return modeloProducto;
+    }
+
+    public void setModeloProducto(String modeloProducto) {
+        this.modeloProducto = modeloProducto;
+    }
+
+    public List<ProductoVO> getListaProductos() {
+        return listaProductos;
+    }
+
+    public void setListaProductos(List<ProductoVO> listaProductos) {
+        this.listaProductos = listaProductos;
+    }
+
+    public String getDescripcionProducto() {
+        return descripcionProducto;
+    }
+
+    public void setDescripcionProducto(String descripcionProducto) {
+        this.descripcionProducto = descripcionProducto;
+    }
+
+    public List<TipoVO> getListaMarcas() {
+        return listaMarcas;
+    }
+
+    public void setListaMarcas(List<TipoVO> listaMarcas) {
+        this.listaMarcas = listaMarcas;
+    }
+
+    public List<TipoVO> getListaModelos() {
+        return listaModelos;
+    }
+
+    public void setListaModelos(List<TipoVO> listaModelos) {
+        this.listaModelos = listaModelos;
+    }
+
+    public List<Tipo> getListaTiposProducto() {
+        return listaTiposProducto;
+    }
+
+    public void setListaTiposProducto(List<Tipo> listaTiposProducto) {
+        this.listaTiposProducto = listaTiposProducto;
+    }
+
+    public List<ProductoVO> getListaProductosSeleccionados() {
+        return listaProductosSeleccionados;
+    }
+
+    public void setListaProductosSeleccionados(List<ProductoVO> listaProductosSeleccionados) {
+        this.listaProductosSeleccionados = listaProductosSeleccionados;
+    }
+
+    public ProductoVO getProductoAgregar() {
+        return productoAgregar;
+    }
+
+    public void setProductoAgregar(ProductoVO productoAgregar) {
+        this.productoAgregar = productoAgregar;
+    }
+    
+    
+}

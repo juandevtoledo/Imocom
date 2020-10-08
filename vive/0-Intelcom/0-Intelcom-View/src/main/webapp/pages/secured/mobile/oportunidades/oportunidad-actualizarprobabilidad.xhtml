@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+    <ui:define name="content">
+        <h:form id="oportunidades-form">
+            <p><h1 align="center">Consulta de Oportunidades</h1></p> 
+            <p:separator style="width:90%" />
+
+            <h:panelGrid  columns="2" id="grid_nit" cellpadding="5" width="90%" >
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Cliente:  " styleClass="labelForm"/>
+                    <p:commandButton onclick="PF('consulta_cli').show();" value=" " icon="ui-icon-search" type="button"   style="display: inline-block !important" immediate="true"  />
+                </h:panelGroup>
+                <p:inputText id="nombre_cliente" value="#{oportunidadesClientesFacesBean.clienteSeleccionado.nombreCliente}" disabled="true" style="color:blue;font-weight: bolder;"/>
+
+                <p:outputLabel  value="Estado de la Oportunidad" style="font-weight: bold" />
+                <p:selectOneMenu id="select-tipo-estado" value="#{oportunidadesClientesFacesBean.estadoOportunidad}" >                   
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{oportunidadesClientesFacesBean.listaEstadosOportunidad}" 
+                                   var="typEstado" itemLabel="#{typEstado.tipoEtiqueta}" itemValue="#{typEstado.tipoValor}"  />  
+                </p:selectOneMenu>  
+
+                <p:outputLabel value="Probabilidad Ejecución del Proyecto" style="font-weight: bold" />
+                <p:selectOneMenu id="select-tipo-ejecucion" value="#{oportunidadesClientesFacesBean.probabilidadEjecucion}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{oportunidadesClientesFacesBean.listaProbabilidadEjecucion}" 
+                                   var="typEjecucion" itemLabel="#{typEjecucion.tipoEtiqueta}" itemValue="#{typEjecucion.tipoValor}"  />  
+                </p:selectOneMenu>    
+
+                <p:outputLabel value="Probabilidad de Exito para IMOCOM" style="font-weight: bold" />
+                <p:selectOneMenu id="select-tipo-exito" value="#{oportunidadesClientesFacesBean.probabilidadExito}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{oportunidadesClientesFacesBean.listaProbabilidadExito}" 
+                                   var="typExito" itemLabel="#{typExito.tipoEtiqueta}" itemValue="#{typExito.tipoValor}"  />  
+                </p:selectOneMenu>    
+
+                <p:outputLabel value="Etapa de la Oportunidad" style="font-weight: bold" />
+                <p:selectOneMenu id="select-tipo-etapa" value="#{oportunidadesClientesFacesBean.etapaOportunidad}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{oportunidadesClientesFacesBean.listaEtapaOportunidad}" 
+                                   var="typEtapa" itemLabel="#{typEtapa.tipoEtiqueta}" itemValue="#{typEtapa.tipoValor}"  />  
+                </p:selectOneMenu>    
+
+            </h:panelGrid>
+
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" severity="error" />
+
+            <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton id="btn_buscar_pr" value="Buscar" update="tablaOportunidades,btn_buscar_pr"  actionListener="#{oportunidadesClientesFacesBean.buscarAction}" styleClass="backGIntelcom" onclick="this.disabled = true;" oncomplete="this.disabled=false;" onerror="this.disabled=false;"/>
+                <p:commandButton  value="Crear" ajax="false"  action="#{oportunidadesClientesFacesBean.redirectCrear}" onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);" styleClass="backGIntelcom">
+
+                </p:commandButton>
+            </h:panelGrid>
+
+            <p:separator style="width:90%" />
+            <p><h1>Lista de Oportunidades</h1></p>
+            <p:growl id="growlMessages" showDetail="true" sticky="true" />
+            <p:dataTable  id="tablaOportunidades" var="oportunidad" value="#{oportunidadesClientesFacesBean.oportunidades}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable" editable="true">
+                <!--<p:ajax event="rowEdit" listener="#{oportunidadesClientesFacesBean.onRowEdit}"  />-->
+                <p:column id="col_nombre_op" headerText="Nombre Oportunidad" styleClass="justificarIzquierda first_column">
+                    <h:outputText id="labelNombreOportunidad" value="Id" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_nombre_op" value="#{oportunidad.nombreOportunidad}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_nombre_et" headerText="Nombre Etapa">
+                    <h:outputText id="labelEtapa" value="Nombre Etapa" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_nombre_et" value="#{oportunidad.nombreEtapaOportunidad}" styleClass="detailRows"/>
+                </p:column>                             
+                <p:column id="col_prob_ejec" headerText="Probabilidad de Ejecución">
+                    <h:outputText id="labelNombreProbEjec" value="Probabilidad de Ejecución" styleClass="labelRows "/>
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{oportunidad.probabilidadEjecucion}" styleClass="detailRows"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{oportunidad.probabilidadEjecucion}" style="width:100%" styleClass="detailRows">
+                                <f:selectItems value="#{oportunidadesClientesFacesBean.listaProbabilidadEjecucion}" var="probEjecucion" itemLabel="#{probEjecucion.tipoEtiqueta}" itemValue="#{probEjecucion.tipoEtiqueta}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column id="col_prob_exito" headerText="Probabilidad de Éxito IMOCOM">
+                    <h:outputText id="labelNombreProbExito" value="Probabilidad de Éxito IMOCOM" styleClass="labelRows "/>
+                    <p:cellEditor>
+                        <f:facet name="output">
+                            <h:outputText value="#{oportunidad.probabilidadExito}" styleClass="detailRows"/>
+                        </f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{oportunidad.probabilidadExito}" style="width:100%" styleClass="detailRows">
+                                <f:selectItems value="#{oportunidadesClientesFacesBean.listaProbabilidadExito}" var="probExito" itemLabel="#{probExito.tipoEtiqueta}" itemValue="#{probExito.tipoEtiqueta}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column id="col_act_val" headerText="Modificar" style="width:60px;text-align: center;">
+                    <h:outputText id="labelNombreModificar" value="Modificar" styleClass="labelRows "/>
+                    <p:rowEditor class="detailRows table_row_editor" />
+                </p:column>
+                <p:column id="col_act_prob" headerText="Actualizar Oportunidad">
+                    <h:outputText id="labelNombreActOportunidad" value="Actualizar Oportunidad" styleClass="labelRows "/>
+                    <p:commandButton id="btn_t_seguimiento" styleClass="backGIntelcom"  action="#{oportunidadesClientesFacesBean.actualizarProbabilidadOportunidad}" icon="ui-icon-check" style="width: 27px;" title="#{oportunidad.nombreOportunidad}" process="@this" update="@this, :template:oportunidades-form:growlMessages">
+                        <f:setPropertyActionListener target="#{oportunidadesClientesFacesBean.oportunidadSeleccionada}" value="#{oportunidad}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+
+
+        </h:form>
+        <p:dialog header="Añadir Cliente" widgetVar="consulta_cli" showEffect="pop" styleClass="popupResponsive" >
+            <h:form >  
+                <pm:field>    
+                    <p:outputLabel value="Nombre Cliente" style="font-weight: bold" />
+                    <p:inputText id="it_nombre" value="#{clientesNombreNitFacesBean.nombre}"  />
+                </pm:field>    
+                <p:messages id="messagesPage_add_cliente" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+                <p:commandButton id="btn_buscar" value="Buscar" update="tablaClientes"  actionListener="#{clientesNombreNitFacesBean.buscarAction}" styleClass="backGIntelcom"  />
+                <p:separator style="width:90%" />
+                <p><h1>Consultar Clientes</h1></p> 
+                <p:dataTable  id="tablaClientes" var="cliente" value="#{clientesNombreNitFacesBean.listDatosCliente}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column id="col_nombre" headerText="Nombre Cliente" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_t_nombre" value="#{cliente.nombreCliente}" />
+                    </p:column>
+                    <p:column id="col_nit" headerText="NIT">
+                        <h:outputText id="labelEtapa" value="NIT" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_nit" value="#{cliente.nitCliente}" styleClass="detailRows" />
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton value="Seleccionar"  process="@all" update=":template:oportunidades-form:nombre_cliente" styleClass="backGIntelcom" onclick="PF('consulta_cli').hide();">
+                            <f:setPropertyActionListener target="#{oportunidadesClientesFacesBean.clienteSeleccionado.nitCliente}" value="#{cliente.nitCliente}" />
+                            <f:setPropertyActionListener target="#{oportunidadesClientesFacesBean.clienteSeleccionado.nombreCliente}" value="#{cliente.nombreCliente}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+    </ui:define>                   
+</ui:composition>

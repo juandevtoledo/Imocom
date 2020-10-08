@@ -1,0 +1,25 @@
+<?binding.jca ConsultaProductosByLeadIDEBSAdapter_db.jca?>
+<wsdl:definitions name="ConsultaProductosByLeadIDEBSAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/ConsultaProductosByLeadIDEBSAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaProductosByLeadIDEBSAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/ConsultaProductosByLeadIDEBSAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsultaProductosByLeadIDEBSAdapter_plt">
+        <plt:role name="ConsultaProductosByLeadIDEBSAdapter_role">
+            <plt:portType name="tns:ConsultaProductosByLeadIDEBSAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaProductosByLeadIDEBSAdapter" schemaLocation="xsd/ConsultaProductosByLeadIDEBSAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsultaProductosByLeadIDEBSAdapterInput_msg">
+        <wsdl:part name="ConsultaProductosByLeadIDEBSAdapterInput_msg" element="db:ConsultaProductosByLeadIDEBSAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsultaProductosByLeadIDEBSAdapterOutputCollection_msg">
+        <wsdl:part name="ConsultaProductosByLeadIDEBSAdapterOutputCollection" element="db:ConsultaProductosByLeadIDEBSAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsultaProductosByLeadIDEBSAdapter_ptt">
+        <wsdl:operation name="ConsultaProductosByLeadIDEBSAdapter">
+            <wsdl:input message="tns:ConsultaProductosByLeadIDEBSAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsultaProductosByLeadIDEBSAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

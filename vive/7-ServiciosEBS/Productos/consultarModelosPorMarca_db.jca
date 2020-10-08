@@ -1,0 +1,13 @@
+<adapter-config name="consultarModelosPorMarca" adapter="Database Adapter" wsdlLocation="consultarModelosPorMarca.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="consultarModelosPorMarca_ptt" operation="consultarModelosPorMarca">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="SELECT DISTINCT MODELO  FROM IMCM_CONSULTA_INV_VM WHERE TRANSLATE(CENTRO_COSTOS_DESC,'‘áéíóúÁÉÍÓÚ’', '‘aeiouAEIOU’') = #V_CENTRO_COSTOS_DESC   AND MARCA = #V_MARCA AND CATALOGO ='Y' ORDER BY MODELO"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

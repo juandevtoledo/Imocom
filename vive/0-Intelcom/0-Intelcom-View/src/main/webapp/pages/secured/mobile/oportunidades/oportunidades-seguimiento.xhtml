@@ -1,0 +1,249 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="oportunidad-seguimiento-form" enctype="multipart/form-data">
+            <p><h1 align="center">Registrar Seguimiento Oportunidad</h1></p> 
+            <p:separator style="width:90%" />
+            <h:panelGrid columns="4"  cellpadding="4" width="90%" styleClass="detailTable"> 
+
+                <p:outputLabel  value="ID Oportunidad"  style="font-weight: bold" styleClass="justificarIzquierda" />
+                <p:outputLabel  value="#{oportunidadesDetalleFacesBean.oportunidad.idOportunidad}" />
+
+                <p:outputLabel  value="NIT" style="font-weight: bold" styleClass="justificarIzquierda"/>
+                <p:outputLabel id="it_nit" value="#{oportunidadesSeguimientoFacesBean.oportunidad.nit}"  />
+
+                <p:outputLabel  value="Nombre Cliente" style="font-weight: bold" styleClass="justificarIzquierda"/>
+                <p:outputLabel id="it_ncliente" value="#{oportunidadesSeguimientoFacesBean.oportunidad.nombreCliente}"  />
+
+                <p:outputLabel  value="Nombre Oportunidad" style="font-weight: bold" styleClass="justificarIzquierda"/>
+                <p:inputText id="it_nombreOportunidad" value="#{oportunidadesSeguimientoFacesBean.oportunidad.nombreOportunidad}"  />         
+
+                <p:outputLabel  value="Probabilidad de Ejecución del Proyecto" style="font-weight: bold" styleClass="justificarIzquierda"/>
+                <p:selectOneMenu id="select-tipo-ejecucion" value="#{oportunidadesSeguimientoFacesBean.oportunidad.idProbabilidadEjecucion}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{oportunidadesSeguimientoFacesBean.listaProbabilidadEjecucion}" 
+                                   var="typEjecucion" itemLabel="#{typEjecucion.tipoEtiqueta}" itemValue="#{typEjecucion.tipoValor}"  />  
+                </p:selectOneMenu>    
+
+                <p:outputLabel  value="Probabilidad de Éxito de IMOCOM" style="font-weight: bold" styleClass="justificarIzquierda"/>
+                <p:selectOneMenu id="select-tipo-exito" value="#{oportunidadesSeguimientoFacesBean.oportunidad.idProbabilidadExito}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{oportunidadesSeguimientoFacesBean.listaProbabilidadExito}" 
+                                   var="typExito" itemLabel="#{typExito.tipoEtiqueta}" itemValue="#{typExito.tipoValor}"  />  
+                </p:selectOneMenu>    
+
+                <p:outputLabel value="Fecha de Cierre Estimada" style="font-weight: bold" styleClass="justificarIzquierda"/>
+                <p:calendar id="btn_fecha" value="#{oportunidadesSeguimientoFacesBean.fechaCierre}"  />
+            </h:panelGrid> 
+            <h:panelGrid columns="2"  cellpadding="4" width="90%"> 
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="ol_producto" value="Producto" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:dataTable id="tablaProductosSeleccionados" value="#{oportunidadesSeguimientoFacesBean.listaProductosConsultados}" var="producto" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                     <p:column id="col_p_nombre" headerText="Nombre" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_p_nombre" value="#{producto.nombre}" />
+                    </p:column>
+                    <p:column id="col_p_codigo" headerText="Código" >
+                        <h:outputText id="labelCodigoPr" value="Código" styleClass="labelRows "/>
+                        <h:outputText id="ot_p_codigo" value="#{producto.codigo}" />
+                    </p:column>                   
+                    <p:column id="col_p_Marca" headerText="Marca">
+                        <h:outputText id="labelMarca" value="Marca" styleClass="labelRows "/>
+                        <h:outputText id="ot_p_Marca" value="#{producto.marca}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_p_modelo" headerText="Modelo">
+                        <h:outputText id="labelModelo" value="Modelo" styleClass="labelRows "/>
+                        <h:outputText id="ot_p_modelo" value="#{producto.modelo}" styleClass="detailRows"/>
+                    </p:column>         
+                    <p:column id="col_p_cantidad" headerText="Cantidad">
+                        <h:outputText id="labelCantidad" value="Cantidad" styleClass="labelRows "/>
+                        <h:outputText id="ot_p_cantidad" value="#{producto.cantidad}" styleClass="detailRows"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+            <p:separator style="width:90%" rendered="#{oportunidadesSeguimientoFacesBean.oportunidad.nombreEtapa =='Etapa 2: Cotización' and oportunidadesSeguimientoFacesBean.oportunidad.idArchivoOrdenCompra ==''}"/> 
+            <h:panelGrid rendered="#{oportunidadesSeguimientoFacesBean.oportunidad.nombreEtapa =='Etapa 2: Cotización' and oportunidadesSeguimientoFacesBean.oportunidad.idArchivoOrdenCompra ==''}">
+                <p><h1 align="center">Cotizaciones Elaboradas</h1></p> 
+            </h:panelGrid>
+
+            <p:dataTable id="tablaCotizacionesXClientes" value="#{oportunidadesSeguimientoFacesBean.cotizaciones}"  var="cotizacion" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable" rendered="#{oportunidadesSeguimientoFacesBean.oportunidad.nombreEtapa =='Etapa 2: Cotización' and oportunidadesSeguimientoFacesBean.oportunidad.idArchivoOrdenCompra ==''}">
+                <p:column id="col_id_nproducto" headerText="Producto" styleClass="justificarIzquierda">
+                    <p:commandLink id="ot_t_idnproducto" styleClass="backGIntelcom"   value="#{cotizacion.nombreProducto}" process="@this" update="@form">
+                        <f:setPropertyActionListener target="#{oportunidadesSeguimientoFacesBean.cotizacionSelect}" value="#{cotizacion}" />
+                    </p:commandLink>
+                </p:column>
+                <p:column id="col_id_cotizacion" headerText="Codigo Cotización" >
+                    <h:outputText id="labedetalle_cot" value="Codigo Cotización" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_detalle_codcot" value="#{cotizacion.codigo}" styleClass="detailRows"/>
+                </p:column> 
+                <p:column id="col_cod_cotizacion" headerText="Id Solicitud"  >
+                    <h:outputText id="labelcodCotizacion" value="Id Cotización" styleClass="labelRows "/>
+                    <h:outputText id="ot_cod_nombre" value="#{cotizacion.idCotizacion}"  styleClass="detailRows"/>
+                </p:column> 
+                <p:column id="col_id_tipooferta" headerText="Tipo">
+                    <h:outputText id="labelTipooferta" value="Tipo" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_tipooferta" value="#{cotizacion.idtipooferta.tipoEtiqueta}" styleClass="detailRows"/>
+                </p:column>                
+                <p:column id="col_id_estado" headerText="Aceptacion">
+                    <h:outputText id="labelEstado" value="Aceptacion" styleClass="labelRows "/>
+                    <p:selectOneMenu id="selectAceptacion" value="#{cotizacion.aceptacioncliente}" required="true">
+                        <f:selectItems value="#{oportunidadesSeguimientoFacesBean.tiposAceptacion}"  
+                                       var="tipo" itemLabel="#{tipo.tipoEtiqueta}"  
+                                       itemValue="#{tipo.tipoValor}"/> 
+                    </p:selectOneMenu>
+                </p:column>
+                <p:column headerText="Seleccionar">
+                    <p:commandButton action="#{oportunidadesSeguimientoFacesBean.seleccionarCotizacionPrincipal}" value="Principal" process="@all" update="tablaCotizacionesXClientes" styleClass="backGIntelcom"  >
+                        <f:setPropertyActionListener target="#{oportunidadesSeguimientoFacesBean.cotizacionPrincipal}" value="#{cotizacion}"   />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <p:separator style="width:90%" />
+            <h:panelGrid columns="2"  cellpadding="4" width="90%" > 
+                <p:outputLabel  value="Estado de la Oportunidad" style="font-weight: bold" />
+                <p:selectOneMenu id="select-tipo-estado"  value="#{oportunidadesSeguimientoFacesBean.oportunidad.idEstadoOportunidad}" valueChangeListener="#{oportunidadesSeguimientoFacesBean.cargarMotivosCierre}" disabled="#{oportunidadesSeguimientoFacesBean.visibleEstado}">
+                    <p:ajax process="select-tipo-estado" immediate="true" partialSubmit="true" event="valueChange" update="motivo_cierre" />
+                    <f:selectItem itemLabel="Seleccione" itemValue="-"  />
+                    <f:selectItems value="#{oportunidadesSeguimientoFacesBean.listaEstadosOportunidad}" 
+                                   var="typEstado" itemLabel="#{typEstado.tipoEtiqueta}" itemValue="#{typEstado.tipoValor}"  />  
+                </p:selectOneMenu>  
+                <p:outputLabel  value="Motivo de Cierre" style="font-weight: bold" />
+                <h:panelGroup style="width: 100%" id="motivo_cierre" >
+                    <p:selectOneMenu id="select-tipo-cierre" value="#{oportunidadesSeguimientoFacesBean.oportunidad.idMotivoCierre}" disabled="#{oportunidadesSeguimientoFacesBean.visibleEstado}">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{oportunidadesSeguimientoFacesBean.listaMotivosCierre}" 
+                                       var="typCierre" itemLabel="#{typCierre.tipoEtiqueta}" itemValue="#{typCierre.tipoValor}"  />  
+                    </p:selectOneMenu>
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="lt_adjunto" >
+                    <p:outputLabel  value="Adjuntar Orden de Compra Ó Confirmación de pedido" styleClass="labelForm" rendered="#{oportunidadesSeguimientoFacesBean.oportunidad.nombreEtapa !='Etapa 1: Definición Proyecto' and oportunidadesSeguimientoFacesBean.visibleEstado == false}" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="file_adj" >
+
+                    <p:fileUpload id="finput" value="#{oportunidadesSeguimientoFacesBean.file}" mode="simple"  rendered="#{oportunidadesSeguimientoFacesBean.oportunidad.nombreEtapa !='Etapa 1: Definición Proyecto' and oportunidadesSeguimientoFacesBean.visibleEstado == false}">
+
+                    </p:fileUpload>
+                </h:panelGroup> 
+                
+                <p:outputLabel  value="Nota a Oportunidad"  style="font-weight: bold"/>
+                <p:inputText id="it_notaOportunidad" value="#{oportunidadesSeguimientoFacesBean.notaOportunidad}"  />    
+            </h:panelGrid>  
+            <p:separator style="width:90%" />   
+            <p><h1>Observaciones</h1></p> 
+            <p:dataTable  id="tablaNota" var="nota" value="#{oportunidadesDetalleFacesBean.notas}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                <p:column id="col_p_nota" headerText="Nota" styleClass="justificarIzquierda">
+                    <h:outputText id="ot_p_nota" value="#{nota.descripcion}" />
+                </p:column>
+                <p:column id="col_p_fecha" headerText="Fecha Creación">
+                    <h:outputText id="labelFechaCreacion" value="Fecha Creación" styleClass="labelRows "/>
+                    <h:outputText id="ot_p_fecha" value="#{nota.fechaCreacion}" styleClass="detailRows"/>
+                </p:column>
+                <p:column id="col_p_autor" headerText="Autor">
+                    <h:outputText id="labelAutor" value="Autor" styleClass="labelRows "/>
+                    <h:outputText id="ot_p_autor" value="#{nota.autor}" styleClass="detailRows"/>
+                </p:column>
+                <p:column id="col_p_tipo" headerText="Tipo">
+                    <h:outputText id="labelTipo" value="Tipo" styleClass="labelRows "/>
+                    <h:outputText id="ot_p_tipo" value="#{nota.tipoNota}" styleClass="detailRows"/>
+                </p:column>
+            </p:dataTable>
+            
+            
+            <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton id="btn_crear" value="Enviar" ajax="false"  action="#{oportunidadesSeguimientoFacesBean.enviarAction}"  styleClass="backGIntelcom"  onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);" />
+                <p:commandButton id="btn_cancelar" value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:oportunidades-consultar" />
+                </p:commandButton>
+            </h:panelGrid>
+        </h:form>
+        <p:dialog header="Añadir Producto" widgetVar="consulta_prod" showEffect="pop"  >
+            <h:form >  
+                <h:panelGrid  columns="2" id="grid_consulta_inventario" cellpadding="5" width="90%" >
+
+                    <h:panelGroup style="width: 100%" >
+                        <p:outputLabel id="req_ol_tipo" value="(*)" styleClass="requerido" />
+                        <p:outputLabel id="ol_tipo" value="Tipo de Producto" styleClass="labelForm" /> 
+                    </h:panelGroup>
+                    <p:selectOneRadio id="sor_tipo" value="#{inventarioConsultaFacesBean.tipoProducto}"  layout="grid" columns="3" required="true" requiredMessage="El tipo de producto es necesario para realizar la consulta." >
+                        <f:selectItems value="#{inventarioConsultaFacesBean.listaTiposProducto}" var="typProd" itemLabel="#{typProd.tipoEtiqueta}" itemValue="#{typProd.tipoValor}"/>
+                    </p:selectOneRadio>
+
+                    <p:outputLabel id="ol_marca" value="Marca" styleClass="labelForm" />
+                    <p:inputText id="it_marca" value="#{inventarioConsultaFacesBean.marca}" />
+
+                    <p:outputLabel id="ol_modelo" value="Modelo" styleClass="labelForm" />
+                    <p:inputText id="it_modelo" value="#{inventarioConsultaFacesBean.modelo}" />
+
+                    <p:outputLabel id="ol_descripcion" value="Descripción" styleClass="labelForm" />
+                    <p:inputText id="it_descripcion" value="#{inventarioConsultaFacesBean.descripcion}"  />
+
+
+                </h:panelGrid>
+
+                <p:messages id="messagesPopup" showDetail="true" autoUpdate="true" styleClass="messagesForm" />       
+
+
+                <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                    <p:commandButton id="btn_buscar" value="Buscar" update="tablaProductosConsultados"  actionListener="#{inventarioConsultaFacesBean.buscarAction}" styleClass="backGIntelcom" />
+                    <p:commandButton  value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                        <f:param name="#{navigationFaces.redirectParamName}" value="outcome:index" />
+                    </p:commandButton>
+                </h:panelGrid>
+
+
+                <p:separator style="width:90%" />
+                <p><h1>Lista de Productos</h1></p> 
+                <p:dataTable  id="tablaProductosConsultados" var="producto" value="#{inventarioConsultaFacesBean.listaProductos}" emptyMessage="Sin registros"  styleClass="tablaresultados">
+
+
+                    <p:column id="col_nombre" headerText="Nombre Producto">
+                        <h:outputText id="ot_t_nombre" value="#{producto.nombre}" />
+                    </p:column>
+
+                    <p:column id="col_linea" headerText="Línea">
+                        <h:outputText id="ot_t_linea" value="#{producto.linea}" />
+                    </p:column>
+
+                    <p:column id="col_marca" headerText="Marca">
+                        <h:outputText id="ot_t_marca" value="#{producto.marca}" />
+                    </p:column>
+
+                    <p:column id="col_precioLista" headerText="Precio Lista COP">
+                        <h:outputText id="ot_t_precioLista" value="#{producto.precioLista}" />
+                    </p:column>
+
+                    <p:column id="col_division" headerText="Bodega">
+                        <h:outputText id="ot_t_division" value="#{producto.division}" />
+                    </p:column>
+
+                    <p:column id="col_cantidad" headerText="Cantidad">
+                        <h:outputText id="ot_t_cantidad" value="#{producto.cantidad}" />
+                    </p:column>
+
+                    <p:column headerText="Acción">
+                        <p:commandButton action="#{oportunidadesSeguimientoFacesBean.agregarProducto}" value="Agregar" process="@all" update=":template:oportunidad-seguimiento-form:tablaProductosSeleccionados,tablaProductosConsultados" styleClass="backGIntelcom"  >
+                            <f:setPropertyActionListener target="#{oportunidadesSeguimientoFacesBean.productoAgregar}" value="#{producto}"   />
+                        </p:commandButton>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition> 

@@ -1,0 +1,127 @@
+/*
+ * Copyright (c) 2014 IMOCOM. All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of IMOCOM.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of IMOCOM.
+ */
+package com.imocom.intelcom.persistence.entities;
+
+import com.imocom.intelcom.persistence.AbstractEntity;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
+/**
+ * <strong>Aplicación</strong> : IMOCOM Sistema de inteligencia comercial.
+ * <br/>
+ * <br/>
+ * <strong>Date</strong> : Mayo 7, 2017
+ * <br/><br/>
+ * <strong>Target</strong> :
+ *
+ * @author Rafael Blanco (rblanco) - POINTMIND S.A.S. - rafael.blanco@pointmind.com
+ * rafael.blanco@pointmind.com
+ *
+ */
+@Entity
+    @Table(name = "HABEASDATACONTACTO")
+@NamedQueries({
+    @NamedQuery(name = "HabeasDataContacto.findAllByIdentificacion", query = "SELECT p FROM HabeasDataContacto p WHERE p.identificacion = :identificacion"),
+    @NamedQuery(name = "HabeasDataContacto.findAllByIdentificacionYnit", query = "SELECT p FROM HabeasDataContacto p WHERE p.identificacion = :identificacion AND p.nit = :nit"),
+    @NamedQuery(name = "HabeasDataContacto.findAllByNnitYdocName", query = "SELECT p FROM HabeasDataContacto p WHERE p.idDocName = :docName AND p.nit = :nit"),
+    @NamedQuery(name = "HabeasDataContacto.findAllByNnitYdocNameyNOMBREcONTACTO", query = "SELECT p FROM HabeasDataContacto p WHERE p.idDocName = :docName AND p.nit = :nit AND p.identificacion = :identificacion")
+})
+public class HabeasDataContacto extends AbstractEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @Column(name = "IDCONTENT")
+    private String idContent;
+    
+    @Column(name = "IDENTIFICACION")
+    private String identificacion;
+    
+    @Column(name = "NIT")
+    private String nit;
+    
+    @Column(name = "IDDOCNAME")
+    private String idDocName;
+    
+    @Column(name = "ORIGEN")
+    private String origen;
+    
+    public HabeasDataContacto() {
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idContent != null ? idContent.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof HabeasDataContacto)) {
+            return false;
+        }
+        HabeasDataContacto other = (HabeasDataContacto) object;
+        if ((this.idContent == null && other.idContent != null) || (this.idContent != null && !this.idContent.equals(other.idContent))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.imocom.intelcom.persistence.entities.HabeasDataContacto[ idContent=" + idContent + " ]";
+    }
+
+    public String getIdContent() {
+        return idContent;
+    }
+
+    public void setIdContent(String idContent) {
+        this.idContent = idContent;
+    }
+
+    public String getIdentificacion() {
+        return identificacion;
+    }
+
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
+
+    public String getNit() {
+        return nit;
+    }
+
+    public void setNit(String nit) {
+        this.nit = nit;
+    }
+
+    public String getIdDocName() {
+        return idDocName;
+    }
+
+    public void setIdDocName(String idDocName) {
+        this.idDocName = idDocName;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }    
+}

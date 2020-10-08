@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="prospecto-crear-form">
+            <p><h1 align="center">Solicitud de Creación de Clientes Prospectos</h1></p> 
+            <p:separator style="width:90%" />
+
+            <h:panelGrid  columns="2" id="grid_nit" cellpadding="5" width="90%" >
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_nit" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_nit" value="NIT" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_nit" value="#{clientesProspectoCrearFacesBean.nit}"  required="true" requiredMessage="Campo NIT es requerido" />
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_nombre_cliente" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_nombre_cliente" value="Nombre Cliente" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_nombre_cliente" value="#{clientesProspectoCrearFacesBean.empresa}"  required="true" requiredMessage="Campo Nombre Cliente es requerido" />
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_cedula_legal" value="Cedula Representante Legal" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_cedula_legal" value="#{clientesProspectoCrearFacesBean.cedulaRepresentantelegal}"   />
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_nombre_legal" value="Nombre Representante Legal" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_nombre_legal" value="#{clientesProspectoCrearFacesBean.nombreRepresentantelegal}"   />
+                
+                 <h:panelGroup style="width: 100%" >
+                   <p:outputLabel id="ol_apellido_legal" value="Apellido Representante Legal" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_apellido_legal" value="#{clientesProspectoCrearFacesBean.apellidoRepresentantelegal}"   />
+                                
+                <h:panelGroup style="width: 100%" >
+                   <p:outputLabel id="ol_gerente_general" value="Cedula Gerente General" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_gerente_general" value="#{clientesProspectoCrearFacesBean.cedulaGerentelegal}"   />
+                
+                <h:panelGroup style="width: 100%" >
+                     <p:outputLabel id="ol_nombre_gerente_general" value="Nombre Gerente General" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_nombre_gerente_general" value="#{clientesProspectoCrearFacesBean.nombreGerentelegal}"  />
+                
+                 <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_apellido_gerente_general" value="Apellido Gerente General" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_apellido_gerente_general" value="#{clientesProspectoCrearFacesBean.apellidoGerentelegal}"   />
+                
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_pais" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_pais" value="País" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-tipo-pais" value="#{clientesProspectoCrearFacesBean.pais}" valueChangeListener="#{clientesProspectoCrearFacesBean.cargarDepto}"  required="true" requiredMessage="Campo País es requerido">
+                    <f:selectItems value="#{clientesProspectoCrearFacesBean.listapaises}" 
+                                   var="typPais" itemLabel="#{typPais.tipoEtiqueta}" itemValue="#{typPais.idTipo}"  /> 
+                    <p:ajax update="pdeptos,pcius"/>
+                </p:selectOneMenu>                                   
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_depto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_depto" value="Departamento" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="pdeptos">
+                    <p:selectOneMenu rendered="#{clientesProspectoCrearFacesBean.esPaisColombia}" id="select-tipo-depto" value="#{clientesProspectoCrearFacesBean.departamento}" valueChangeListener="#{clientesProspectoCrearFacesBean.cargarCiudad}"  required="true" requiredMessage="Campo Departamento requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{clientesProspectoCrearFacesBean.listaDepto}" 
+                                       var="typDepto" itemLabel="#{typDepto.tipoEtiqueta}" itemValue="#{typDepto.idTipo}"  /> 
+                        <p:ajax update="pcius"/>
+                    </p:selectOneMenu>
+                     <p:inputText rendered="#{!clientesProspectoCrearFacesBean.esPaisColombia}" id="it_tipo-depto" value="#{clientesProspectoCrearFacesBean.departamento}"  required="true" requiredMessage="Información de Departamento es requerido" />
+                </h:panelGroup>
+              
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_ciudad" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_ciudad" value="Ciudad" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="pcius">
+                    <p:selectOneMenu rendered="#{clientesProspectoCrearFacesBean.esPaisColombia}" id="select-tipo-ciudad" value="#{clientesProspectoCrearFacesBean.ciudad}"  required="true" requiredMessage="Campo Ciudad requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{clientesProspectoCrearFacesBean.listaCiudad}"
+                                       var="typCiudad" itemLabel="#{typCiudad.tipoEtiqueta}" itemValue="#{typCiudad.idTipo}" />
+                    </p:selectOneMenu>
+                    <p:inputText rendered="#{!clientesProspectoCrearFacesBean.esPaisColombia}" id="it_tipo-ciudad" value="#{clientesProspectoCrearFacesBean.ciudad}"  required="true" requiredMessage="Información de Ciudad es requerida" />
+                </h:panelGroup>
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_direccion" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_direccion" value="Dirección" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_direccion" value="#{clientesProspectoCrearFacesBean.direccion}"  required="true" requiredMessage="Campo Dirección es requerido" />
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_telefono" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_telefono" value="Teléfono Contacto Fijo" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_telefono" value="#{clientesProspectoCrearFacesBean.telefono}"  required="true" requiredMessage="Campo Teléfono es requerido" />
+
+
+                <p:outputLabel id="ol_linea" value="Línea" styleClass="labelForm" />
+                <p:inputText id="it_linea" value="#{clientesProspectoCrearFacesBean.linea}" />
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_sector" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_sector" value="Sector" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-tipo-sector" value="#{clientesProspectoCrearFacesBean.sector}"  required="true" requiredMessage="Campo Sector requerido">
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{clientesProspectoCrearFacesBean.listaSectores}" 
+                                   var="typSector" itemLabel="#{typSector.tipoEtiqueta}" itemValue="#{typSector.idTipo}"  />  
+                </p:selectOneMenu>                   
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_contacto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_contacto" value="Nombre Contacto" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_contacto" value="#{clientesProspectoCrearFacesBean.contacto}" required="true" requiredMessage="Campo Contacto es requerido" />
+                 
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_apellido_cliente" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_apllido_cliente" value="Apellido Contacto" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_apellid_cliente" value="#{clientesProspectoCrearFacesBean.apellidoempresa}"  required="true" requiredMessage="Campo Apellido Cliente es requerido" />
+                
+                
+                <p:outputLabel id="ol_telefono_contacto" value="Teléfono Contacto" styleClass="labelForm" />
+                <p:inputText id="it_telefono_contacto"  value="#{clientesProspectoCrearFacesBean.telefonoContacto}" />
+
+                <p:outputLabel id="ol_celular" value="Teléfono Contacto Célular" styleClass="labelForm" />
+                <p:inputText id="it_celular" value="#{clientesProspectoCrearFacesBean.celular}"   />
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_cargo" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_cargo" value="Cargo" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-tipo-cargo" value="#{clientesProspectoCrearFacesBean.cargo}"  required="true" requiredMessage="Cargo es requerido">
+                    <f:selectItems value="#{clientesProspectoCrearFacesBean.listaCargos}" 
+                                   var="typCargo" itemLabel="#{typCargo.tipoEtiqueta}" itemValue="#{typCargo.idTipo}"  />  
+                </p:selectOneMenu>                   
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_correo" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_correo" value="Correo" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_correo" value="#{clientesProspectoCrearFacesBean.correo}" required="true" requiredMessage="Campo Correo es requerido" />
+
+                <p:outputLabel id="ol_observacion" value="Observación" styleClass="labelForm" />
+                <p:inputTextarea  id="it_observacion" value="#{clientesProspectoCrearFacesBean.observacion}"  />
+
+            </h:panelGrid>
+
+            <p:separator style="width:90%" />
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+
+            <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton id="btn_enviar" value="Enviar" onclick="this.disabled=true;" oncomplete="this.disabled=false;" onerror="this.disabled=false;" actionListener="#{clientesProspectoCrearFacesBean.enviarAction}" update=":@form" styleClass="backGIntelcom"  />
+                <p:commandButton id="btn_cancelar" value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:index" />
+                </p:commandButton>
+            </h:panelGrid>
+
+
+
+
+        </h:form>
+    </ui:define>
+</ui:composition> 

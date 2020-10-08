@@ -1,0 +1,25 @@
+<?binding.jca DetalleClienteNit_db.jca?>
+<wsdl:definitions name="DetalleClienteNit" targetNamespace="http://com.imocom.intelcom.ws.ebs.interfaces/" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/DetalleClienteNit" xmlns:tns="http://com.imocom.intelcom.ws.ebs.interfaces/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="DetalleClienteNit_plt">
+        <plt:role name="DetalleClienteNit_role">
+            <plt:portType name="tns:DetalleClienteNit_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/DetalleClienteNit" schemaLocation="xsd/DetalleClienteNit.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="DetalleClienteNitInput_msg">
+        <wsdl:part name="DetalleClienteNitInput_msg" element="db:DetalleClienteNitInput"/>
+    </wsdl:message>
+    <wsdl:message name="DetalleClienteNitOutputCollection_msg">
+        <wsdl:part name="DetalleClienteNitOutputCollection" element="db:DetalleClienteNitOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="DetalleClienteNit_ptt">
+        <wsdl:operation name="DetalleClienteNit">
+            <wsdl:input message="tns:DetalleClienteNitInput_msg"/>
+            <wsdl:output message="tns:DetalleClienteNitOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

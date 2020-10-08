@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="visitas-cliente-form">
+            <p><h1 align="center">Consultar Visitas por Cliente</h1></p> 
+            <p:separator style="width:90%" />
+
+            <h:panelGrid  columns="2" id="grid_consulta_eventos" cellpadding="5" width="90%" >
+
+                <p:outputLabel id="ol_nit_label" value="NIT" styleClass="labelForm" />
+                <p:outputLabel id="ol_nit" value="#{eventosConsultaFacesBean.clienteSeleccionado.nitCliente}" />
+
+                <p:outputLabel id="ol_nombre_cliente_label" value="Nombre Cliente" styleClass="labelForm" />
+                <p:outputLabel id="ol_nombre_cliente" value="#{eventosConsultaFacesBean.clienteSeleccionado.nombreCliente}" />
+
+                <p:outputLabel value="Tipo de Visita" styleClass="labelForm"/>
+                <p:selectOneMenu id="select-tipo-evento" value="#{eventosConsultaFacesBean.tipoEvento}" >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{eventosConsultaFacesBean.listaTiposEvento}" 
+                                   var="typEv" itemLabel="#{typEv.tipoEtiqueta}" itemValue="#{typEv.idTipo}"  />  
+                </p:selectOneMenu>    
+
+                <p:outputLabel  value="Fecha" styleClass="labelForm"/>
+                <p:calendar id="btn_fechaFiltro" value="#{eventosConsultaFacesBean.fechaFiltro}"  />
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Oportunidad:  " styleClass="labelForm"/>
+                    <p:commandButton id="btn_buscar_oportunudad" onclick="PF('consulta_oprt').show();" actionListener="#{cotizacionesConsultarBean.loadOportunidad}" update=":template:form-oportunidad-consultados:tablaOportunidadesAsesor" icon="ui-icon-search" value="" style="width: 15px; height:35px; text-align: right; display: inline-block !important"/>
+                </h:panelGroup>
+                <p:inputText id="oportunidadSeleccionada"  value="#{eventosConsultaFacesBean.oportunidad.nombreOportunidad}"/>
+
+            </h:panelGrid>
+
+            <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton id="btn_buscar" value="Buscar" update=":template:tabla-cliente-form:tablaEventosXClientes" ajax="false" actionListener="#{eventosConsultaFacesBean.buscarAction}" styleClass="backGIntelcom" />
+                <p:commandButton  id="btn_crear" value="Crear Visita" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:eventos-crearXCliente" />
+                </p:commandButton>
+            </h:panelGrid>
+        </h:form>
+        <h:form id="tabla-cliente-form">
+            <p:separator style="width:90%" />
+            <p><h1>Lista de Visitas Programados por Cliente</h1></p> 
+
+            <p:dataTable  id="tablaEventosXClientes" var="visita" value="#{eventosConsultaFacesBean.listaVisitas}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                <p:column id="col_didvisita" headerText="Id Visita" styleClass="justificarIzquierda">
+                    <h:outputText id="ot_t_idvisita" value="#{visita.idvisita}" />
+                </p:column>
+                <p:column id="col_oportunidad" headerText="Oportunidad">
+                    <h:outputText id="labelOportunidad" value="Oportunidad" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_oportunidad" value="#{visita.nombreOportunidad}" styleClass="detailRows"/>
+                </p:column>
+                <p:column id="col_tipo_visita" headerText="Medio de Contacto">
+                    <h:outputText id="labelContacto" value="Medio de Contacto" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_tipo_visita" value="#{visita.idTipovisita.tipoEtiqueta}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_fecha" headerText="Fecha">
+                    <h:outputText id="labelFecha" value="Fecha" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_fecha" value="#{visita.fechaVisitaMostrar}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_hora_inicio" headerText="Hora Inicio">
+                    <h:outputText id="labelHoraInicio" value="Hora Inicio" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_hora_inicio" value="#{visita.horaIniVisitaMostrar}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_hora_fin" headerText="Hora Fin">
+                    <h:outputText id="labelHoraFin" value="Hora Fin" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_hora_fin" value="#{visita.horaFinVisitaMostrar}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_detalle" headerText="Detalle">
+                    <p:commandButton id="btn_t_detalle" action="#{eventosConsultaFacesBean.redirectDetalle}" value="Detalle" process="@this" update="@form" styleClass="backGIntelcom">
+                        <f:setPropertyActionListener target="#{eventosConsultaFacesBean.eventoSeleccionado}" value="#{visita}" />
+                    </p:commandButton>
+                </p:column>
+
+                <p:column id="col_resultado" headerText="Registrar resultado">
+                    <p:commandButton id="btn_t_resultado" action="#{eventosConsultaFacesBean.redirectResultado}" value="Registrar Resultado" process="@this" update="@form" styleClass="backGIntelcom">
+                        <f:setPropertyActionListener target="#{eventosConsultaFacesBean.eventoSeleccionado}" value="#{visita}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+         <p:dialog header="Consultar Oportunidad" widgetVar="consulta_oprt" showEffect="pop"  >
+            <h:form id="form-oportunidad-consultados">
+                <p:dataTable  id="tablaOportunidadesAsesor" var="oportunidad" value="#{cotizacionesConsultarBean.oportunidades}" emptyMessage="Sin registros"  styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column id="col_nopor" headerText="Nombre Oportunidad" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_st_nopor" value="#{oportunidad.nombreOportunidad}" />
+                    </p:column>
+                    <p:column id="col_ncliente" headerText="Nombre Cliente">
+                        <h:outputText id="labelNombreCliente" value="Nombre Cliente" styleClass="labelRows "/>
+                        <h:outputText id="ot_st_ncliente" value="#{oportunidad.nombreCliente}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_etapa" headerText="Etapa">
+                        <h:outputText id="labelEtapa" value="Etapa" styleClass="labelRows "/>
+                        <h:outputText id="ot_etapa" value="#{oportunidad.etapaOportunidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton value="Agregar" process="@all" update=":template:visitas-cliente-form:oportunidadSeleccionada" immediate="true" styleClass="backGIntelcom">
+                            <f:setPropertyActionListener target="#{eventosConsultaFacesBean.oportunidad}" value="#{oportunidad}"   />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition> 

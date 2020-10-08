@@ -1,0 +1,71 @@
+<schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/sp/CargaDeOportunidadesEBSAdapter" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/sp/CargaDeOportunidadesEBSAdapter" elementFormDefault="qualified">
+   <element name="InputParameters">
+      <complexType>
+         <sequence>
+            <element name="L_USER_NAME" type="string" db:index="1" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_DESCRIPTION" type="string" db:index="2" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_NIT" type="string" db:index="3" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_SALES_STAGE_ID" type="decimal" db:index="4" db:type="NUMBER" minOccurs="0" nillable="true"/>
+            <element name="L_STATUS_CODE" type="string" db:index="5" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_TOTAL_AMOUNT" type="decimal" db:index="6" db:type="NUMBER" minOccurs="0" nillable="true"/>
+            <element name="L_CHANNEL_CODE" type="string" db:index="7" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_DECISION_DATE" type="string" db:index="8" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_CURRENCY_CODE" type="string" db:index="9" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_PROB_OPORCLIE" type="string" db:index="10" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_PROB_OPORIMO" type="string" db:index="11" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_TIPO_OPORTUNIDAD" type="string" db:index="12" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="L_LINE_TBL_BPM" type="db:APPS.BPM_OPORTUNIDAD_LINE_TABLA" db:index="13" db:type="Array" minOccurs="0" nillable="true"/>
+         </sequence>
+      </complexType>
+   </element>
+   <element name="OutputParameters">
+      <complexType>
+         <sequence>
+            <element name="L_LINE_TBL_OUT" type="db:APPS.BPM_OPORTUNIDAD_LINE_OUT_TABLA" db:index="14" db:type="Array" minOccurs="0" nillable="true"/>
+            <element name="O_ERROR_MSG" type="string" db:index="15" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+            <element name="O_LEAD_ID" type="decimal" db:index="16" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         </sequence>
+      </complexType>
+   </element>
+   <complexType name="APPS.BPM_OPORTUNIDAD_LINE_OUT_OBJ">
+      <sequence>
+         <element name="LEAD_LINE_ID" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="RETURN_STATUS" type="db:string120" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+         <element name="INVENTORY_ITEM_ID" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="UOM_CODE" type="db:string3" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+         <element name="QUANTITY" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="TOTAL_AMOUNT" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+      </sequence>
+   </complexType>
+   <complexType name="APPS.BPM_OPORTUNIDAD_LINE_OBJ">
+      <sequence>
+         <element name="INVENTORY_ITEM_ID" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="UOM_CODE" type="db:string3" db:type="VARCHAR2" minOccurs="0" nillable="true"/>
+         <element name="QUANTITY" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="TOTAL_AMOUNT" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="OPP_WORST_FORECAST_AMOUNT" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="OPP_FORECAST_AMOUNT" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+         <element name="OPP_BEST_FORECAST_AMOUNT" type="decimal" db:type="NUMBER" minOccurs="0" nillable="true"/>
+      </sequence>
+   </complexType>
+   <complexType name="APPS.BPM_OPORTUNIDAD_LINE_TABLA">
+      <sequence>
+         <element name="L_LINE_TBL_BPM_ITEM" type="db:APPS.BPM_OPORTUNIDAD_LINE_OBJ" db:type="Struct" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+      </sequence>
+   </complexType>
+   <complexType name="APPS.BPM_OPORTUNIDAD_LINE_OUT_TABLA">
+      <sequence>
+         <element name="L_LINE_TBL_OUT_ITEM" type="db:APPS.BPM_OPORTUNIDAD_LINE_OUT_OBJ" db:type="Struct" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+      </sequence>
+   </complexType>
+   <simpleType name="string3">
+      <restriction base="string">
+         <maxLength value="3"/>
+      </restriction>
+   </simpleType>
+   <simpleType name="string120">
+      <restriction base="string">
+         <maxLength value="120"/>
+      </restriction>
+   </simpleType>
+</schema>

@@ -1,0 +1,25 @@
+<?binding.jca GeoConsultaAdapter_db.jca?>
+<wsdl:definitions name="GeoConsultaAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Clientes/GeoConsultaAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/GeoConsultaAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Clientes/GeoConsultaAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="GeoConsultaAdapter_plt">
+        <plt:role name="GeoConsultaAdapter_role">
+            <plt:portType name="tns:GeoConsultaAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/GeoConsultaAdapter" schemaLocation="xsd/GeoConsultaAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="GeoConsultaAdapterInput_msg">
+        <wsdl:part name="GeoConsultaAdapterInput_msg" element="db:GeoConsultaAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="GeoConsultaAdapterOutputCollection_msg">
+        <wsdl:part name="GeoConsultaAdapterOutputCollection" element="db:GeoConsultaAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="GeoConsultaAdapter_ptt">
+        <wsdl:operation name="GeoConsultaAdapter">
+            <wsdl:input message="tns:GeoConsultaAdapterInput_msg"/>
+            <wsdl:output message="tns:GeoConsultaAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

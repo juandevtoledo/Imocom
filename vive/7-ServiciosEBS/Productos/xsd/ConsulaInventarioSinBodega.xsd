@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsulaInventarioSinBodega" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsulaInventarioSinBodega" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsulaInventarioSinBodegaInput" type="ConsulaInventarioSinBodegaInput"/>
+   <xs:complexType name="ConsulaInventarioSinBodegaInput">
+      <xs:sequence>
+         <xs:element name="v_tipo_producto" type="xs:string" nillable="true"/>
+         <xs:element name="v_marca" type="xs:string" nillable="true"/>
+         <xs:element name="v_modelo" type="xs:string" nillable="true"/>
+         <xs:element name="v_descripcion" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsulaInventarioSinBodegaOutputCollection" type="ConsulaInventarioSinBodegaOutputCollection"/>
+   <xs:complexType name="ConsulaInventarioSinBodegaOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsulaInventarioSinBodegaOutput" type="ConsulaInventarioSinBodegaOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsulaInventarioSinBodegaOutput">
+      <xs:sequence>
+         <xs:element name="DESCRIPTION" type="xs:string" nillable="true"/>
+         <xs:element name="UNIDAD" type="xs:string" nillable="true"/>
+         <xs:element name="MARCA" type="xs:string" nillable="true"/>
+         <xs:element name="MODELO" type="xs:string" nillable="true"/>
+         <xs:element name="FAMILIA" type="xs:string" nillable="true"/>
+         <xs:element name="REFERENCIA" type="xs:string" nillable="true"/>
+         <xs:element name="INVENTORY_ITEM_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="SALDO" type="xs:decimal" nillable="true"/>
+         <xs:element name="BODEGA" type="xs:string" nillable="true"/>
+         <xs:element name="ORGANIZATION_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="TIPO_PRODUCTO" type="xs:string" nillable="true"/>
+         <xs:element name="PRECIO_LISTA" type="xs:string" nillable="true"/>
+         <xs:element name="CENTRO_COSTOS_DESC" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

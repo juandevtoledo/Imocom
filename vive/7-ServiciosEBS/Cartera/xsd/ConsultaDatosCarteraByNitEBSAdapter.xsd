@@ -1,0 +1,36 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDatosCarteraByNitEBSAdapter" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDatosCarteraByNitEBSAdapter" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsultaDatosCarteraByNitEBSAdapterInput" type="ConsultaDatosCarteraByNitEBSAdapterInput"/>
+   <xs:complexType name="ConsultaDatosCarteraByNitEBSAdapterInput">
+      <xs:sequence>
+         <xs:element name="v_id_asesor" type="xs:string" nillable="true"/>
+         <xs:element name="v_nit" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsultaDatosCarteraByNitEBSAdapterOutputCollection" type="ConsultaDatosCarteraByNitEBSAdapterOutputCollection"/>
+   <xs:complexType name="ConsultaDatosCarteraByNitEBSAdapterOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsultaDatosCarteraByNitEBSAdapterOutput" type="ConsultaDatosCarteraByNitEBSAdapterOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsultaDatosCarteraByNitEBSAdapterOutput">
+      <xs:sequence>
+         <xs:element name="asesor" type="xs:string" nillable="true"/>
+         <xs:element name="asesor1" type="xs:string" nillable="true"/>
+         <xs:element name="nombre_asesor" type="xs:string" nillable="true"/>
+         <xs:element name="CUSTOMER_NAME" type="xs:string" nillable="true"/>
+         <xs:element name="CUSTOMER_NUMBER" type="xs:string" nillable="true"/>
+         <xs:element name="CUSTOMER_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="TIPOCLIE" type="xs:string" nillable="true"/>
+         <xs:element name="CUPO_CREDITO" type="xs:decimal" nillable="true"/>
+         <xs:element name="FECHA_VENCIMIENTO" type="xs:dateTime" nillable="true"/>
+         <xs:element name="DIAS_VENCIDOS" type="xs:decimal" nillable="true"/>
+         <xs:element name="numero_factura" type="xs:string" nillable="true"/>
+         <xs:element name="CENTRO_COST" type="xs:string" nillable="true"/>
+         <xs:element name="valor_car_vendedor" type="xs:decimal" nillable="true"/>
+         <xs:element name="cartera_vencida" type="xs:string" nillable="true"/>
+         <xs:element name="cartera_por_vencer" type="xs:string" nillable="true"/>
+         <xs:element name="sub_TOTAL_CARTERA" type="xs:decimal" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

@@ -1,0 +1,41 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaClientesByFiltrosEBSAdapter" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaClientesByFiltrosEBSAdapter" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsultaClientesByFiltrosEBSAdapterInput" type="ConsultaClientesByFiltrosEBSAdapterInput"/>
+   <xs:complexType name="ConsultaClientesByFiltrosEBSAdapterInput">
+      <xs:sequence>
+         <xs:element name="v_asesor" type="xs:string" nillable="true"/>
+         <xs:element name="v_asesor1" type="xs:string" nillable="true"/>
+         <xs:element name="v_nombreEmpresa" type="xs:string" nillable="true"/>
+         <xs:element name="v_nit" type="xs:string" nillable="true"/>
+         <xs:element name="v_tipo_cliente" type="xs:string" nillable="true"/>
+         <xs:element name="v_semaforo" type="xs:string" nillable="true"/>
+         <xs:element name="v_asesor2" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsultaClientesByFiltrosEBSAdapterOutputCollection" type="ConsultaClientesByFiltrosEBSAdapterOutputCollection"/>
+   <xs:complexType name="ConsultaClientesByFiltrosEBSAdapterOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsultaClientesByFiltrosEBSAdapterOutput" type="ConsultaClientesByFiltrosEBSAdapterOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsultaClientesByFiltrosEBSAdapterOutput">
+      <xs:sequence>
+         <xs:element name="PARTY_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="PARTY_NAME" type="xs:string" nillable="true"/>
+         <xs:element name="FECHA_CREACION" type="xs:dateTime" nillable="true"/>
+         <xs:element name="NIT" type="xs:string" nillable="true"/>
+         <xs:element name="DIRECCION" type="xs:string" nillable="true"/>
+         <xs:element name="CIUDAD" type="xs:string" nillable="true"/>
+         <xs:element name="DEPARTAMENTO" type="xs:string" nillable="true"/>
+         <xs:element name="URL" type="xs:string" nillable="true"/>
+         <xs:element name="CORREO" type="xs:string" nillable="true"/>
+         <xs:element name="TIPO_CLIENTE" type="xs:string" nillable="true"/>
+         <xs:element name="PAIS" type="xs:string" nillable="true"/>
+         <xs:element name="DIAS_SIN_VISITA" type="xs:decimal" nillable="true"/>
+         <xs:element name="DIAS_USER" type="xs:string" nillable="true"/>
+         <xs:element name="ACCESS_USER" type="xs:string" nillable="true"/>
+         <xs:element name="SEMAFORO" type="xs:string" nillable="true"/>
+         <xs:element name="PRIMARY_PHONE_NUMBER" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

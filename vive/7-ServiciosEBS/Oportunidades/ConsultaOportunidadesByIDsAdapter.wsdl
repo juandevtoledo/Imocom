@@ -1,0 +1,25 @@
+<?binding.jca ConsultaOportunidadesByIDsAdapter_db.jca?>
+<wsdl:definitions name="ConsultaOportunidadesByIDsAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsultaOportunidadesByIDsAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesByIDsAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsultaOportunidadesByIDsAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsultaOportunidadesByIDsAdapter_plt">
+        <plt:role name="ConsultaOportunidadesByIDsAdapter_role">
+            <plt:portType name="tns:ConsultaOportunidadesByIDsAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesByIDsAdapter" schemaLocation="xsd/ConsultaOportunidadesByIDsAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsultaOportunidadesByIDsAdapterInput_msg">
+        <wsdl:part name="ConsultaOportunidadesByIDsAdapterInput_msg" element="db:ConsultaOportunidadesByIDsAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsultaOportunidadesByIDsAdapterOutputCollection_msg">
+        <wsdl:part name="ConsultaOportunidadesByIDsAdapterOutputCollection" element="db:ConsultaOportunidadesByIDsAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsultaOportunidadesByIDsAdapter_ptt">
+        <wsdl:operation name="ConsultaOportunidadesByIDsAdapter">
+            <wsdl:input message="tns:ConsultaOportunidadesByIDsAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsultaOportunidadesByIDsAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,13 @@
+<adapter-config name="DetalleProducto" adapter="Database Adapter" wsdlLocation="DetalleProducto.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="DetalleProducto_ptt" operation="DetalleProducto">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value=" SELECT PR.INVENTORY_ITEM_ID,PR.DESCRIPTION,TRANSLATE(UPPER(PR.CENTRO_COSTOS_DESC),'‘áéíóúÁÉÍÓÚ’', '‘aeiouAEIOU’') AS CENTRO_COSTOS_DESC,PR.PRECIO_LISTA_DDP AS PRECIO_LISTA,PR.UNIDAD,PR.MARCA,  PR.FAMILIA,PR.MODELO AS REFERENCIA,   PR.BODEGA,PR.LINK_ACCESORIOS,PR.LINK_CARACTERISTICAS,PR.ORGANIZATION_ID,PR.MARCA,PR.LINK_IMG,PR.LINK_CARACTERISTICAS,     PR.LINK_ACCESORIOS,PR.LINK_VIDEO,cotizable,PR.MONEDA_ORIGEN    FROM IMCM_CONSULTA_INV_VM PR      WHERE  PR.INVENTORY_ITEM_ID = #v_item_id   and PR.CATALOGO='Y' and ROWNUM=1"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

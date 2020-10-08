@@ -1,0 +1,14 @@
+<adapter-config name="ActualizacionOportunidadEBSAdapter" adapter="Database Adapter" wsdlLocation="ActualizacionOportunidadEBSAdapter.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="ActualizacionOportunidadEBSAdapter_ptt" operation="ActualizacionOportunidadEBSAdapter">
+    <interaction-spec className="oracle.tip.adapter.db.DBStoredProcedureInteractionSpec">
+      <property name="SchemaName" value="APPS"/>
+      <property name="PackageName" value="INTELCOM_OPORTUNIDADES"/>
+      <property name="ProcedureName" value="ACTUALIZAR_OPORTUNIDAD"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

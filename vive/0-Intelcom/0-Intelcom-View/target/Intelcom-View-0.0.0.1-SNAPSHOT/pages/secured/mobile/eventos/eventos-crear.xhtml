@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+
+    <ui:define name="content">
+
+        <h:form id="crear-visita-form">
+            <p><h1 align="center">Crear Visita</h1></p> 
+            <p:separator style="width:90%" />
+
+            <h:panelGrid  columns="2" id="grid_evento_crear" cellpadding="5" width="90%" styleClass="tableForm">
+
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="req_ol_nit" value="(*)" styleClass="requerido" rendered="#{!eventoCrearFacesBean.existeCliente}" />
+                    <p:outputLabel id="ol_nit" value="NIT" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="it_nit" value="#{eventoCrearFacesBean.nit}" style="display: inline-block !important"  />
+                    <p:outputLabel id="ol_blank_nit" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" escape="false" styleClass="labelForm" rendered="#{!eventoCrearFacesBean.existeCliente}" />
+                    <p:commandButton onclick="PF('consulta_cli').show();" value=" " icon="ui-icon-search" type="button" rendered="#{!eventoCrearFacesBean.existeCliente}"  style="display: inline-block !important" immediate="true"  />
+                </h:panelGroup>
+
+
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="req_ol_nombre" value="(*)" styleClass="requerido" rendered="#{!eventoCrearFacesBean.existeCliente}" />
+                    <p:outputLabel id="ol_nombre" value="Nombre" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:outputLabel id="it_nombre" value="#{eventoCrearFacesBean.nombreCliente}"  />
+
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="req_ol_asunto" value="(*)" styleClass="requerido"  />
+                    <p:outputLabel id="ol_asunto" value="Asunto" styleClass="labelForm" />
+                </h:panelGroup>
+                    <p:inputText id="it_asunto"  value="#{eventoCrearFacesBean.evento.asuntovisita}" required="true" requiredMessage="El asunto de la visita es requerido." >
+                            <p:focus for="it_asunto"/>
+                    </p:inputText>
+
+                <p:outputLabel  value="Oportunidades" style="font-weight: bold" />
+                <p:selectManyCheckbox id="grid_oportunidades" value="#{eventoCrearFacesBean.listaOportunidadesSeleccionadas}"  >
+                    <f:selectItems value="#{eventoCrearFacesBean.listaOportunidades}" var="oportunidad" itemLabel="#{oportunidad.nombreOportunidad}" itemValue="#{oportunidad.idOportunidad}" />
+                </p:selectManyCheckbox>            
+
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="req_ol_tipo_evento" value="(*)" styleClass="requerido"  />
+                    <p:outputLabel id="ol_tipo_evento" value="Medio de Contacto" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-tipo-evento" value="#{eventoCrearFacesBean.evento.idTipovisita.idTipo}"  required="true"  requiredMessage="El Tipo de Visita de la visita es requerido." >
+                    <f:selectItems value="#{eventoCrearFacesBean.listaTiposEvento}" 
+                                   var="typEvento" itemLabel="#{typEvento.tipoEtiqueta}" itemValue="#{typEvento.idTipo}"  />  
+                </p:selectOneMenu>    
+
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="req_ol_fecha" value="(*)" styleClass="requerido"  />
+                    <p:outputLabel id="ol_fecha" value="Fecha" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:calendar id="btn_fecha" value="#{eventoCrearFacesBean.evento.fechainicio}"  readonlyInput="true" pattern="dd-MMM-yyyy"  required="true" requiredMessage="La fecha de la visita es requerida." mode="inline"/>
+
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="req_ol_fecha_ini" value="(*)" styleClass="requerido"  />
+                    <p:outputLabel id="ol_fecha_ini" value="Hora Inicio (24H)" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-hora-ini" value="#{eventoCrearFacesBean.horaIni}" required="true" requiredMessage="La hora de inicio de la visita es requerida." >
+                    <f:selectItems value="#{eventoCrearFacesBean.valoresHoras}" 
+                                   var="valorHora" itemLabel="#{valorHora}" itemValue="#{valorHora}"  />  
+                </p:selectOneMenu>    
+
+
+                <h:panelGroup style="width: 100%">
+                    <p:outputLabel id="req_ol_fecha_fin" value="(*)" styleClass="requerido"  />
+                    <p:outputLabel id="ol_fecha_fin" value="Hora Fin (24H)" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-hora-fin" value="#{eventoCrearFacesBean.horaFin}" required="true" requiredMessage="La hora de finalización de la visita es requerida."  >
+                    <f:selectItems value="#{eventoCrearFacesBean.valoresHoras}" 
+                                   var="valorHora" itemLabel="#{valorHora}" itemValue="#{valorHora}"  />  
+                </p:selectOneMenu>    
+
+                <p:outputLabel id="ol_ubicacion" value="Ubicación" styleClass="labelForm" />
+                <p:inputText id="it_ubicacion" value="#{eventoCrearFacesBean.evento.ubicacion}" />
+
+            </h:panelGrid>
+            <p:separator style="width:90%" />
+
+            <p><h1>Lista de Invitados</h1></p> 
+            <p:commandButton id="add_invitado" value="Añadir Invitado" onclick="PF('consulta_inv').show();" styleClass="backGIntelcom" immediate="true" />
+            <p:dataTable id="tablaInvitados" value="#{eventoCrearFacesBean.listaUsuariosSeleccionados}" var="invitado" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                <p:column headerText="Nombre" styleClass="justificarIzquierda">
+                    <h:outputText value="#{invitado.nombre}" />
+                </p:column>
+                <p:column headerText="Usuario">
+                    <h:outputText id="labelUsuario" value="Usuario" styleClass="labelRows "/>
+                    <h:outputText value="#{invitado.usuario}" styleClass="detailRows"/>
+                </p:column>
+                <p:column headerText="Acción">
+                    <p:commandButton action="#{eventoCrearFacesBean.borrarInvitado}" value="Borrar" icon="ui-icon-trash" process="@this" update="tablaInvitados" styleClass="backGIntelcom" >
+                        <f:setPropertyActionListener target="#{eventoCrearFacesBean.usuarioBorrar}" value="#{invitado}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            <p:separator style="width:90%" />
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+
+            <h:panelGrid columns="2" id="matchGrid-btn-foot" cellpadding="5" styleClass="panelBotones" >  
+                <p:commandButton id="crear_visitas_evento" value="Crear"  onclick="this.disabled=true;" oncomplete="this.disabled=false;" onerror="this.disabled=false;" update="crear_visitas_evento" actionListener="#{eventoCrearFacesBean.crearAction}" styleClass="backGIntelcom" />
+                <p:commandButton  value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:eventos-calendario" />
+                </p:commandButton>
+            </h:panelGrid>
+        </h:form>
+
+
+        <p:dialog header="Añadir Invitado" widgetVar="consulta_inv" showEffect="pop"  >
+            <h:form >  
+                <pm:field>    
+                    <p:outputLabel value="Nombre Invitado" style="font-weight: bold" />
+                    <p:inputText id="it_nombre-buscar" value="#{eventoCrearFacesBean.nombreBuscar}" />
+                </pm:field>    
+                <p:commandButton value="Buscar" update="tablaUsuarios"  actionListener="#{eventoCrearFacesBean.buscarAction}" styleClass="backGIntelcom"   />
+                <p:separator style="width:90%" />
+                <p><h1>Consultar Invitados</h1></p> 
+                <p:dataTable id="tablaUsuarios" value="#{eventoCrearFacesBean.listaUsuariosConsultados}" var="usuario" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column headerText="Nombre Invitado" styleClass="justificarIzquierda">
+                        <h:outputText style="font-weight: bold" value="#{usuario.nombre}," />
+                    </p:column>
+                    <p:column headerText="Nombre Usuario">
+                        <h:outputText id="labelNombreUsuario" value="Nombre Usuario" styleClass="labelRows "/>
+                        <h:outputText value="#{usuario.usuario}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton action="#{eventoCrearFacesBean.agregarInvitado}" value="Agregar" process="@all" update=":template:crear-visita-form:tablaInvitados,tablaUsuarios" styleClass="backGIntelcom" >
+                            <f:setPropertyActionListener target="#{eventoCrearFacesBean.usuarioAgregar}" value="#{usuario}"   />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog header="Añadir Cliente" widgetVar="consulta_cli" showEffect="pop"  >
+            <h:form >  
+                <pm:field>    
+                    <p:outputLabel value="Nombre Cliente" style="font-weight: bold" />
+                    <p:inputText id="it_nombre" value="#{clientesNombreNitFacesBean.nombre}"  />
+                </pm:field>    
+                <p:messages id="messagesPage_add_cliente" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+                <p:commandButton id="btn_buscar" value="Buscar" update="tablaClientes"  actionListener="#{clientesNombreNitFacesBean.buscarAction}" styleClass="backGIntelcom"  />
+                <p:separator style="width:90%" />
+                <p><h1>Consultar Clientes</h1></p> 
+                <p:dataTable  id="tablaClientes" var="cliente" value="#{clientesNombreNitFacesBean.listDatosCliente}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column id="col_nombre" headerText="Nombre Cliente" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_t_nombre" value="#{cliente.nombreCliente}" />
+                    </p:column>
+                    <p:column id="col_nit" headerText="NIT">
+                        <h:outputText id="labelNit" value="NIT" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_nit" value="#{cliente.nitCliente}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton value="Seleccionar" onclick="PF('consulta_cli').hide();" action="#{eventoCrearFacesBean.cargarOPortunidadesPopup}" process="@all" update=":template:crear-visita-form:it_nit,:template:crear-visita-form:it_nombre,:template:crear-visita-form:grid_oportunidades" styleClass="backGIntelcom" >
+                            <f:setPropertyActionListener target="#{eventoCrearFacesBean.nit}" value="#{cliente.nitCliente}" />
+                            <f:setPropertyActionListener target="#{eventoCrearFacesBean.nombreCliente}" value="#{cliente.nombreCliente}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>             

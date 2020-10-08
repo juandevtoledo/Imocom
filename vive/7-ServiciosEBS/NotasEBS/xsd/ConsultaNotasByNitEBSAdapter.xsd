@@ -1,0 +1,28 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaNotasByNitEBSAdapter" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaNotasByNitEBSAdapter" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsultaNotasByNitEBSAdapterInput" type="ConsultaNotasByNitEBSAdapterInput"/>
+   <xs:complexType name="ConsultaNotasByNitEBSAdapterInput">
+      <xs:sequence>
+         <xs:element name="v_nit" type="xs:string" nillable="true"/>
+         <xs:element name="v_asesor" type="xs:string" nillable="true"/>
+         <xs:element name="v_nit1" type="xs:string" nillable="true"/>
+         <xs:element name="v_asesor1" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsultaNotasByNitEBSAdapterOutputCollection" type="ConsultaNotasByNitEBSAdapterOutputCollection"/>
+   <xs:complexType name="ConsultaNotasByNitEBSAdapterOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsultaNotasByNitEBSAdapterOutput" type="ConsultaNotasByNitEBSAdapterOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsultaNotasByNitEBSAdapterOutput">
+      <xs:sequence>
+         <xs:element name="JGZZ_FISCAL_CODE" type="xs:string" nillable="true"/>
+         <xs:element name="CREATION_DATE" type="xs:dateTime" nillable="true"/>
+         <xs:element name="NOTES" type="xs:string" nillable="true"/>
+         <xs:element name="SOURCE_NAME" type="xs:string" nillable="true"/>
+         <xs:element name="NOMBRE_OPORTUNIDAD" type="xs:string" nillable="true"/>
+         <xs:element name="TIPO_NOTA" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

@@ -1,0 +1,34 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/DetalleClienteNit" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/DetalleClienteNit" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="DetalleClienteNitInput" type="DetalleClienteNitInput"/>
+   <xs:complexType name="DetalleClienteNitInput">
+      <xs:sequence>
+         <xs:element name="v_nit" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="DetalleClienteNitOutputCollection" type="DetalleClienteNitOutputCollection"/>
+   <xs:complexType name="DetalleClienteNitOutputCollection">
+      <xs:sequence>
+         <xs:element name="DetalleClienteNitOutput" type="DetalleClienteNitOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="DetalleClienteNitOutput">
+      <xs:sequence>
+         <xs:element name="PARTY_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="PARTY_NUMBER" type="xs:string" nillable="true"/>
+         <xs:element name="NOMBRE" type="xs:string" nillable="true"/>
+         <xs:element name="fecha_creacion" type="xs:dateTime" nillable="true"/>
+         <xs:element name="NIT" type="xs:string" nillable="true"/>
+         <xs:element name="DIRECCION" type="xs:string" nillable="true"/>
+         <xs:element name="CIUDAD" type="xs:string" nillable="true"/>
+         <xs:element name="DEPARTAMENTO" type="xs:string" nillable="true"/>
+         <xs:element name="URL" type="xs:string" nillable="true"/>
+         <xs:element name="CORREO" type="xs:string" nillable="true"/>
+         <xs:element name="TELEFONO" type="xs:string" nillable="true"/>
+         <xs:element name="PAIS" type="xs:string" nillable="true"/>
+         <xs:element name="TIPO_CLIENTE" type="xs:string" nillable="true"/>
+         <xs:element name="INDICATIVO" type="xs:string" nillable="true"/>
+         <xs:element name="APELLIDO_G_GRAL" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

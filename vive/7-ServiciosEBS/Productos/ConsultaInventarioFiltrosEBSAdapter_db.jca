@@ -1,0 +1,13 @@
+<adapter-config name="ConsultaInventarioFiltrosEBSAdapter" adapter="Database Adapter" wsdlLocation="ConsultaInventarioFiltrosEBSAdapter.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="ConsultaInventarioFiltrosEBSAdapter_ptt" operation="ConsultaInventarioFiltrosEBSAdapter">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="  SELECT * FROM IMCM_CONSULTA_INV_VM WHERE decode(TIPO_PRODUCTO,null,' ',TIPO_PRODUCTO) LIKE UPPER(#v_tipo_producto) AND TRANSLATE(UPPER(CENTRO_COSTOS_DESC),'‘áéíóúÁÉÍÓÚ’', '‘aeiouAEIOU’') LIKE UPPER(#v_linea) AND UPPER(MARCA) LIKE '%'||UPPER(#v_marca)||'%' AND UPPER(MODELO) LIKE UPPER(#vmodelo) AND UPPER(DESCRIPTION) LIKE '%'||UPPER(#v_descripcion)||'%' AND organization_id like #v_organization_id and decode(SUBINVENTARIO, null, ' ',SUBINVENTARIO) like #v_subinventario and decode(cotizable, null, ' ', cotizable) like #v_cotizable and CATALOGO LIKE #v_catalago  order by description asc "/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

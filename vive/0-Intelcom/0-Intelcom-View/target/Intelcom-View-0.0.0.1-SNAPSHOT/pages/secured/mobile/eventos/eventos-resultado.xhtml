@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="eventos-resultado-form">
+            <p><h1 align="center">Registrar Resultados</h1></p> 
+
+            <h:panelGrid columns="4" id="datos-visita-grid" cellpadding="5" styleClass="tablaDetalles" >
+                <p:outputLabel  id="ol_nit" value="NIT" styleClass="labelDetalle" />
+                <p:outputLabel id="it_nit" value="#{eventoResultadoFacesBean.evento.idcliente}" />
+                <p:outputLabel  id="ol_nombre" value="Nombre Cliente" styleClass="labelDetalle" />
+                <p:outputLabel id="it_nombre" value="#{eventoResultadoFacesBean.evento.nombreCliente}" />
+                <p:outputLabel id="ol_fechaVisitaMostrar"  value="Fecha" styleClass="labelDetalle" />
+                <p:outputLabel id="it_fechaVisitaMostrar" value="#{eventoResultadoFacesBean.evento.fechaVisitaMostrar}" />
+                <p:outputLabel id="ol_idTipovisita" value="Medio de Contacto" styleClass="labelDetalle" />
+                <p:outputLabel id="it_idTipovisita" value="#{eventoResultadoFacesBean.evento.idTipovisita.tipoEtiqueta}" />
+                <p:outputLabel id="ol_horaIniVisitaMostrar" value="Hora Inicio" styleClass="labelDetalle" />
+                <p:outputLabel id="it_horaIniVisitaMostrar" value="#{eventoResultadoFacesBean.evento.horaIniVisitaMostrar}" />
+                <p:outputLabel id="ol_ubicacion" value="Ubicación" styleClass="labelDetalle" />
+                <p:outputLabel id="it_ubicacion" value="#{eventoResultadoFacesBean.evento.ubicacion}" />
+                <p:outputLabel id="ol_horaFinVisitaMostrar" value="Hora Fin" styleClass="labelDetalle" />
+                <p:outputLabel id="it_horaFinVisitaMostrar" value="#{eventoResultadoFacesBean.evento.horaFinVisitaMostrar}" />
+                <p:outputLabel id="ol_fechaModificacionMostrar" value="Fecha Última Modificación" styleClass="labelDetalle" />
+                <p:outputLabel id="it_fechaModificacionMostrar" value="#{eventoResultadoFacesBean.evento.fechaModificacionMostrar}" />
+                <p:outputLabel id="ol_asunto" value="Asunto" styleClass="labelDetalle" />
+                <p:outputLabel id="it_asunto" value="#{eventoResultadoFacesBean.evento.asuntovisita}" />
+            </h:panelGrid>
+            <h:panelGrid columns="2" id="resultados-visita-grid" cellpadding="5" styleClass="tablaDetalles" >
+                <p:outputLabel id="ol-tipo-estado" value="Estado" styleClass="labelForm" />
+                <p:selectOneMenu id="select-tipo-estado" value="#{eventoResultadoFacesBean.idTipoEstado}" required="true" >
+                    <f:selectItems value="#{eventoResultadoFacesBean.listaEstados}" 
+                                   var="typEstado" itemLabel="#{typEstado.tipoEtiqueta}" itemValue="#{typEstado.idTipo}"  />  
+                </p:selectOneMenu>    
+                <p:outputLabel id="ol_acciones" value="Actividades Generadas" styleClass="labelForm" />
+                <p:inputText id="it_acciones" value="#{eventoResultadoFacesBean.evento.accionesGeneradas}" />
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_resultados" value="(*)" styleClass="requerido" rendered="#{!clientesNombreNitFacesBean.soloClientesAsignados}" />
+                    <p:outputLabel id="ol_resultados" value="Resultados" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_resultados" value="#{eventoResultadoFacesBean.evento.resultadovisita}" required="true" requiredMessage="Es necesario ingresar el resultado de la visita" />
+            </h:panelGrid>
+            <p><h2 align="center">Resultados por Oportunidad  </h2></p> 
+            <p:dataTable  id="tablaOportunidadesXVisita" var="oportunidad" value="#{eventoResultadoFacesBean.evento.oportunidadVisitaSet}" emptyMessage="Sin registros" styleClass="tablaresultados">
+
+                <p:column id="col_oportunidad_nombre" headerText="Nombre Oportunidad">
+                    <p:outputLabel id="ot_t_oportunidad_nombre" value="#{oportunidad.nombreOportunidad}" />
+                </p:column>
+                <p:column id="col_oportunidad_resultado" headerText="Resultado Oportunidad">
+                    <p:inputText id="it_t_oportunidad_resultado" value="#{oportunidad.resultadoVisita}" />
+                </p:column>
+            </p:dataTable>
+            <h:panelGrid columns="2" id="resultados-check-grid" cellpadding="5">
+                <p:outputLabel id="ol_check_visita" value="¿Genera Visita?" styleClass="labelForm" />
+                <p:selectBooleanCheckbox value="#{eventoResultadoFacesBean.generaVisita}" >
+                    <p:ajax update="panel_resultados"  />
+                </p:selectBooleanCheckbox>
+                <p:outputLabel id="ol_check_oportunidad" value="¿Genera oportunidad?" styleClass="labelForm" />
+                <p:selectBooleanCheckbox value="#{eventoResultadoFacesBean.generaOportunidad}" >
+                    <p:ajax update="panel_resultados"  />
+                </p:selectBooleanCheckbox>
+            </h:panelGrid>
+
+            <p:accordionPanel id="panel_resultados" activeIndex="-1" multiple="true">
+
+                <p:tab id="tab_generaVisita" title="Creación de Visita" disabled="#{!eventoResultadoFacesBean.generaVisita}"  >
+                    <p><h1 align="center">Crear Visita</h1></p> 
+                    <p:separator style="width:90%" />
+
+                    <h:panelGrid  columns="2" id="grid_evento_crear" cellpadding="5" width="90%" >
+
+                        <h:panelGroup style="width: 100%">
+                            <p:outputLabel id="req_ol_asunto_gec" value="(*)" styleClass="requerido"  />
+                            <p:outputLabel id="ol_asunto_gec" value="Asunto" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:inputText id="it_asunto_gec" value="#{eventoCrearFacesBean.evento.asuntovisita}" required="#{eventoResultadoFacesBean.generaVisita}" requiredMessage="En creación de Visita el asunto de la visita es requerido." />
+
+                        <p:outputLabel id="req_ol_oportunidades_gec" value="Oportunidades" styleClass="labelForm" />
+                        <p:selectManyCheckbox id="smcb_oportunidades_gec" value="#{eventoCrearFacesBean.listaOportunidadesSeleccionadas}"  >
+                            <f:selectItems value="#{eventoCrearFacesBean.listaOportunidades}" var="oportunidad" itemLabel="#{oportunidad.nombreOportunidad}" itemValue="#{oportunidad.idOportunidad}" />
+                        </p:selectManyCheckbox>            
+
+                        <h:panelGroup style="width: 100%">
+                            <p:outputLabel id="req_ol_tipo_evento_gec" value="(*)" styleClass="requerido"  />
+                            <p:outputLabel id="ol_tipo_evento_gec" value="Medio de Contacto" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:selectOneMenu id="select-tipo-evento_gec" value="#{eventoCrearFacesBean.evento.idTipovisita.idTipo}"  required="#{eventoResultadoFacesBean.generaVisita}"  requiredMessage="En creación de Visita el Tipo de Visita de la visita es requerido." >
+                            <f:selectItems value="#{eventoCrearFacesBean.listaTiposEvento}" 
+                                           var="typEvento" itemLabel="#{typEvento.tipoEtiqueta}" itemValue="#{typEvento.idTipo}"  />  
+                        </p:selectOneMenu>    
+
+                        <h:panelGroup style="width: 100%">
+                            <p:outputLabel id="req_ol_fecha_gec" value="(*)" styleClass="requerido"  />
+                            <p:outputLabel id="ol_fecha_gec" value="Fecha" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:calendar id="btn_fecha" value="#{eventoCrearFacesBean.evento.fechainicio}"  readonlyInput="true" pattern="dd-MMM-yyyy"  required="#{eventoResultadoFacesBean.generaVisita}"  requiredMessage="En creación de Visita la fecha de la visita es requerida." mode="inline"/>
+
+                        <h:panelGroup style="width: 100%">
+                            <p:outputLabel id="req_ol_fecha_ini_gec" value="(*)" styleClass="requerido"  />
+                            <p:outputLabel id="ol_fecha_ini_gec" value="Hora Inicio (24H)" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:selectOneMenu id="select-hora-ini_gec" value="#{eventoCrearFacesBean.horaIni}" required="#{eventoResultadoFacesBean.generaVisita}" requiredMessage="En creación de Visita la hora de inicio de la visita es requerida." >
+                            <f:selectItems value="#{eventoCrearFacesBean.valoresHoras}" 
+                                           var="valorHora" itemLabel="#{valorHora}" itemValue="#{valorHora}"  />  
+                        </p:selectOneMenu>    
+
+                        <h:panelGroup style="width: 100%">
+                            <p:outputLabel id="req_ol_fecha_fin_gec" value="(*)" styleClass="requerido"  />
+                            <p:outputLabel id="ol_fecha_fin_gec" value="Hora Fin (24H)" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:selectOneMenu id="select-hora-fin_gec" value="#{eventoCrearFacesBean.horaFin}" required="#{eventoResultadoFacesBean.generaVisita}" requiredMessage="En creación de Visita la hora de finalización de la visita es requerida."  >
+                            <f:selectItems value="#{eventoCrearFacesBean.valoresHoras}" 
+                                           var="valorHora" itemLabel="#{valorHora}" itemValue="#{valorHora}"  />  
+                        </p:selectOneMenu>    
+
+
+                        <p:outputLabel id="ol_ubicacion_gec" value="Ubicación" styleClass="labelForm" />
+                        <p:inputText id="it_ubicacion_gec" value="#{eventoCrearFacesBean.evento.ubicacion}" />
+
+                    </h:panelGrid>
+                    <p:separator style="width:90%" />
+
+                    <p><h1>Lista de Invitados</h1></p> 
+                    <p:commandButton id="add_invitado_gec" value="Añadir Invitado" onclick="PF('consulta_inv_gec').show();" styleClass="backGIntelcom" immediate="true" />
+                    <p:dataTable id="tablaInvitados_gec" value="#{eventoCrearFacesBean.listaUsuariosSeleccionados}" var="invitado" emptyMessage="Sin registros" styleClass="tablaresultados">
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{invitado.nombre}," />
+                        </p:column>
+                        <p:column headerText="Usuario">
+                            <h:outputText value="#{invitado.usuario}" />
+                        </p:column>
+                        <p:column headerText="Acción">
+                            <p:commandButton action="#{eventoCrearFacesBean.borrarInvitado}" value="Borrar" icon="ui-icon-trash" process="@this" update="@form" styleClass="backGIntelcom" >
+                                <f:setPropertyActionListener target="#{eventoCrearFacesBean.usuarioBorrar}" value="#{invitado}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:separator style="width:90%" />
+                </p:tab>
+
+                <p:tab id="tab_generaOportunidad" title="Creación de Oportunidad" disabled="#{!eventoResultadoFacesBean.generaOportunidad}" >
+                    <p><h1 align="center">Creación de Oportunidad</h1></p> 
+                    <p:separator style="width:90%" />
+
+                    <h:panelGrid  columns="2" id="grid_nit_tco" cellpadding="5" width="90%" >
+                        <p:outputLabel value="Línea" styleClass="labelForm"/>
+                        <p:selectOneMenu id="selectLinea" value="#{oportunidadesCrearFacesBean.linea}" >
+                            <p:ajax process="selectLinea"  listener="#{inventarioConsultaFacesBean.listaMarcaPorLinea}" event="valueChange"  update=":template:producto_inventario:panel_id_marca,:template:producto_inventario:panel_id_modelo"/>
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <f:selectItems value="#{cotizacionesCrearBean.contadorCotLinea}"  
+                                           var="linea" itemLabel="#{linea.idlinea}"  
+                                           itemValue="#{linea.idlinea}"/> 
+                        </p:selectOneMenu>
+
+                        <h:panelGroup style="width: 100%" >
+                            <p:outputLabel id="req_ol_nombre_oportunidad_tco" value="(*)" styleClass="requerido" />
+                            <p:outputLabel id="ol_nombre_oportunidad_tco" value="Nombre Oportunidad" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:inputText id="it_nombre_oportunidad_tco" value="#{oportunidadesCrearFacesBean.oportunidad.nombreOportunidad}" required="#{eventoResultadoFacesBean.generaOportunidad}" requiredMessage="En creación de oportunidades el nombre de la oportunidad es requerido" />
+
+                        <h:panelGroup style="width: 100%" id="panel_add_producto" >
+                            <p:outputLabel id="req_ol_producto_tco" value="(*)" styleClass="requerido" />
+                            <p:outputLabel id="ol_producto_tco" value="Producto" styleClass="labelForm" />
+                            <p:commandButton id="btn_add_producto_tco" onclick="PF('consulta_prod_tco').show();" value=" " icon="ui-icon-search" immediate="true" style="display: inline-block !important"  rendered="#{oportunidadesCrearFacesBean.agregarProductos}"/>
+                        </h:panelGroup>
+                        <p:dataTable id="tablaProductosSeleccionados_tco" value="#{oportunidadesCrearFacesBean.listaProductosSeleccionados}" var="producto" emptyMessage="Sin registros"  styleClass="tablaresultados">
+                            <p:column headerText="Nombre" styleClass="justificarIzquierda">
+                                <h:outputText value="#{producto.nombre}," />
+                            </p:column>
+                            <p:column headerText="Marca" styleClass="campoOculto">
+                                <h:outputText value="#{producto.marca}" />
+                            </p:column>
+                            <p:column headerText="Código">
+                                <h:outputText id="labelCodigo" value="Código" styleClass="labelRows "/>
+                                <h:outputText value="#{producto.codigo}" styleClass="detailRows"/>
+                            </p:column>
+                            <p:column id="col_id_cantidad" headerText="Cantidad">
+                                <h:outputText id="labelCantidad" value="Cantidad" styleClass="labelRows "/>
+                                <h:inputText id="ipt_cantidad" value="#{producto.cantidad}" styleClass="detailRows"/>
+                            </p:column>
+                            <p:column headerText="Acción">
+                                <p:commandButton action="#{oportunidadesCrearFacesBean.borrarProducto}" value="Borrar" icon="ui-icon-trash" process="@this" update="tablaProductosSeleccionados_tco,:template:eventos-resultado-form:panel_resultados:panel_add_producto" >
+                                    <f:setPropertyActionListener target="#{oportunidadesCrearFacesBean.productoBorrar}" value="#{producto}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+
+
+                        <h:panelGroup style="width: 100%" >
+                            <p:outputLabel id="req_ol_tipo_oportunidad_tco" value="(*)" styleClass="requerido" />
+                            <p:outputLabel id="ol_tipo_oportunidad_tco" value="Tipo Oportunidad" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:selectOneMenu id="select-tipo-oportunidad_tco" value="#{oportunidadesCrearFacesBean.oportunidad.idTipoOportunidad}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{oportunidadesCrearFacesBean.listaTipoOportunidad}" 
+                                           var="typOportunidad" itemLabel="#{typOportunidad.tipoEtiqueta}" itemValue="#{typOportunidad.tipoValor}"  />  
+                        </p:selectOneMenu>    
+                        <h:panelGroup style="width: 100%" >
+                            <p:outputLabel id="req_ol_fecha_cierre_tco" value="(*)" styleClass="requerido" />
+                            <p:outputLabel id="ol_fecha_cierre_tco" value="Fecha Cierre" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:calendar id="btn_fecha_cierre" value="#{oportunidadesCrearFacesBean.fechaCierre}"   readonlyInput="true" pattern="dd-MMM-yyyy" mode="inline"/>
+
+
+                        <h:panelGroup style="width: 100%" >
+                            <p:outputLabel id="req_ol_prob_ejecucion_tco" value="(*)" styleClass="requerido" />
+                            <p:outputLabel id="ol_prob_ejecucion_tco" value="Probabilidad Ejecución del Proyecto" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:selectOneMenu id="select-tipo-ejecucion_tco" value="#{oportunidadesCrearFacesBean.oportunidad.idProbabilidadEjecucion}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{oportunidadesCrearFacesBean.listaProbabilidadEjecucion}" 
+                                           var="typEjecucion" itemLabel="#{typEjecucion.tipoEtiqueta}" itemValue="#{typEjecucion.idTipo}"  />  
+                        </p:selectOneMenu>    
+
+
+                        <h:panelGroup style="width: 100%" >
+                            <p:outputLabel id="req_ol_prob_exito_tco" value="(*)" styleClass="requerido" />
+                            <p:outputLabel id="ol_prob_exito_tco" value="Probabilidad de exito para IMOCOM" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:selectOneMenu id="select-tipo-exito_tco" value="#{oportunidadesCrearFacesBean.oportunidad.idProbabilidadExito}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{oportunidadesCrearFacesBean.listaProbabilidadExito}" 
+                                           var="typExito" itemLabel="#{typExito.tipoEtiqueta}" itemValue="#{typExito.idTipo}"  />  
+                        </p:selectOneMenu>    
+
+                        <h:panelGroup style="width: 100%" >
+                            <p:outputLabel id="req_ol_canal_tco" value="(*)" styleClass="requerido" />
+                            <p:outputLabel id="ol_canal_tco" value="Canal Entrada de Oportunidad" styleClass="labelForm" />
+                        </h:panelGroup>
+                        <p:selectOneMenu id="select-tipo-etapa_tco" value="#{oportunidadesCrearFacesBean.oportunidad.idCanalEntrada}" >
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{oportunidadesCrearFacesBean.listaCanalEntrada}" 
+                                           var="typCanal" itemLabel="#{typCanal.valor}" itemValue="#{typCanal.clave}"  />  
+                        </p:selectOneMenu>   
+
+                        <p:outputLabel id="ol_observacion_tco" value="Observación" styleClass="labelForm" />
+                        <p:inputText id="it_observacion_tco" value="#{oportunidadesCrearFacesBean.oportunidad.observacionPedido}"  />    
+
+                    </h:panelGrid>                
+
+                </p:tab>
+
+            </p:accordionPanel>    
+            <p:separator style="width:90%" />
+            <p:messages id="messagesPage" showDetail="true" showSummary="false" autoUpdate="true" styleClass="messagesForm" />  
+
+            <h:panelGrid columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >  
+                <p:commandButton value="Guardar"  id="crear_op_button" onclick="this.disabled = true;" oncomplete="this.disabled=false;" onerror="this.disabled=false;" update="crear_op_button" actionListener="#{eventoResultadoFacesBean.actualizarAction}" styleClass="backGIntelcom" />
+                <p:commandButton  value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:eventos-consultar" />
+                </p:commandButton>
+            </h:panelGrid>
+
+        </h:form>
+
+        <p:dialog header="Añadir Invitado" widgetVar="consulta_inv_gec" showEffect="pop"  >
+            <h:form >  
+                <pm:field>    
+                    <p:outputLabel value="Nombre Invitado" style="font-weight: bold" />
+                    <p:inputText id="it_nombre-buscar_gec" value="#{eventoCrearFacesBean.nombreBuscar}" />
+                </pm:field>    
+                <p:commandButton value="Buscar" update="tablaUsuarios_gec"  actionListener="#{eventoCrearFacesBean.buscarAction}" styleClass="backGIntelcom"   />
+                <p:separator style="width:90%" />
+                <p><h1>Consultar Invitados</h1></p> 
+                <p:dataTable id="tablaUsuarios_gec" value="#{eventoCrearFacesBean.listaUsuariosConsultados}" var="usuario" emptyMessage="Sin registros" styleClass="tablaresultados">
+                    <p:column headerText="Nombre Invitado">
+                        <h:outputText style="font-weight: bold" value="#{usuario.nombre}" />
+                    </p:column>
+                    <p:column headerText="Nombre Usuario">
+                        <h:outputText value="#{usuario.usuario}" />
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton action="#{eventoCrearFacesBean.agregarInvitado}" value="Agregar" process="@all" update=":template:eventos-resultado-form:panel_resultados:tablaInvitados_gec,tablaUsuarios_gec" styleClass="backGIntelcom" >
+                            <f:setPropertyActionListener target="#{eventoCrearFacesBean.usuarioAgregar}" value="#{usuario}"   />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Añadir Producto en Creación de Oportunidad" widgetVar="consulta_prod_tco" showEffect="pop"  >
+            <h:form id="producto_inventario" >  
+                <h:panelGrid  columns="2" id="grid_consulta_inventario_tco" cellpadding="5" width="90%" >
+
+                    <h:panelGroup style="width: 100%" >
+                        <p:outputLabel id="req_ol_tipo_tco" value="(*)" styleClass="requerido" />
+                        <p:outputLabel id="ol_tipo_tco" value="Tipo de Producto" styleClass="labelForm" /> 
+                    </h:panelGroup>
+                    <p:selectOneMenu id="sor_tipo" value="#{inventarioConsultaFacesBean.tipoProducto}">
+                        <p:ajax process="@this" partialSubmit="true"/>
+                        <f:selectItem itemLabel="" itemValue=""/>
+                        <f:selectItems value="#{inventarioConsultaFacesBean.listaTiposProducto}" var="typProd" itemLabel="#{typProd.tipoEtiqueta}" itemValue="#{typProd.tipoValor}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel id="ol_marca" value="Marca" styleClass="labelForm" />
+                    <h:panelGroup style="width: 100%" id="panel_id_marca">
+                        <p:selectOneMenu id="selectMarca" value="#{inventarioConsultaFacesBean.marca}" >
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <p:ajax process="selectMarca"  event="valueChange" listener="#{inventarioConsultaFacesBean.listaModeloXMarcas}" update="panel_id_modelo"/>
+                            <f:selectItems value="#{inventarioConsultaFacesBean.listaMarcas}"  
+                                           var="tipo" itemLabel="#{tipo.nombre}"  
+                                           itemValue="#{tipo.nombre}"/> 
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+
+
+                    <p:outputLabel id="ol_modelo" value="Modelo" styleClass="labelForm" />
+                    <h:panelGroup style="width: 100%" id="panel_id_modelo">
+                        <p:selectOneMenu id="selectModelo" value="#{inventarioConsultaFacesBean.modelo}" >
+                            <p:ajax process="selectModelo"  event="valueChange"/>
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <f:selectItems value="#{inventarioConsultaFacesBean.listaModelos}"  
+                                           var="tipo" itemLabel="#{tipo.nombre}"  
+                                           itemValue="#{tipo.nombre}"/> 
+                        </p:selectOneMenu>
+
+                    </h:panelGroup>
+
+                    <p:outputLabel id="ol_descripcion" value="Descripción" styleClass="labelForm" />
+                    <p:inputText id="it_descripcion" value="#{inventarioConsultaFacesBean.descripcion}"  />
+                    <input type="hidden" name="hidden1" value="crear-oportunidad" />
+
+
+                </h:panelGrid>
+
+                <p:messages id="messagesPopup_tco" showDetail="true" autoUpdate="true" styleClass="messagesForm" />       
+
+
+                <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                    <p:commandButton id="btn_buscar_tco" value="Buscar" update="tablaProductosConsultados_tco,btn_buscar_tco" onclick="this.disabled = true;" oncomplete="this.disabled=false;" actionListener="#{inventarioConsultaFacesBean.buscarAction}" styleClass="backGIntelcom" />
+                </h:panelGrid>
+
+
+                <p:separator style="width:90%" />
+                <p><h1>Lista de Productos</h1></p> 
+                <p:dataTable  id="tablaProductosConsultados_tco" var="producto" value="#{inventarioConsultaFacesBean.listaProductos}" emptyMessage="Sin registros"  styleClass="tablaresultados">
+
+
+                    <p:column id="col_nombre" headerText="Nombre producto" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_t_nombre" value="#{producto.nombre}" />
+                    </p:column>
+
+                    <p:column id="col_precioLista" headerText="Precio Lista DDP">
+                        <h:outputText id="labelPrecio" value="Precio Lista DDP" styleClass="labelRows"/>
+                        <h:outputText id="ot_t_precioLista" value="#{producto.precioLista}" styleClass="detailRows"/>
+                    </p:column>
+
+                    <p:column id="col_division" headerText="Moneda">
+                        <h:outputText id="labelBodega" value="Moneda" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_division" value="#{producto.moneda}" styleClass="detailRows"/>
+                    </p:column>
+
+                    <p:column id="col_cantidad" headerText="Cantidad">
+                        <h:outputText id="labelCantidad" value="Cantidad" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_cantidad" value="#{producto.cantidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_unidad" headerText="Unidad">
+                        <h:outputText id="labelUnidad" value="Unidad" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_unidad" value="#{producto.unidad}" styleClass="detailRows"/>
+                    </p:column>
+
+                    <p:column headerText="Acción">
+                        <p:commandButton action="#{oportunidadesCrearFacesBean.agregarProducto}" onclick="PF('consulta_prod_tco').hide();" value="Agregar"  update=":template:eventos-resultado-form:panel_resultados:tablaProductosSeleccionados_tco,:template:eventos-resultado-form:panel_resultados:panel_add_producto,tablaProductosConsultados_tco" styleClass="backGIntelcom"  >
+                            <f:setPropertyActionListener target="#{oportunidadesCrearFacesBean.productoAgregar}" value="#{producto}"   />
+                        </p:commandButton>
+                    </p:column>
+
+
+
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
+
+    </ui:define>
+</ui:composition> 

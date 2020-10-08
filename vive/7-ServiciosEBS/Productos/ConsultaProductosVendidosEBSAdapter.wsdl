@@ -1,0 +1,25 @@
+<?binding.jca ConsultaProductosVendidosEBSAdapter_db.jca?>
+<wsdl:definitions name="ConsultaProductosVendidosEBSAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/ConsultaProductosVendidosEBSAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaProductosVendidosEBSAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/ConsultaProductosVendidosEBSAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsultaProductosVendidosEBSAdapter_plt">
+        <plt:role name="ConsultaProductosVendidosEBSAdapter_role">
+            <plt:portType name="tns:ConsultaProductosVendidosEBSAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaProductosVendidosEBSAdapter" schemaLocation="xsd/ConsultaProductosVendidosEBSAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsultaProductosVendidosEBSAdapterInput_msg">
+        <wsdl:part name="ConsultaProductosVendidosEBSAdapterInput_msg" element="db:ConsultaProductosVendidosEBSAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsultaProductosVendidosEBSAdapterOutputCollection_msg">
+        <wsdl:part name="ConsultaProductosVendidosEBSAdapterOutputCollection" element="db:ConsultaProductosVendidosEBSAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsultaProductosVendidosEBSAdapter_ptt">
+        <wsdl:operation name="ConsultaProductosVendidosEBSAdapter">
+            <wsdl:input message="tns:ConsultaProductosVendidosEBSAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsultaProductosVendidosEBSAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

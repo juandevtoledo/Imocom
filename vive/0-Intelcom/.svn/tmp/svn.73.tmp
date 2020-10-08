@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wls:weblogic-ejb-jar xmlns:wls="http://xmlns.oracle.com/weblogic/weblogic-ejb-jar" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd http://xmlns.oracle.com/weblogic/weblogic-ejb-jar http://xmlns.oracle.com/weblogic/weblogic-ejb-jar/1.0/weblogic-ejb-jar.xsd">
+    
+    <!--wls:weblogic-enterprise-bean>
+        <wls:ejb-name>IUserService</wls:ejb-name>
+        <wls:jndi-name>ejb/ServiceBean</wls:jndi-name>
+        <wls:enable-call-by-reference>true</wls:enable-call-by-reference>
+    </wls:weblogic-enterprise-bean -->
+
+</wls:weblogic-ejb-jar>
+
+

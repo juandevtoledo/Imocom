@@ -1,0 +1,25 @@
+<?binding.jca ConsutaOportunidadesVisitaAdapter_db.jca?>
+<wsdl:definitions name="ConsutaOportunidadesVisitaAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsutaOportunidadesVisitaAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsutaOportunidadesVisitaAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsutaOportunidadesVisitaAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsutaOportunidadesVisitaAdapter_plt">
+        <plt:role name="ConsutaOportunidadesVisitaAdapter_role">
+            <plt:portType name="tns:ConsutaOportunidadesVisitaAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsutaOportunidadesVisitaAdapter" schemaLocation="xsd/ConsutaOportunidadesVisitaAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsutaOportunidadesVisitaAdapterInput_msg">
+        <wsdl:part name="ConsutaOportunidadesVisitaAdapterInput_msg" element="db:ConsutaOportunidadesVisitaAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsutaOportunidadesVisitaAdapterOutputCollection_msg">
+        <wsdl:part name="ConsutaOportunidadesVisitaAdapterOutputCollection" element="db:ConsutaOportunidadesVisitaAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsutaOportunidadesVisitaAdapter_ptt">
+        <wsdl:operation name="ConsutaOportunidadesVisitaAdapter">
+            <wsdl:input message="tns:ConsutaOportunidadesVisitaAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsutaOportunidadesVisitaAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="client-actualizar-form">
+            <p><h1 align="center">Actualizar Cliente</h1></p> 
+            <p:separator style="width:90%" styleClass="separadores"/>   
+            <h:panelGrid columns="2" id="grid_nit"  cellpadding="5" width="90%" >
+
+                <p:outputLabel id="ol_nombre_cliente" value="Nombre Cliente" styleClass="labelForm" />
+                <p:outputLabel id="it_nombre" value="#{clientesActualizarFacesBean.detalleCliente.nombre}"  />
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_pais" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_pais" value="País" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-tipo-pais" value="#{clientesActualizarFacesBean.idPais}" valueChangeListener="#{clientesActualizarFacesBean.cargarDepto}"  required="true" requiredMessage="Campo País es requerido">
+                    <f:selectItems value="#{clientesActualizarFacesBean.listaPaises}" 
+                                   var="typPais" itemLabel="#{typPais.tipoEtiqueta}" itemValue="#{typPais.idTipo}"  /> 
+                    <p:ajax update="pdeptos,pcius"/>
+                </p:selectOneMenu>    
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_depto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_depto" value="Departamento" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="pdeptos">
+                    <p:selectOneMenu rendered="#{clientesActualizarFacesBean.esPaisColombia}" id="select-tipo-depto" value="#{clientesActualizarFacesBean.idDepartamento}" valueChangeListener="#{clientesActualizarFacesBean.cargarCiudad}"  required="true" requiredMessage="Campo Departamento requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{clientesActualizarFacesBean.listaDepto}" 
+                                       var="typDepto" itemLabel="#{typDepto.tipoEtiqueta}" itemValue="#{typDepto.idTipo}"  /> 
+                        <p:ajax update="pcius"/>
+                    </p:selectOneMenu>
+                    <p:inputText rendered="#{!clientesActualizarFacesBean.esPaisColombia}" id="it_tipo-depto" value="#{clientesActualizarFacesBean.idDepartamento}"  required="true" requiredMessage="Información de Departamento es requerido" />
+                </h:panelGroup>
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_ciudad" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_ciudad" value="Ciudad" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="pcius">
+                    <p:selectOneMenu rendered="#{clientesActualizarFacesBean.esPaisColombia}" id="select-tipo-ciudad" value="#{clientesActualizarFacesBean.idCiudad}"  required="true" requiredMessage="Campo Ciudad requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{clientesActualizarFacesBean.listaCiudad}"
+                                       var="typCiudad" itemLabel="#{typCiudad.tipoEtiqueta}" itemValue="#{typCiudad.idTipo}" />
+                    </p:selectOneMenu>
+                    <p:inputText rendered="#{!clientesActualizarFacesBean.esPaisColombia}" id="it_tipo-ciudad" value="#{clientesActualizarFacesBean.idCiudad}"  required="true" requiredMessage="Información de Ciudad es requerida" />
+                </h:panelGroup>
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_direccion" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_direccion" value="Dirección" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_direccion" value="#{clientesActualizarFacesBean.detalleCliente.direccion}" required="true" requiredMessage="Dirección es requerida" />
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_telefono" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_telefono" value="Teléfono" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_telefono" value="#{clientesActualizarFacesBean.detalleCliente.telefono}" required="true" requiredMessage="Teléfono es requerido" />
+                
+            </h:panelGrid>
+
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+
+            <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton id="btn_actualizar_cli" onclick="this.disabled=true;" oncomplete="this.disabled=false;" onerror="this.disabled=false;" update="btn_actualizar_cli" value="Solicitar Actualización"  actionListener="#{clientesActualizarFacesBean.actualizarAction}" styleClass="backGIntelcom" />
+                <p:commandButton id="btn_cancelar" value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom">
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:clientes-detalleConsultado" />
+                </p:commandButton>
+            </h:panelGrid>
+
+            
+            <p><h1>Contactos del Cliente</h1></p>
+            
+            <p:commandButton id="btn_t_insertar_contacto" action="#{clientesActualizarFacesBean.redirectInsertartContacto}" value="Crear Contacto" update="@form" styleClass="backGIntelcom" immediate="true">
+            </p:commandButton>
+            
+            <p:dataTable  id="tablaContactos" var="contacto" value="#{clientesActualizarFacesBean.detalleCliente.listaContactos}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+
+                <p:column id="col_nombre" headerText="Nombre" styleClass="justificarIzquierda" >
+                    <h:outputText id="ot_tablaContactos_nombre" value="#{contacto.nombre}" />
+                </p:column>
+
+                <p:column id="col_cargo" headerText="Cargo">
+                    <h:outputText id="labelCargo" value="Cargo" styleClass="labelRows "/>
+                    <h:outputText id="ot_tablaContactos_cargo" value="#{contacto.cargo}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_telefono" headerText="Teléfono">
+                    <h:outputText id="labelTelefono" value="Teléfono" styleClass="labelRows "/>
+                    <h:outputLink value="tel:#{contacto.telefono}" styleClass="detailRows">
+                        <h:outputText value="#{contacto.telefono}" />
+                    </h:outputLink>     
+                </p:column>
+
+                <p:column id="col_celular" headerText="Celular">
+                    <h:outputText id="labelCelular" value="Celular" styleClass="labelRows "/>
+                    <h:outputLink value="tel:#{contacto.celular}" styleClass="detailRows">
+                        <h:outputText value="#{contacto.celular}" />
+                    </h:outputLink>                    
+                </p:column>
+
+                <p:column id="col_correo" headerText="Correo">
+                    <h:outputText id="labelCorreo" value="Correo" styleClass="labelRows "/>
+                    <h:outputLink value="mailto:#{contacto.correo}" styleClass="detailRows">
+                        <h:outputText value="#{contacto.correo}" />
+                    </h:outputLink>
+                </p:column>
+
+                <p:column id="col_actualizar" headerText="Actualizar">
+                    <p:commandButton id="btn_t_actualizar_contacto" action="#{clientesActualizarFacesBean.redirectActualizarContacto}" value="Actualizar" process="@this" update="@form" styleClass="backGIntelcom">
+                        <f:setPropertyActionListener target="#{clientesActualizarFacesBean.contactoSeleccionado}" value="#{contacto}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+</ui:composition>  

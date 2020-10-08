@@ -1,0 +1,103 @@
+/*
+ * Copyright (c) 2014 IMOCOM. All Rights Reserved.
+ * 
+ * This software is the confidential and proprietary information of IMOCOM.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of IMOCOM.
+ * 
+ * 
+ */
+
+package com.imocom.intelcom.view;
+
+import com.imocom.intelcom.view.security.NavigationFaces;
+import com.imocom.intelcom.view.security.UserSession;
+import com.imocom.intelcom.view.util.JSFUtils;
+import java.util.Set;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedProperty;
+
+/**
+ * <strong>Aplicación</strong>     : IMOCOM Sistema de inteligencia comercial.
+ * <br/>
+ * <br/>
+ * <strong>Date</strong>           : 22/08/2014
+ * <br/><br/>
+ * <strong>Target</strong>         : Abstract Faces component to composite presentation layer.
+ * 
+ * @author Carlos Guzman (cguzman) - PointMind S.A.S. - carlos.guzman@pointmind.com
+ * 
+ */
+public abstract class AbstractFacesBean extends JSFUtils {      
+    
+    
+    @ManagedProperty(value="#{navigationFaces}")
+    protected NavigationFaces navigationFaces;
+    
+    @ManagedProperty(value="#{userSession}")
+    protected UserSession userSession;
+    
+    protected static final String SUCESSFULL_MESSAGE = "La operación se realizó con éxito!";
+    
+    /**
+     *
+     *
+     *
+     */
+    @PostConstruct
+    protected void init() {   
+        build();
+    }
+    
+    /**
+     *
+     * @param title
+     */
+    protected void setPageTitle(String title) {
+        userSession.setPageTitle(title);
+    }
+    
+    /**
+     *
+     * @param redirect
+     * @return
+     */
+    protected String redirectTo(String redirect) {
+        return navigationFaces.navigation.get(redirect);
+    }
+    
+    /**
+     *
+     */
+    protected abstract void build();
+    
+    /**
+     *
+     * @param navigationFaces
+     */
+    public void setNavigationFaces(NavigationFaces navigationFaces) {
+        this.navigationFaces = navigationFaces;
+    }
+    
+    
+    /**
+     *
+     * @param userSession
+     */
+    public void setUserSession(UserSession userSession) {
+        this.userSession = userSession;
+    }
+ 
+    public boolean isUsuarioTieneRolGerente(){
+        Set<String> rolUsers =  userSession.getUserSessionRoles();
+        boolean tieneRolGerente = false;
+        for(String rol : rolUsers){
+            if( "gerente".equalsIgnoreCase( rol ) ){
+                tieneRolGerente = true;
+                break;
+            }
+        }
+        return tieneRolGerente;
+    }
+}

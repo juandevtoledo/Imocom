@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pm="http://primefaces.org/mobile">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link href="//fonts.googleapis.com/css?family=Open+Sans Condensed:300italic,300,700" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/css/intelcom-styles.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/css/html5demos.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/general-validations.js" />
+        <script type="text/javascript" src="#{request.contextPath}/js/primefaces-galleria-custom-override.js" />
+        <script type="text/javascript" src="#{request.contextPath}/js/h5utils.js" />      
+               
+        
+        <style type="text/css">
+            .ui-grid-a div {
+                padding: 0em 0.5em;
+            }
+        </style>
+    </h:head>
+
+    <f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE" />
+
+    <h:body>
+
+        <pm:page id="template" >
+            <div align="center" class="divFondoPaginas" >
+                <img src="/vive/images/fondoPagina.jpg" class="fondoPaginas" />
+            </div>
+
+            <h:form id="menu-form" styleClass="menuFormStyle">
+
+                <pm:header title="" swatch="b" style="background-color:#3388CC; border-color:#3388CC" >
+                    <p:commandButton id="btn-menu" type="button" value="Inteligencia Comercial" icon="ui-icon-home"
+                                     style="top: 0.0em; background-color:#3388CC; border-color:#3388CC; box-shadow: 0 1px 3px rgba(0, 0, 0, 0);"/>
+
+                    <p:commandButton id="btn-logout" icon="ui-icon-info" type="button" style="width: 27px;" />
+
+                    <p:overlayPanel for="btn-logout" widgetVar="pnl-basic-logout" at="right" showEffect="overlay" onShow="true"
+                                    style="min-height: 13%; right: 16px; top: 17px; position: absolute; color: #3388CC; background-color:#FFFFFF; border-color:#3388CC; box-shadow: 0 1px 3px rgba(0, 0, 0, 0); text-shadow: 0 0px 0 #FFF;">
+
+                        <p:dataList value="#{userSession.opcionesMenuEmergente}" var="_op" styleClass="menuEmergente" style="color: #3388CC; background-color:#FFFFFF; border-color:#3388CC; box-shadow: 0 1px 3px rgba(0, 0, 0, 0); text-shadow: 0 0px 0 #FFF;">
+                            <h:outputLink value="#" styleClass="ui-btn" onclick="PF('dlg1').show();" style="color: #3388CC; background-color:#FFFFFF; border-color:#3388CC; box-shadow: 0 1px 3px rgba(0, 0, 0, 0); text-shadow: 0 0px 0 #FFF;">
+                                #{_op}
+                            </h:outputLink>
+                        </p:dataList>
+                    </p:overlayPanel>
+
+
+                    <p:dialog header="Cerrar sesión" widgetVar="dlg1" showEffect="pop">
+                        <div style="text-align:center">
+                            <h:panelGrid columns="1" width="100%">
+                                <h:outputText value="Sr. usuario desea ud cerrar la sesión?" />
+                                <h:panelGrid columns="2" width="100%" rowClasses="panel-grid-buttons-logout" columnClasses="panel-grid-button-column-left, panel-grid-button-column-right">
+                                    <p:commandButton value="Si" immediate="true" action="#{userSession.terminateSession}" oncomplete="PF('dlg1').hide();" style="width: 100%;"/>
+                                    <p:commandButton value="No" type="button" onclick="PF('dlg1').hide()
+                                                ;" style="width: 100%;"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </div>
+                    </p:dialog>
+
+                </pm:header>
+                <p:messages id="messages" globalOnly="true" autoUpdate="true" showDetail="true"
+                            showSummary="false" closable="true" styleClass="messagesForm"/>
+                <p:overlayPanel for="btn-menu" widgetVar="pnl-dynamic" at="left" showEffect="overlay" dynamic="true" >
+
+                    <p:graphicImage value="/images/home_logo.png" width="90%" alt="Logo IMOCOM"/>
+                    <h:outputText style="font-size: 14px;"  value="Versión 1.4 - 16-03-2016"/>
+                    <div style="height: 9.3em; width: 100%; margin-left: -10px;">
+                        <div style="float: left; display: inline-block; width: 30%; position: absolute;">
+                            <h:graphicImage value="/image?file=test.jpg"  alt="user" style="width: 100%;"/>
+                        </div>
+                        <div style="margin-left: 75px; width: 70%; float: none;">
+                            <p style="line-height: 1.2em;"><b>#{userSession.usuario.nombre}</b>
+                                <i style='font-family: "PT Sans Narrow",sans-serif; font-size: 0.8em;'>#{userSession.usuario.correo}</i><br />
+                                <p:commandLink id="link_profile" value="Editar perfil" action="#{menuFacesBean.redirect}" immediate="true">
+                                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:perfil" />
+                                </p:commandLink>
+                            </p>
+                        </div>
+                    </div>
+                    <p:menu model="#{menuFacesBean.menuModel}" />
+
+                </p:overlayPanel>
+
+                <p:idleMonitor timeout="#{session.maxInactiveInterval * 1000}" >
+                    <p:ajax event="idle" listener="#{userSession.terminateSession}" oncomplete="window.location = '#{facesContext.externalContext.requestContextPath}';" />
+                </p:idleMonitor>
+
+            </h:form>
+            <pm:content>
+                <ui:insert name="content" />
+            </pm:content>
+        </pm:page>
+    </h:body>
+</html>

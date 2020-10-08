@@ -1,0 +1,13 @@
+<adapter-config name="ProductoCotizableAutomaticamente" adapter="Database Adapter" wsdlLocation="ProductoCotizableAutomaticamente.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="ProductoCotizableAutomaticamente_ptt" operation="ProductoCotizableAutomaticamente">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="select *  from apps.imcm_div_li_tipo_nuevo_v1 where catalogo = 'Y' and COTIZABLE_AUTOMATICAMENTE = 'Y' and PRECIO_LISTA_DDP > 0 and MONEDA_ORIGEN is not null and inventory_item_id = #v_inventory_item_id"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

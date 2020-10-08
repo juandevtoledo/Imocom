@@ -1,0 +1,1268 @@
+/*
+ * Copyright (c) 2014 IMOCOM. All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of IMOCOM.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of IMOCOM.
+ */
+package com.imocom.intelcom.ws.ebs.vo.entities;
+
+import java.io.Serializable;
+import java.util.List;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+/**
+ * <strong>AplicaciÃ³n</strong> : IMOCOM Sistema de Inteligencia Comercial.
+ * <br/>
+ * <br/>
+ * <strong>Date</strong> : Dec 22, 2014
+ * <br/><br/>
+ * <strong>Target</strong> :
+ *
+ * @author Carlos Guzman (cguzman) - PointMind S.A.S. -
+ * carlos.guzman@pointmind.com
+ *
+ */
+@XmlRootElement(name = "resultadoVisita", namespace = "http://com.imocom.intelcom.ws.ebs.interfaces/")
+@XmlType(name = "ResultadoVisitaVO", namespace = "http://com.imocom.intelcom.ws.ebs.interfaces/",
+        propOrder = {"nombreUsuario",
+            "creacionProspecto",
+            "idClienteVisita",
+            "tipoEventoVisita",
+            "estadoEventoVisita",
+            "idEventoGeneradorVisita",
+            "asuntoEventoVisita",
+            "resultadoEventoVisita",
+            "fechaCreacionVisita",
+            "fechaInicioVisita",
+            "fechaFinalVisita",
+            "fechaModificacionVisita",
+            "fechaRegistroResultadosVisita",
+            "ubicacionVisita",
+            "nombreOportunidadOportunidad",
+            "idClienteOportunidad",
+            "nombreClienteOportunidad",
+            "idUsuarioModificadorOportunidad",
+            "idTipoOportunidadOportunidad",
+            "nombreTipoOportunidadOportunidad",
+            "idIncotermOportunidad",
+            "nombreIncotermOportunidad",
+            "idTipoMonedaOportunidad",
+            "idCanalEntradaOportunidad",
+            "probabilidadProyectoOportunidad",
+            "probabilidadImocomOportunidad",
+            "observacionOportunidad",
+            "montoOportunidad",
+            "fechaCreacionOportunidad",
+            "fechaEstimadaCierreOportunidad",
+            "fechaModificacionOportunidad",
+            "idEtapaOportunidadOportunidad",
+            "idEstadoOportunidadOportunidad",
+            "nitClienteProspecto",
+            "nombreClienteProspecto",
+            "nombreContactoProspecto",
+            "cargoContactoProspecto",
+            "telefonoContactoProspecto",
+            "correoContactoProspecto",
+            "idPaisDireccionProspecto",
+            "nombrePaisDireccionProspecto",
+            "idDepartamentoDireccionProspecto",
+            "nombreDepartamentoDireccionProspecto",
+            "idCiudadDireccionProspecto",
+            "ciudadDireccionProspecto",
+            "direccionDireccionProspecto",
+            "telefonoPrincipalDireccionProspecto",
+            "idLineaProspecto",
+            "tipoLineaProspecto",
+            "idSectorIndustrialProspecto",
+            "nombreSectorIndustriaProspecto",
+            "observacionProspecto",
+            "oportunidadProducto",
+            "oportunidadNota",
+            "nombreRepresentantelegal",
+            "cedulaRepresentantelegal",
+            "nombreGerentelegal",
+            "cedulaGerentelegal",
+            "idContactoProspecto",
+            "celularContactoProspecto",
+            "idCargoContactoProspecto",
+            "indicativo",
+            "apellidoCliente",
+            "apellidoGerenteGeneral",
+            "apellidoRepresentanteLegal",
+            "indicativoContacto",
+            "accionActualizacion",
+            "cedulaContactoProspecto","autorizaSensibles","autorizaPersonales","idContentSensibles","idContentPersonales"})
+@XmlAccessorType(XmlAccessType.PROPERTY)
+public class ResultadoVisitaVO implements Serializable {
+
+    private String nombreUsuario;
+    private String creacionProspecto;
+
+    // Visita
+    // private TipoVisitaVO visita;
+    private String idClienteVisita;
+    private String tipoEventoVisita;
+    private String estadoEventoVisita;
+    private String idEventoGeneradorVisita;
+    private String asuntoEventoVisita;
+    private String resultadoEventoVisita;
+    // private TipoOportunidadNotaVO[] oportunidadNota;
+    //private String[] idOportunidadVisita;
+    //private String[] notaOportunidadVisita;
+    //private String[] idProductoOportunidad;
+    private List<ProductoVO> oportunidadProducto;
+    private List<OportunidadNotaVO> oportunidadNota;
+
+    private String fechaCreacionVisita;
+    private String fechaInicioVisita;
+    private String fechaFinalVisita;
+    private String fechaModificacionVisita;
+    private String fechaRegistroResultadosVisita;
+    private String ubicacionVisita;
+
+    // Oportunidad
+    // private TipoOportunidadVO oportunidad;
+    private String nombreOportunidadOportunidad;
+    private String idClienteOportunidad;
+    private String nombreClienteOportunidad;
+    private String idUsuarioModificadorOportunidad;
+    private String idTipoOportunidadOportunidad;
+    private String nombreTipoOportunidadOportunidad;
+    private String idIncotermOportunidad;
+    private String nombreIncotermOportunidad;
+    private String idTipoMonedaOportunidad;
+    private String idCanalEntradaOportunidad;
+    private String probabilidadProyectoOportunidad;
+    private String probabilidadImocomOportunidad;
+    private String observacionOportunidad;
+
+    private String montoOportunidad;
+    private String fechaCreacionOportunidad;
+    private String fechaEstimadaCierreOportunidad;
+    private String fechaModificacionOportunidad;
+    private String idEtapaOportunidadOportunidad;
+    private String idEstadoOportunidadOportunidad;
+
+    // Prospecto
+    //private TipoProspectoVO prospecto;
+    private String nitClienteProspecto;
+    private String nombreClienteProspecto;
+
+    // Contacto prospecto
+    // private TipoContactoVO contacto;
+    private String idContactoProspecto;
+    private String nombreContactoProspecto;
+    private String idCargoContactoProspecto;
+    private String cargoContactoProspecto;
+    private String telefonoContactoProspecto;
+    private String celularContactoProspecto;
+    private String correoContactoProspecto;
+
+    // Direccion Prospecto
+    // private TipoDireccionVO direccion;
+    private String idPaisDireccionProspecto;
+    private String nombrePaisDireccionProspecto;
+    private String idDepartamentoDireccionProspecto;
+    private String nombreDepartamentoDireccionProspecto;
+    private String idCiudadDireccionProspecto;
+    private String ciudadDireccionProspecto;
+    private String direccionDireccionProspecto;
+    private String telefonoPrincipalDireccionProspecto;
+
+    // Linea Prospecto
+    // private TipoLineaVO linea;
+    private String idLineaProspecto;
+    private String tipoLineaProspecto;
+
+    // Sector Indsutrial Prospecto
+    // private TipoSectorIndustrialVO sectorIndustrial;
+    private String idSectorIndustrialProspecto;
+    private String nombreSectorIndustriaProspecto;
+
+    private String observacionProspecto;
+    //Atributo de Sarlatf
+    private String nombreRepresentantelegal;
+    private String cedulaRepresentantelegal;
+    private String nombreGerentelegal;
+    private String cedulaGerentelegal;
+
+    //Campos adiciones prospectps y cliente
+    private String indicativo;
+    private String apellidoCliente;
+    private String apellidoGerenteGeneral;
+    private String apellidoRepresentanteLegal;
+    private String indicativoContacto;
+    
+    private String accionActualizacion;
+    
+    private String cedulaContactoProspecto;
+    private String autorizaSensibles;
+    private String autorizaPersonales;
+    private String idContentSensibles;
+    private String idContentPersonales;
+
+    public List<ProductoVO> getOportunidadProducto() {
+        return oportunidadProducto;
+    }
+
+    public void setOportunidadProducto(List<ProductoVO> oportunidadProducto) {
+        this.oportunidadProducto = oportunidadProducto;
+    }
+
+    public List<OportunidadNotaVO> getOportunidadNota() {
+        return oportunidadNota;
+    }
+
+    public void setOportunidadNota(List<OportunidadNotaVO> oportunidadNota) {
+        this.oportunidadNota = oportunidadNota;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    /**
+     *
+     * @param nombreUsuario
+     */
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCreacionProspecto() {
+        return creacionProspecto;
+    }
+
+    /**
+     *
+     * @param creacionProspecto
+     */
+    public void setCreacionProspecto(String creacionProspecto) {
+        this.creacionProspecto = creacionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdClienteVisita() {
+        return idClienteVisita;
+    }
+
+    /**
+     *
+     * @param idClienteVisita
+     */
+    public void setIdClienteVisita(String idClienteVisita) {
+        this.idClienteVisita = idClienteVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTipoEventoVisita() {
+        return tipoEventoVisita;
+    }
+
+    /**
+     *
+     * @param tipoEventoVisita
+     */
+    public void setTipoEventoVisita(String tipoEventoVisita) {
+        this.tipoEventoVisita = tipoEventoVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getEstadoEventoVisita() {
+        return estadoEventoVisita;
+    }
+
+    /**
+     *
+     * @param estadoEventoVisita
+     */
+    public void setEstadoEventoVisita(String estadoEventoVisita) {
+        this.estadoEventoVisita = estadoEventoVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdEventoGeneradorVisita() {
+        return idEventoGeneradorVisita;
+    }
+
+    /**
+     *
+     * @param idEventoGeneradorVisita
+     */
+    public void setIdEventoGeneradorVisita(String idEventoGeneradorVisita) {
+        this.idEventoGeneradorVisita = idEventoGeneradorVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getAsuntoEventoVisita() {
+        return asuntoEventoVisita;
+    }
+
+    /**
+     *
+     * @param asuntoEventoVisita
+     */
+    public void setAsuntoEventoVisita(String asuntoEventoVisita) {
+        this.asuntoEventoVisita = asuntoEventoVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getResultadoEventoVisita() {
+        return resultadoEventoVisita;
+    }
+
+    /**
+     *
+     * @param resultadoEventoVisita
+     */
+    public void setResultadoEventoVisita(String resultadoEventoVisita) {
+        this.resultadoEventoVisita = resultadoEventoVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaCreacionVisita() {
+        return fechaCreacionVisita;
+    }
+
+    /**
+     *
+     * @param fechaCreacionVisita
+     */
+    public void setFechaCreacionVisita(String fechaCreacionVisita) {
+        this.fechaCreacionVisita = fechaCreacionVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaInicioVisita() {
+        return fechaInicioVisita;
+    }
+
+    /**
+     *
+     * @param fechaInicioVisita
+     */
+    public void setFechaInicioVisita(String fechaInicioVisita) {
+        this.fechaInicioVisita = fechaInicioVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaFinalVisita() {
+        return fechaFinalVisita;
+    }
+
+    /**
+     *
+     * @param fechaFinalVisita
+     */
+    public void setFechaFinalVisita(String fechaFinalVisita) {
+        this.fechaFinalVisita = fechaFinalVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaModificacionVisita() {
+        return fechaModificacionVisita;
+    }
+
+    /**
+     *
+     * @param fechaModificacionVisita
+     */
+    public void setFechaModificacionVisita(String fechaModificacionVisita) {
+        this.fechaModificacionVisita = fechaModificacionVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaRegistroResultadosVisita() {
+        return fechaRegistroResultadosVisita;
+    }
+
+    /**
+     *
+     * @param fechaRegistroResultadosVisita
+     */
+    public void setFechaRegistroResultadosVisita(String fechaRegistroResultadosVisita) {
+        this.fechaRegistroResultadosVisita = fechaRegistroResultadosVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getUbicacionVisita() {
+        return ubicacionVisita;
+    }
+
+    /**
+     *
+     * @param ubicacionVisita
+     */
+    public void setUbicacionVisita(String ubicacionVisita) {
+        this.ubicacionVisita = ubicacionVisita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreOportunidadOportunidad() {
+        return nombreOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @param nombreOportunidadOportunidad
+     */
+    public void setNombreOportunidadOportunidad(String nombreOportunidadOportunidad) {
+        this.nombreOportunidadOportunidad = nombreOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdClienteOportunidad() {
+        return idClienteOportunidad;
+    }
+
+    /**
+     *
+     * @param idClienteOportunidad
+     */
+    public void setIdClienteOportunidad(String idClienteOportunidad) {
+        this.idClienteOportunidad = idClienteOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreClienteOportunidad() {
+        return nombreClienteOportunidad;
+    }
+
+    /**
+     *
+     * @param nombreClienteOportunidad
+     */
+    public void setNombreClienteOportunidad(String nombreClienteOportunidad) {
+        this.nombreClienteOportunidad = nombreClienteOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdUsuarioModificadorOportunidad() {
+        return idUsuarioModificadorOportunidad;
+    }
+
+    /**
+     *
+     * @param idUsuarioModificadorOportunidad
+     */
+    public void setIdUsuarioModificadorOportunidad(String idUsuarioModificadorOportunidad) {
+        this.idUsuarioModificadorOportunidad = idUsuarioModificadorOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdTipoOportunidadOportunidad() {
+        return idTipoOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @param idTipoOportunidadOportunidad
+     */
+    public void setIdTipoOportunidadOportunidad(String idTipoOportunidadOportunidad) {
+        this.idTipoOportunidadOportunidad = idTipoOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreTipoOportunidadOportunidad() {
+        return nombreTipoOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @param nombreTipoOportunidadOportunidad
+     */
+    public void setNombreTipoOportunidadOportunidad(String nombreTipoOportunidadOportunidad) {
+        this.nombreTipoOportunidadOportunidad = nombreTipoOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdIncotermOportunidad() {
+        return idIncotermOportunidad;
+    }
+
+    /**
+     *
+     * @param idIncotermOportunidad
+     */
+    public void setIdIncotermOportunidad(String idIncotermOportunidad) {
+        this.idIncotermOportunidad = idIncotermOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreIncotermOportunidad() {
+        return nombreIncotermOportunidad;
+    }
+
+    /**
+     *
+     * @param nombreIncotermOportunidad
+     */
+    public void setNombreIncotermOportunidad(String nombreIncotermOportunidad) {
+        this.nombreIncotermOportunidad = nombreIncotermOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdTipoMonedaOportunidad() {
+        return idTipoMonedaOportunidad;
+    }
+
+    /**
+     *
+     * @param idTipoMonedaOportunidad
+     */
+    public void setIdTipoMonedaOportunidad(String idTipoMonedaOportunidad) {
+        this.idTipoMonedaOportunidad = idTipoMonedaOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdCanalEntradaOportunidad() {
+        return idCanalEntradaOportunidad;
+    }
+
+    /**
+     *
+     * @param idCanalEntradaOportunidad
+     */
+    public void setIdCanalEntradaOportunidad(String idCanalEntradaOportunidad) {
+        this.idCanalEntradaOportunidad = idCanalEntradaOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getProbabilidadProyectoOportunidad() {
+        return probabilidadProyectoOportunidad;
+    }
+
+    /**
+     *
+     * @param probabilidadProyectoOportunidad
+     */
+    public void setProbabilidadProyectoOportunidad(String probabilidadProyectoOportunidad) {
+        this.probabilidadProyectoOportunidad = probabilidadProyectoOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getProbabilidadImocomOportunidad() {
+        return probabilidadImocomOportunidad;
+    }
+
+    /**
+     *
+     * @param probabilidadImocomOportunidad
+     */
+    public void setProbabilidadImocomOportunidad(String probabilidadImocomOportunidad) {
+        this.probabilidadImocomOportunidad = probabilidadImocomOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getObservacionOportunidad() {
+        return observacionOportunidad;
+    }
+
+    /**
+     *
+     * @param observacionOportunidad
+     */
+    public void setObservacionOportunidad(String observacionOportunidad) {
+        this.observacionOportunidad = observacionOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getMontoOportunidad() {
+        return montoOportunidad;
+    }
+
+    /**
+     *
+     * @param montoOportunidad
+     */
+    public void setMontoOportunidad(String montoOportunidad) {
+        this.montoOportunidad = montoOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaCreacionOportunidad() {
+        return fechaCreacionOportunidad;
+    }
+
+    /**
+     *
+     * @param fechaCreacionOportunidad
+     */
+    public void setFechaCreacionOportunidad(String fechaCreacionOportunidad) {
+        this.fechaCreacionOportunidad = fechaCreacionOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaEstimadaCierreOportunidad() {
+        return fechaEstimadaCierreOportunidad;
+    }
+
+    /**
+     *
+     * @param fechaEstimadaCierreOportunidad
+     */
+    public void setFechaEstimadaCierreOportunidad(String fechaEstimadaCierreOportunidad) {
+        this.fechaEstimadaCierreOportunidad = fechaEstimadaCierreOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFechaModificacionOportunidad() {
+        return fechaModificacionOportunidad;
+    }
+
+    /**
+     *
+     * @param fechaModificacionOportunidad
+     */
+    public void setFechaModificacionOportunidad(String fechaModificacionOportunidad) {
+        this.fechaModificacionOportunidad = fechaModificacionOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdEtapaOportunidadOportunidad() {
+        return idEtapaOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @param idEtapaOportunidadOportunidad
+     */
+    public void setIdEtapaOportunidadOportunidad(String idEtapaOportunidadOportunidad) {
+        this.idEtapaOportunidadOportunidad = idEtapaOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdEstadoOportunidadOportunidad() {
+        return idEstadoOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @param idEstadoOportunidadOportunidad
+     */
+    public void setIdEstadoOportunidadOportunidad(String idEstadoOportunidadOportunidad) {
+        this.idEstadoOportunidadOportunidad = idEstadoOportunidadOportunidad;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNitClienteProspecto() {
+        return nitClienteProspecto;
+    }
+
+    /**
+     *
+     * @param nitClienteProspecto
+     */
+    public void setNitClienteProspecto(String nitClienteProspecto) {
+        this.nitClienteProspecto = nitClienteProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreClienteProspecto() {
+        return nombreClienteProspecto;
+    }
+
+    /**
+     *
+     * @param nombreClienteProspecto
+     */
+    public void setNombreClienteProspecto(String nombreClienteProspecto) {
+        this.nombreClienteProspecto = nombreClienteProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreContactoProspecto() {
+        return nombreContactoProspecto;
+    }
+
+    /**
+     *
+     * @param nombreContactoProspecto
+     */
+    public void setNombreContactoProspecto(String nombreContactoProspecto) {
+        this.nombreContactoProspecto = nombreContactoProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCargoContactoProspecto() {
+        return cargoContactoProspecto;
+    }
+
+    /**
+     *
+     * @param cargoContactoProspecto
+     */
+    public void setCargoContactoProspecto(String cargoContactoProspecto) {
+        this.cargoContactoProspecto = cargoContactoProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTelefonoContactoProspecto() {
+        return telefonoContactoProspecto;
+    }
+
+    /**
+     *
+     * @param telefonoContactoProspecto
+     */
+    public void setTelefonoContactoProspecto(String telefonoContactoProspecto) {
+        this.telefonoContactoProspecto = telefonoContactoProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCorreoContactoProspecto() {
+        return correoContactoProspecto;
+    }
+
+    /**
+     *
+     * @param correoContactoProspecto
+     */
+    public void setCorreoContactoProspecto(String correoContactoProspecto) {
+        this.correoContactoProspecto = correoContactoProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdPaisDireccionProspecto() {
+        return idPaisDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param idPaisDireccionProspecto
+     */
+    public void setIdPaisDireccionProspecto(String idPaisDireccionProspecto) {
+        this.idPaisDireccionProspecto = idPaisDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombrePaisDireccionProspecto() {
+        return nombrePaisDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param nombrePaisDireccionProspecto
+     */
+    public void setNombrePaisDireccionProspecto(String nombrePaisDireccionProspecto) {
+        this.nombrePaisDireccionProspecto = nombrePaisDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdDepartamentoDireccionProspecto() {
+        return idDepartamentoDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param idDepartamentoDireccionProspecto
+     */
+    public void setIdDepartamentoDireccionProspecto(String idDepartamentoDireccionProspecto) {
+        this.idDepartamentoDireccionProspecto = idDepartamentoDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreDepartamentoDireccionProspecto() {
+        return nombreDepartamentoDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param nombreDepartamentoDireccionProspecto
+     */
+    public void setNombreDepartamentoDireccionProspecto(String nombreDepartamentoDireccionProspecto) {
+        this.nombreDepartamentoDireccionProspecto = nombreDepartamentoDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdCiudadDireccionProspecto() {
+        return idCiudadDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param idCiudadDireccionProspecto
+     */
+    public void setIdCiudadDireccionProspecto(String idCiudadDireccionProspecto) {
+        this.idCiudadDireccionProspecto = idCiudadDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCiudadDireccionProspecto() {
+        return ciudadDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param ciudadDireccionProspecto
+     */
+    public void setCiudadDireccionProspecto(String ciudadDireccionProspecto) {
+        this.ciudadDireccionProspecto = ciudadDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getDireccionDireccionProspecto() {
+        return direccionDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param direccionDireccionProspecto
+     */
+    public void setDireccionDireccionProspecto(String direccionDireccionProspecto) {
+        this.direccionDireccionProspecto = direccionDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTelefonoPrincipalDireccionProspecto() {
+        return telefonoPrincipalDireccionProspecto;
+    }
+
+    /**
+     *
+     * @param telefonoPrincipalDireccionProspecto
+     */
+    public void setTelefonoPrincipalDireccionProspecto(String telefonoPrincipalDireccionProspecto) {
+        this.telefonoPrincipalDireccionProspecto = telefonoPrincipalDireccionProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdLineaProspecto() {
+        return idLineaProspecto;
+    }
+
+    /**
+     *
+     * @param idLineaProspecto
+     */
+    public void setIdLineaProspecto(String idLineaProspecto) {
+        this.idLineaProspecto = idLineaProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTipoLineaProspecto() {
+        return tipoLineaProspecto;
+    }
+
+    /**
+     *
+     * @param tipoLineaProspecto
+     */
+    public void setTipoLineaProspecto(String tipoLineaProspecto) {
+        this.tipoLineaProspecto = tipoLineaProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getIdSectorIndustrialProspecto() {
+        return idSectorIndustrialProspecto;
+    }
+
+    /**
+     *
+     * @param idSectorIndustrialProspecto
+     */
+    public void setIdSectorIndustrialProspecto(String idSectorIndustrialProspecto) {
+        this.idSectorIndustrialProspecto = idSectorIndustrialProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNombreSectorIndustriaProspecto() {
+        return nombreSectorIndustriaProspecto;
+    }
+
+    /**
+     *
+     * @param nombreSectorIndustriaProspecto
+     */
+    public void setNombreSectorIndustriaProspecto(String nombreSectorIndustriaProspecto) {
+        this.nombreSectorIndustriaProspecto = nombreSectorIndustriaProspecto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getObservacionProspecto() {
+        return observacionProspecto;
+    }
+
+    /**
+     *
+     * @param observacionProspecto
+     */
+    public void setObservacionProspecto(String observacionProspecto) {
+        this.observacionProspecto = observacionProspecto;
+    }
+
+    public String getNombreRepresentantelegal() {
+        return nombreRepresentantelegal;
+    }
+
+    public void setNombreRepresentantelegal(String nombreRepresentantelegal) {
+        this.nombreRepresentantelegal = nombreRepresentantelegal;
+    }
+
+    public String getCedulaRepresentantelegal() {
+        return cedulaRepresentantelegal;
+    }
+
+    public void setCedulaRepresentantelegal(String cedulaRepresentantelegal) {
+        this.cedulaRepresentantelegal = cedulaRepresentantelegal;
+    }
+
+    public String getNombreGerentelegal() {
+        return nombreGerentelegal;
+    }
+
+    public void setNombreGerentelegal(String nombreGerentelegal) {
+        this.nombreGerentelegal = nombreGerentelegal;
+    }
+
+    public String getCedulaGerentelegal() {
+        return cedulaGerentelegal;
+    }
+
+    public void setCedulaGerentelegal(String cedulaGerentelegal) {
+        this.cedulaGerentelegal = cedulaGerentelegal;
+    }
+
+    public String getIdContactoProspecto() {
+        return idContactoProspecto;
+    }
+
+    public void setIdContactoProspecto(String idContactoProspecto) {
+        this.idContactoProspecto = idContactoProspecto;
+    }
+
+    public String getIdCargoContactoProspecto() {
+        return idCargoContactoProspecto;
+    }
+
+    public void setIdCargoContactoProspecto(String idCargoContactoProspecto) {
+        this.idCargoContactoProspecto = idCargoContactoProspecto;
+    }
+
+    public String getCelularContactoProspecto() {
+        return celularContactoProspecto;
+    }
+
+    public void setCelularContactoProspecto(String celularContactoProspecto) {
+        this.celularContactoProspecto = celularContactoProspecto;
+    }
+
+    public String getIndicativo() {
+        return indicativo;
+    }
+
+    public void setIndicativo(String indicativo) {
+        this.indicativo = indicativo;
+    }
+
+    public String getApellidoCliente() {
+        return apellidoCliente;
+    }
+
+    public void setApellidoCliente(String apellidoCliente) {
+        this.apellidoCliente = apellidoCliente;
+    }
+
+    public String getApellidoGerenteGeneral() {
+        return apellidoGerenteGeneral;
+    }
+
+    public void setApellidoGerenteGeneral(String apellidoGerenteGeneral) {
+        this.apellidoGerenteGeneral = apellidoGerenteGeneral;
+    }
+
+    public String getApellidoRepresentanteLegal() {
+        return apellidoRepresentanteLegal;
+    }
+
+    public void setApellidoRepresentanteLegal(String apellidoRepresentanteLegal) {
+        this.apellidoRepresentanteLegal = apellidoRepresentanteLegal;
+    }
+
+    public String getIndicativoContacto() {
+        return indicativoContacto;
+    }
+
+    public void setIndicativoContacto(String indicativoContacto) {
+        this.indicativoContacto = indicativoContacto;
+    }
+    
+    
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+
+        return "{nombreUsuario=" + nombreUsuario + ", "
+                + "creacionProspecto=" + creacionProspecto + ", "
+                + "idClienteVisita=" + idClienteVisita + ", "
+                + "tipoEventoVisita=" + tipoEventoVisita + ", "
+                + "estadoEventoVisita=" + estadoEventoVisita + ", "
+                + "idEventoGeneradorVisita=" + idEventoGeneradorVisita + ", "
+                + "asuntoEventoVisita=" + asuntoEventoVisita + ", "
+                + "resultadoEventoVisita=" + resultadoEventoVisita + ", "
+                + //"idOportunidadVisita=" + (idOportunidadVisita != null ? idOportunidadVisita.toString() : "[]") + ", " +
+                //"notaOportunidadVisita=" + (notaOportunidadVisita != null ? notaOportunidadVisita.toString(): "[]") + ", " +
+                "fechaCreacionVisita=" + fechaCreacionVisita + ", "
+                + "fechaInicioVisita=" + fechaInicioVisita + ", "
+                + "fechaFinalVisita=" + fechaFinalVisita + ", "
+                + "fechaModificacionVisita=" + fechaModificacionVisita + ", "
+                + "fechaRegistroResultadosVisita=" + fechaRegistroResultadosVisita + ", "
+                + "ubicacionVisita=" + ubicacionVisita + ", "
+                + "idTipoOportunidadOportunidad=" + idTipoOportunidadOportunidad + ", "
+                + "nombreOportunidadOportunidad=" + nombreOportunidadOportunidad + ", "
+                + "idClienteOportunidad=" + idClienteOportunidad + ", "
+                + "nombreClienteOportunidad=" + nombreClienteOportunidad + ", "
+                + "idUsuarioModificadorOportunidad=" + idUsuarioModificadorOportunidad + ", "
+                + "nombreTipoOportunidadOportunidad=" + nombreTipoOportunidadOportunidad + ", "
+                + "idIncotermOportunidad=" + idIncotermOportunidad + ", "
+                + "nombreIncotermOportunidad=" + nombreIncotermOportunidad + ", "
+                + "idTipoMonedaOportunidad=" + idTipoMonedaOportunidad + ", "
+                + "idCanalEntradaOportunidad=" + idCanalEntradaOportunidad + ", "
+                + "probabilidadProyectoOportunidad=" + probabilidadProyectoOportunidad + ", "
+                + "probabilidadImocomOportunidad=" + probabilidadImocomOportunidad + ", "
+                + "observacionOportunidad=" + observacionOportunidad + ", "
+                + //"idProductoOportunidad=" + (idProductoOportunidad != null ? idProductoOportunidad.toString() : "[]") + ", " +
+                "montoOportunidad=" + montoOportunidad + ", "
+                + "fechaCreacionOportunidad=" + fechaCreacionOportunidad + ", "
+                + "fechaEstimadaCierreOportunidad=" + fechaEstimadaCierreOportunidad + ", "
+                + "fechaModificacionOportunidad=" + fechaModificacionOportunidad + ", "
+                + "idEtapaOportunidadOportunidad=" + idEtapaOportunidadOportunidad + ", "
+                + "idEstadoOportunidadOportunidad=" + idEstadoOportunidadOportunidad + ", "
+                + "nitClienteProspecto=" + nitClienteProspecto + ", "
+                + "nombreClienteProspecto=" + nombreClienteProspecto + ", "
+                + "nombreContactoProspecto=" + nombreContactoProspecto + ", "
+                + "cargoContactoProspecto=" + cargoContactoProspecto + ", "
+                + "telefonoContactoProspecto=" + telefonoContactoProspecto + ", "
+                + "correoContactoProspecto=" + correoContactoProspecto + ", "
+                + "idPaisDireccionProspecto=" + idPaisDireccionProspecto + ", "
+                + "nombrePaisDireccionProspecto=" + nombrePaisDireccionProspecto + ", "
+                + "idDepartamentoDireccionProspecto=" + idDepartamentoDireccionProspecto + ", "
+                + "nombreDepartamentoDireccionProspecto=" + nombreDepartamentoDireccionProspecto + ", "
+                + "idCiudadDireccionProspecto=" + idCiudadDireccionProspecto + ", "
+                + "ciudadDireccionProspecto=" + ciudadDireccionProspecto + ", "
+                + "direccionDireccionProspecto=" + direccionDireccionProspecto + ", "
+                + "telefonoPrincipalDireccionProspecto=" + telefonoPrincipalDireccionProspecto + ", "
+                + "idLineaProspecto=" + idLineaProspecto + ", "
+                + "tipoLineaProspecto=" + tipoLineaProspecto + ", "
+                + "idSectorIndustrialProspecto=" + idSectorIndustrialProspecto + ", "
+                + "nombreSectorIndustriaProspecto=" + nombreSectorIndustriaProspecto + ", "
+                + "accionActualizacion=" + accionActualizacion + ", "
+                + "observacionProspecto=" + observacionProspecto + "}";
+    }
+
+    public String getAccionActualizacion() {
+        return accionActualizacion;
+    }
+
+    public void setAccionActualizacion(String accionActualizacion) {
+        this.accionActualizacion = accionActualizacion;
+    }
+
+    public String getCedulaContactoProspecto() {
+        return cedulaContactoProspecto;
+    }
+
+    public void setCedulaContactoProspecto(String cedulaContactoProspecto) {
+        this.cedulaContactoProspecto = cedulaContactoProspecto;
+    }
+
+    public String getAutorizaSensibles() {
+        return autorizaSensibles;
+    }
+
+    public void setAutorizaSensibles(String autorizaSensibles) {
+        this.autorizaSensibles = autorizaSensibles;
+    }
+
+    public String getAutorizaPersonales() {
+        return autorizaPersonales;
+    }
+
+    public void setAutorizaPersonales(String autorizaPersonales) {
+        this.autorizaPersonales = autorizaPersonales;
+    }
+
+    public String getIdContentSensibles() {
+        return idContentSensibles;
+    }
+
+    public void setIdContentSensibles(String idContentSensibles) {
+        this.idContentSensibles = idContentSensibles;
+    }
+
+    public String getIdContentPersonales() {
+        return idContentPersonales;
+    }
+
+    public void setIdContentPersonales(String idContentPersonales) {
+        this.idContentPersonales = idContentPersonales;
+    }
+    
+}

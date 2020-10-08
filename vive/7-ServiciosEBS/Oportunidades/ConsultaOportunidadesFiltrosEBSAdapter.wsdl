@@ -1,0 +1,25 @@
+<?binding.jca ConsultaOportunidadesFiltrosEBSAdapter_db.jca?>
+<wsdl:definitions name="ConsultaOportunidadesFiltrosEBSAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsultaOportunidadesFiltrosEBSAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesFiltrosEBSAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Oportunidades/ConsultaOportunidadesFiltrosEBSAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsultaOportunidadesFiltrosEBSAdapter_plt">
+        <plt:role name="ConsultaOportunidadesFiltrosEBSAdapter_role">
+            <plt:portType name="tns:ConsultaOportunidadesFiltrosEBSAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesFiltrosEBSAdapter" schemaLocation="xsd/ConsultaOportunidadesFiltrosEBSAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsultaOportunidadesFiltrosEBSAdapterInput_msg">
+        <wsdl:part name="ConsultaOportunidadesFiltrosEBSAdapterInput_msg" element="db:ConsultaOportunidadesFiltrosEBSAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsultaOportunidadesFiltrosEBSAdapterOutputCollection_msg">
+        <wsdl:part name="ConsultaOportunidadesFiltrosEBSAdapterOutputCollection" element="db:ConsultaOportunidadesFiltrosEBSAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsultaOportunidadesFiltrosEBSAdapter_ptt">
+        <wsdl:operation name="ConsultaOportunidadesFiltrosEBSAdapter">
+            <wsdl:input message="tns:ConsultaOportunidadesFiltrosEBSAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsultaOportunidadesFiltrosEBSAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,221 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.imocom.intelcom.view.beans;
+
+import com.imocom.intelcom.persistence.entities.OportunidadVisita;
+import com.imocom.intelcom.persistence.entities.Tipo;
+import com.imocom.intelcom.persistence.entities.Visita;
+import com.imocom.intelcom.persistence.util.PersistenceException;
+import com.imocom.intelcom.services.interfaces.IEventosServiceLocal;
+import com.imocom.intelcom.services.interfaces.ITipoServiceLocal;
+import com.imocom.intelcom.services.util.ServiceException;
+import com.imocom.intelcom.util.utility.Constants;
+import static com.imocom.intelcom.util.utility.Constants.CLIENT_ID_PARAM;
+import static com.imocom.intelcom.util.utility.Constants.EVENT_ID_PARAM;
+import static com.imocom.intelcom.util.utility.Constants.PAGE_EVENTOS_DETALLE_CLIENTE_KEY;
+import static com.imocom.intelcom.util.utility.Constants.PAGE_EVENTOS_RESULTADO_CLIENTE_KEY;
+import static com.imocom.intelcom.util.utility.Constants.TIPO_EVENTO;
+import com.imocom.intelcom.util.utility.DateUtil;
+import com.imocom.intelcom.view.AbstractFacesBean;
+import static com.imocom.intelcom.view.util.JSFUtils.getViewRedirect;
+import com.imocom.intelcom.ws.ebs.vo.entities.ClienteVO;
+import com.imocom.intelcom.ws.ebs.vo.entities.OportunidadVO;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import javax.ejb.EJB;
+import javax.el.ValueExpression;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author rc
+ */
+@ManagedBean
+@ViewScoped
+public class EventosConsultaFacesBean extends AbstractFacesBean implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(EventosConsultaFacesBean.class);
+    private static final long serialVersionUID = 1L;
+
+    private Date fechaFiltro;
+    private OportunidadVO oportunidad;
+
+    private List<Visita> listaVisitas;
+    private List<Tipo> listaTiposEvento;
+    private ClienteVO clienteSeleccionado;
+    private Visita eventoSeleccionado;
+    private Long tipoEvento;
+
+    @EJB
+    private IEventosServiceLocal iEventosServiceLocal;
+
+    @EJB
+    private ITipoServiceLocal iTipoService;
+    /**
+     * Bean que contiene metodos de consulta de oportunidades
+     */
+    CotizacionesConsultarBean cotizacionesConsultarBean;
+
+    @Override
+    protected void build() {
+        clienteSeleccionado = (ClienteVO) getSessionMap().get(CLIENT_ID_PARAM);
+        logger.info("El cliente seleccionado es --> " + ((clienteSeleccionado != null) ? clienteSeleccionado.getNombreCliente() : "No seleccioando"));
+        ValueExpression ve = getExpressionFactory().createValueExpression(getELContext(), "#{cotizacionesConsultarBean}", CotizacionesConsultarBean.class);
+        if (clienteSeleccionado != null) {
+            cotizacionesConsultarBean = (CotizacionesConsultarBean) ve.getValue(getELContext());
+            cotizacionesConsultarBean.setIdCliente(clienteSeleccionado.getNitCliente());
+        }
+        // String idCliente = clienteSeleccionado.getNitCliente();
+        try {
+            // listaVisitas = iEventosServiceLocal.findInitialResultsByClienteAsesor(userSession.getUsuario(), Long.valueOf(idCliente));
+
+            listaTiposEvento = iTipoService.findByTipoNombre(TIPO_EVENTO);
+
+        } catch (ServiceException ex) {
+            logger.error(ex.getMessage());
+        }
+
+    }
+
+    private String getOportunidadesVisita(Set<OportunidadVisita> oportunidadVisitaSet) {
+        String oportunidades = "";
+        for (OportunidadVisita op : oportunidadVisitaSet) {
+            //Cotizacion cot = cotizacionesConsultarBean.buscarDatosOportunidadXCot(Long.toString(op.getIdOportunidad())).getNombreOportunidad();
+            oportunidades += cotizacionesConsultarBean.buscarDatosOportunidadXCot(Long.toString(op.getIdOportunidad())).getNombreOportunidad() + " - ";
+        }
+        return oportunidades;
+    }
+
+    public void buscarAction(ActionEvent actionEvent) {
+
+        clienteSeleccionado = (ClienteVO) getSessionMap().get(CLIENT_ID_PARAM);
+        logger.info("El cliente seleccionado es --> " + ((clienteSeleccionado != null) ? clienteSeleccionado.getNombreCliente() : "No seleccioando"));
+        String idCliente = clienteSeleccionado.getNitCliente();
+        try {
+            Date fechaFinal = null;
+            if (fechaFiltro != null) {
+                fechaFinal = DateUtil.armarFechaEvento(fechaFiltro, 23, 59);
+            }
+            Tipo tipo = null;
+            if (this.tipoEvento != null) {
+                tipo = iTipoService.findById(tipoEvento);
+            }
+            //Se verifica si se ha cargado la lista de oportunidad se carga la lista.
+            if (cotizacionesConsultarBean.getOportunidades() == null || cotizacionesConsultarBean.getOportunidades().isEmpty()) {
+                cotizacionesConsultarBean.loadOportunidad();
+            }
+            Long idOportunidad = (this.oportunidad != null && this.oportunidad.getIdOportunidad() != null) ? Long.parseLong(this.oportunidad.getIdOportunidad()) : null;
+            logger.info("oportunidad Search: Idoportunidad: Usuario : " + userSession.getUsuario() + " Cliente: " + idCliente + " Tipo: " + tipo + " idOportunidad: " + idOportunidad);
+            listaVisitas = iEventosServiceLocal.findInitialResultsByClienteAsesorTipoFechaOportunidad(userSession.getUsuario(), Long.valueOf(idCliente), tipo, this.fechaFiltro, fechaFinal, idOportunidad);
+            for (Visita v : listaVisitas) {
+                v.setNombreOportunidad(getOportunidadesVisita(v.getOportunidadVisitaSet()));
+            }
+        } catch (ServiceException ex) {
+            logger.error(ex.getMessage());
+        } catch (PersistenceException ex) {
+            logger.error(ex.getMessage());
+        }
+    }
+
+    
+    public String redirectDetalle() {
+          redirect(Constants.PAGE_EVENTOS_DETALLE_KEY, "redirectDetalle");
+        //redirect(Constants.PAGE_LEAD_EDITAR_KEY, "redirectDetalle");
+        return null;
+    }
+
+    public String redirectResultado() {
+        redirect(PAGE_EVENTOS_RESULTADO_CLIENTE_KEY, "redirectResultado");
+        return null;
+    }
+
+    public String redirect(String pageKey, String nombreMetodo) {
+        String outcome = getViewRedirect(pageKey);
+        try {
+            logger.info("El evento seleccionado en " + nombreMetodo + " es --> " + ((eventoSeleccionado != null) ? eventoSeleccionado.getIdvisita() : "No seleccionado"));
+
+            if (eventoSeleccionado != null) {
+                getSessionMap().put(EVENT_ID_PARAM, eventoSeleccionado);
+                redirect(navigationFaces.navigation.get(outcome));
+            }
+        } catch (IOException ex) {
+            String mensaje = "Recurso no encontrado (".concat(outcome).concat(")");
+            logger.error(mensaje.concat(", detalles: ").concat(ex.getLocalizedMessage()));
+
+            performErrorMessages(mensaje);
+        }
+        return null;
+    }
+
+    public List<Visita> getListaVisitas() {
+        return listaVisitas;
+    }
+
+    public void setListaVisitas(List<Visita> listaVisitas) {
+        this.listaVisitas = listaVisitas;
+    }
+
+    public List<Tipo> getListaTiposEvento() {
+        return listaTiposEvento;
+    }
+
+    public void setListaTiposEvento(List<Tipo> listaTiposEvento) {
+        this.listaTiposEvento = listaTiposEvento;
+    }
+
+    public Date getFechaFiltro() {
+        return fechaFiltro;
+    }
+
+    public void setFechaFiltro(Date fechaFiltro) {
+        this.fechaFiltro = fechaFiltro;
+    }
+
+    public OportunidadVO getOportunidad() {
+        if (oportunidad == null) {
+            return new OportunidadVO();
+        }
+
+        return oportunidad;
+    }
+
+    public void setOportunidad(OportunidadVO oportunidad) {
+        this.oportunidad = oportunidad;
+    }
+
+    public Visita getEventoSeleccionado() {
+        return eventoSeleccionado;
+    }
+
+    public void setEventoSeleccionado(Visita eventoSeleccionado) {
+        this.eventoSeleccionado = eventoSeleccionado;
+    }
+
+    public ClienteVO getClienteSeleccionado() {
+        return clienteSeleccionado;
+    }
+
+    public void setClienteSeleccionado(ClienteVO clienteSeleccionado) {
+        this.clienteSeleccionado = clienteSeleccionado;
+    }
+
+    public Long getTipoEvento() {
+        return tipoEvento;
+    }
+
+    public void setTipoEvento(Long tipoEvento) {
+        this.tipoEvento = tipoEvento;
+    }
+
+}

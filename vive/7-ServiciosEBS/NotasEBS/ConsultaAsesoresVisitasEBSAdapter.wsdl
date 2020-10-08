@@ -1,0 +1,25 @@
+<?binding.jca ConsultaAsesoresVisitasEBSAdapter_db.jca?>
+<wsdl:definitions name="ConsultaAsesoresVisitasEBSAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/NotasEBS/ConsultaAsesoresVisitasEBSAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaAsesoresVisitasEBSAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/NotasEBS/ConsultaAsesoresVisitasEBSAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsultaAsesoresVisitasEBSAdapter_plt">
+        <plt:role name="ConsultaAsesoresVisitasEBSAdapter_role">
+            <plt:portType name="tns:ConsultaAsesoresVisitasEBSAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaAsesoresVisitasEBSAdapter" schemaLocation="xsd/ConsultaAsesoresVisitasEBSAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsultaAsesoresVisitasEBSAdapterInput_msg">
+        <wsdl:part name="ConsultaAsesoresVisitasEBSAdapterInput_msg" element="db:ConsultaAsesoresVisitasEBSAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsultaAsesoresVisitasEBSAdapterOutputCollection_msg">
+        <wsdl:part name="ConsultaAsesoresVisitasEBSAdapterOutputCollection" element="db:ConsultaAsesoresVisitasEBSAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsultaAsesoresVisitasEBSAdapter_ptt">
+        <wsdl:operation name="ConsultaAsesoresVisitasEBSAdapter">
+            <wsdl:input message="tns:ConsultaAsesoresVisitasEBSAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsultaAsesoresVisitasEBSAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,240 @@
+/*
+ * Copyright (c) 2014 IMOCOM. All Rights Reserved.
+ * 
+ * This software is the confidential and proprietary information of IMOCOM.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of IMOCOM.
+ * 
+ * 
+ */
+package com.imocom.intelcom.util.utility;
+
+/**
+ * <strong>AplicaciÃ³n</strong> : IMOCOM Sistema de inteligencia comercial
+ * <br/>
+ * <br/>
+ * <strong>Date</strong> : 22/08/2014
+ * <br/><br/>
+ * <strong>Target</strong> : Application constants.
+ *
+ * @author Carlos Guzman (cguzman) - PointMind S.A.S. -
+ * carlos.guzman@pointmind.com
+ *
+ */
+public interface Constants {
+
+    String DEFAULT_JQINCON_MENU = "ui-icon-star";
+    String DEFAULT_ITEMACTION = "#{menuFacesBean.redirect}";
+    String ROLES_EJB_JNDI = "ejb/IRolesServiceLocal";
+    String USUARIO_EJB_JNDI = "ejb/IUsuarioServiceLocal";
+
+    String TYPE_LOG_LEVEL_SEVERE = "SEVERE";
+    String TYPE_LOG_LEVEL_WARN = "WARN";
+    String TYPE_LOG_LEVEL_INFO = "INFO";
+    String TYPE_LOG_LEVEL_ERROR = "ERROR";
+    String TYPE_LOG_LEVEL_FATAL = "FATAL";
+    String STATUS_ACTIVE = "A";
+    String STATUS_INACTIVE = "I";
+
+    //Constantes para la consulta en la tabla tipos
+    String TIPO_PAIS = "PAIS";
+    String TIPO_DEPARTAMENTO = "DEPARTAMENTO";
+    String TIPO_CIUDAD = "CIUDAD";
+    String TIPO_INDICATIVO = "INDICATIVO";
+    String TIPO_CLIENTE = "TIPO_CLIENTE";
+    String TIPO_NIVEL_ATENCION = "NIVEL_ATENCION";
+    String TIPO_SEMAFORO = "SEMAFORO";
+    String TIPO_EVENTO = "TIPO_EVENTO";
+    String TIPO_ESTADO_EVENTO = "ESTADO_EVENTO";
+    String TIPO_ESTADO_OPORTUNIDAD = "ESTADO_OPORTUNIDAD";
+    String TIPO_PROBABILIDAD_EXITO = "PROBABILIDAD_EXITO";
+    String TIPO_PROBABILIDAD_EJECUCION = "PROBABILIDAD_EJECUCION";
+    String TIPO_ETAPA_OPORTUNIDAD = "ETAPA_OPORTUNIDAD";
+    String TIPO_OPORTUNIDAD = "TIPO_OPORTUNIDAD";
+    String TIPO_OPORTUNIDAD_CANAL = "CANAL_ENTRADA";
+    String TIPO_MONEDA = "TIPO_MONEDA";
+    String TIPO_INCOTERM = "INCOTERM";
+    String TIPO_SECTOR_INDUSTRIAL = "SECTOR_INDUSTRIAL";
+    String TIPO_PRODUCTO = "TIPO_PRODUCTO";
+    String TIPO_ACEPTACION_COTIZACION = "ACEPTACION_COTIZACION";
+    String TIPO_MOTIVO_CIERRE = "MOTIVOS_CIERRE";
+    String TIPO_OPORTUNIDAD_ESTADO = "ESTADO_OPORTUNIDAD";
+    String TIPO_OPORTUNIDAD_ESTADO_FILTRO = "ESTADO_OPORTUNIDAD_FILTRO";
+    String TIPO_CARGO = "CARGO";
+    String TIPO_MOTIVO_CIERRE_GANADO = "MOTIVOS_CIERRE_GANADO";
+    String TIPO_MOTIVO_CIERRE_PERDIDO = "MOTIVOS_CIERRE_PERDIDO";
+    String TIPO_MOTIVO_CIERRE_CANCELADO = "MOTIVOS_CIERRE_CANCELADO";
+    String TIPO_MOTIVO_CIERRE_APLAZADO = "MOTIVOS_CIERRE_APLAZADO";
+    String TIPO_DOCUMENTO_CLIENTE = "TIPO_DOCUMENTO_CLIENTE";
+    String TIPO_MONEDA_CLIENTE_PROYECTO = "TIPO_MONEDA_CLIENTE_PROYECTO";
+    
+    String TIPO_LEAD_LINEAS = "TIPO_LEAD_LINEAS";
+    String TIPO_LEAD_CANAL = "TIPO_LEAD_CANAL";
+   
+    String TIPO_RAZON_COMPETENCIA_OPORTUNIDAD = "TIPO_RAZON_COMPETENCIA_OPORTUNIDAD";
+    
+    //Constantes de IDs para la consulta en la tabla tipos
+    String TIPO_VALOR_PAIS_COLOMBIA = "CO";
+    String TIPO_VALOR_ESTADO_EVENTO_PROGRAMADO = "Planificada";
+    String TIPO_VALOR_ESTADO_EVENTO_EJECUTADO = "Ejecutada";
+
+    //Constantes de atributos para la creaciÃ³n de oportunidades
+    String ATR_OPORTUNIDAD_CREACION_ESTADO_OP = "Activo - Preliminar";
+    String ATR_OPORTUNIDAD_CREACION_ETAPA_OP = "11";
+
+    //Constantes de atributos para la creaciÃ³n de oportunidades
+    String ATR_OPORTUNIDAD_ACTUALIZACION_ESTADO_OP = "Activo  -  En Progreso";
+    String ATR_OPORTUNIDAD_ACTUALIZACION_ETAPA_OP = "13";
+
+    //Etapas de busquedas
+    String ATR_OPORTUNIDAD_COTIZACION_ETAPA_OP = "12";
+
+    //Constantes para la configuraciÃ³n de Middleware
+    Long MIDDLEWARE_WSDL_ID = 1L;
+    Long MIDDLEWARE_NAMESPACE_ID = 2L;
+    Long MIDDLEWARE_SERVICE_NAME_ID = 3L;
+
+    //Constantes para conexiÃ³n al ridc    
+    Long RIDC_URL = 4L;
+    Long RIDC_USER = 5L;
+    Long RIDC_PASSWORD = 6L;
+
+    Long LDAP_HOST = 7L;
+    Long LDAP_DOMAIN = 8L;
+    Long LDAP_USER = 9L;
+    Long LDAP_PASSWORD = 10L;
+    Long PARAMETRO_ID_UCM=16L;
+
+    //Constantes para el consumoi de servicios desde el  Middleware
+    String WS_CLIENTE_CONSULTA = "EBS_WS_CLIENT_CONS_NIT";
+    String WS_CLIENTE_DETALLE = "EBS_WS_CLIENT_CONS_DETAILS";
+    String WS_CLIENTES_CONTACTOS_CONSULTA = "EBS_WS_CLIENT_CONS_CONTACS";
+    String WS_CLIENTE_PROSPECTO_CREAR = "EBS_WS_CLIENT_CREATE_PROS";
+    String WS_EVENTOS_CREAR = "EBS_WS_EVENTS_EWS";
+    String WS_CARTERA_CONSULTA_FACTURAS = "EBS_WS_CART_CONS_FACT";
+    String WS_CARTERA_CONSULTA_CLIENTE = "EBS_WS_CART_CONS_CLI";
+    String WS_BPM_PROCESS_INVOCATION = "EBS_WS_BPM_PROCESS";
+    String WS_OPORTUNIDAD_NOTAS = "EBS_WS_NOTAS";
+    String WS_CLIENTE_GEOCLIENTES = "EBS_WS_GEOCONSULTA";
+    String WS_BPM_COTIZACION_CREACION = "EBS_WS_BPM_COTIZACIONES";
+    String WS_BPM_ACTUALIZAR_CREACION = "EBS_WS_BPM_ACT_COTIZACIONES";
+    String WS_OPORTUNIDAD_CONSULTA_x_FILTROS = "EBS_WS_OPORTUNIDADCLIENTEFILTRO";
+    String WS_OPORTUNIDAD_DETALLE = "EBS_WS_DETALLEOPORTUNIDAD";
+    String WS_INVENTARIO_CONSULTA = "EBS_WS_CONSULTAINVENTARIO";
+    String WS_INVENTARIO_CONSULTA_SIN_BODEGA = "EBS_WS_CONSULTAINVENTARIOSINBODEGA";
+    String WS_PRODUCTO_ASOCIADO_OPORTUNIDAD = "EBS_WS_CONSULTARPRODUCTO";
+    String WS_PRODUCTO_DETALLE = "EBS_WS_DETALLEPRODUCTO";
+    String WS_BPM_OPORTUNIDAD_CREACION = "EBS_WS_BPM_OPORTUNIDADES";
+    String WS_BPM_OPORTUNIDAD_CREACION_EXCEL = "EBS_WS_BPM_OPORTUNIDADES_EXCEL";
+    String WS_BPM_OPORTUNIDAD_ACTUALIZAR = "EBS_WS_BPM_ACT_OPORTUNIDADES";
+    String WS_BPM_OPORTUNIDAD_ACTUALIZAR_PRODUCTO = "EBS_WS_BPM_ACT_OPORTUNIDADES_OP";
+    String WS_OPORTUNIDADES_VISITA = "EBS_WS_VISITAOPORTUNIDAD";
+    String WS_OPORTUNIDAD_NOMBRE_ESTAPA = "EBS_WS_OPORTUNIDADESNOMBREETAPA";
+    String WS_OPORTUNIDAD_NOMBRE_ESTAPA_ESTADO = "EBS_WS_OPORTUNIDADESNOMBREETAPAESTADO";
+    String WS_OPORTUNIDAD_NOMBRE_ESTAPA_ESTADO_CLIENTE = "EBS_WS_OPORTUNIDADESNOMBREETAPAESTADOCLIENTE";
+    String WS_CLIENTES_NOTAS = "EBS_WS_NOTAS_X_CLIENTE";
+    String WS_CLIENTES_ASESORES = "EBS_WS_VISITAS_X_ASESOR";
+    String WS_PRODUCTOS_VENDIDOS = "EBS_WS_PRODUCTOS_VENDIDOS";
+    String WS_PRODUCTOS_FACTURAR = "EBS_WS_PRODUCTOS_VENDIDOS_X_FACTURAR";
+    String WS_BPM_CLIENTES_ACTUALIZACION = "EBS_WS_BPM_ACTULIZACION_CONTACTO";
+    String WS_EBS_WS_MARCA_X_LINEA = "EBS_WS_MARCA_X_LINEA";
+    String WS_EBS_WS_MODEL_X_MARCA = "EBS_WS_MODEL_X_MARCA";
+    String WS_LEAD_ASIGNACIONCANALES = "EBS_WS_ASIGNACION_CANAL";
+    String WS_PRODUCTO_COTAUTOMATICA = "EBS_WS_PRODUCTOCOTAUTOMATICA";
+    String WS_PRODUCTO_COTIZABLE_AUTOMATICAMENTE = "EBS_WS_PRODUCTO_COTIZABLE_AUTOMATICAMENTE";
+    String WS_CLIENTE_CONSULTA_EXISTE = "EBS_WS_CLIENT_CONS_EXISTE";
+    String WS_EBS_MODEL_X_MARCA_INVENTARIO = "EBS_WS_MODEL_X_MARCA_INV";
+    String WS_EBS_CONSULTA_PRODUCTOS_INVENTARIO = "EBS_WS_CONSULTA_PROD_INV";
+    
+    // Constantes de navegabilidad
+    String REDIRECT_PARAM = "REDIRECT";
+    String CLIENT_ID_PARAM = "cl-id";
+    String EVENT_ID_PARAM = "ev-id";
+    String OPORTUNIDAD_ID_PARAM = "op-id";
+    String COTIZACION_ID_PARAM = "ct-id";
+    String DETALLE_CLIENTE_ID_PARAM = "cl-det";
+    String CONTACTO_CLIENTE_ID_PARAM = "cl-con";
+    String FILTRO_OPORTUNIDADES_CLIENTE_PARAM = "fi-con-op";
+    String MANTENER_FILTRO_OPORTUNIDADES_CLIENTE_PARAM = "ma-fi-con-op";
+    String FILTRO_COTIZACIONES_PARAM = "fi-cot-op";
+    String MANTENER_FILTRO_COTIZACIONES_PARAM = "ma-fi-cot-op";
+    String FILTRO_CLIENTE_PARAM = "fi-cli-op";
+    String MANTENER_FILTRO_CLIENTE_PARAM = "ma-fi-cli-op";
+    String FILTRO_VISITA_PARAM = "fi-vis-op";
+    String MANTENER_FILTRO_VISITA_PARAM = "ma-fi-vis-op";
+
+//Nombre parÃ¡metro que se coloca en el request de navegaciÃ³n
+    String SPECIFIC_CLIENT_ID_PARAM = "clienteEspecifico";
+    String SPECIFIC_CLIENT_CONSULTADO_ID_PARAM = "clienteEspecificoConsultado";
+    String SPECIFIC_OPORTUNITY_ID_PARAM = "oportunidadEspecifica";
+    String SPECIFIC_OPORTUNITY_PROBABILITY_ID_PARAM = "oportunidadEspecificaProbabilidad";
+    String SPECIFIC_MENU_OP_REQUEST_ID_PARAM = "menuOportunidades";
+
+    String MARKER_GREEN = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+    String MARKER_YELLOW = "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png";
+    String MARKER_RED = "http://maps.google.com/mapfiles/ms/icons/red-dot.png";
+
+    String PAGE_CLIENTES_PROSPECTO_CREAR = "redirect.view.page.clientes.prospecto.crear";
+    String PAGE_CLIENTES_DETALLE_KEY = "redirect.view.page.clientes.detalle";
+    String PAGE_CLIENTES_DETALLE_CONSULTADO_KEY = "redirect.view.page.clientes.detalleConsultado";
+    String PAGE_CLIENTES_CONSULTA_KEY = "redirect.view.page.clientes.consulta";
+    String PAGE_CLIENTES_ACTUALIZACION_KEY = "redirect.view.page.clientes.actualizacion";
+    String PAGE_CLIENTES_CONTACTO_ACTUALIZAR_KEY = "redirect.view.page.clientes.contacto.actualizar";
+    String PAGE_EVENTOS_CALENDARIO = "redirect.view.page.eventos.calendario";
+    String PAGE_EVENTOS_CONSULTA_KEY = "redirect.view.page.eventos.consultar";
+    String PAGE_EVENTOS_CREAR_X_OPORTUNIDAD_KEY = "redirect.view.page.eventos.crearXOportunidad";
+    String PAGE_EVENTOS_CREAR_OPORTUNIDAD_KEY = "redirect.view.page.oportunidades.crear";
+    String PAGE_EVENTOS_CREAR_X_OPORTUNIDAD_PROBABILIDAD_KEY = "redirect.view.page.eventos.crearXOportunidadProbabilidad";
+    String PAGE_EVENTOS_CREAR_CON_RESULTADO_KEY = "redirect.view.page.eventos.crearConResultado";
+    String PAGE_EVENTOS_DETALLE_KEY = "redirect.view.page.eventos.detalle";
+    String PAGE_EVENTOS_MODIFICAR_KEY = "redirect.view.page.eventos.modificar";
+    String PAGE_EVENTOS_DETALLE_CLIENTE_KEY = "redirect.view.page.eventos.detalleXCliente";
+    String PAGE_EVENTOS_RESULTADO_KEY = "redirect.view.page.eventos.resultado";
+    String PAGE_EVENTOS_RESULTADO_CLIENTE_KEY = "redirect.view.page.eventos.resultadoXCliente";
+    String PAGE_EVENTOS_CREAR_X_CLIENTE_KEY = "redirect.view.page.eventos.crearXCliente";
+    String PAGE_OPORTUNIDADES_CONSULTA_KEY = "redirect.view.page.oportunidades.consultar";
+    String PAGE_OPORTUNIDADES_DETALLE_KEY = "redirect.view.page.oportunidades.detalle";
+    String PAGE_OPORTUNIDADES_SEGUIMIENTO_KEY = "redirect.view.page.oportunidades.seguimiento";
+    String PAGE_OPORTUNIDADES_PROBABILIDAD_KEY = "redirect.view.page.oportunidades.probabilidad";
+    String PAGE_CARTERA_CONSULTA_KEY = "redirect.view.page.cartera.consultar";
+    String PAGE_COTIZACIONES_CONSULTAR_KEY = "redirect.view.page.cotizaciones.consultar";
+    String PAGE_COTIZACIONES_DETALLE_KEY = "redirect.view.page.cotizaciones.detalle";
+    String PAGE_COTIZACIONES_VERSION_KEY = "redirect.view.page.cotizaciones.version";
+    String PAGE_COTIZACIONES_ACTUALIZAR_KEY = "redirect.view.page.cotizaciones.actualizar";
+    String PAGE_COTIZACIONES_CREAR_KEY = "redirect.view.page.cotizaciones.crear";
+    
+    String PAGE_CLIENTES_DOCUMENTO_DOCUMENTACION_KEY = "redirect.view.page.clientes.documento.documentacion";
+    String PAGE_CLIENTES_DOCUMENTO_PROYECTO_KEY = "redirect.view.page.clientes.documento.proyecto";
+    String PAGE_CLIENTES_DOCUMENTO_CARGAR_KEY = "redirect.view.page.clientes.documento.cargar";
+    String PAGE_CLIENTES_PROYECTO_CARGAR_KEY = "redirect.view.page.clientes.proyecto.cargar";
+    String PAGE_CLIENTES_PROYECTO_CONSULTAR_KEY = "redirect.view.page.clientes.proyecto.consultar";
+    
+    String PAGE_LEAD_CONSULTAR_KEY = "redirect.view.page.leads.consultar";
+    String PAGE_LEAD_EDITAR_KEY = "redirect.view.page.leads.crear";
+    
+    String WS_PROCESS_ENTITY_RESULTADO_VISITA = "com.imocom.intelcom.ws.ebs.vo.entities.ResultadoVisitaVO";
+    String WS_PROCESS_ENTITY_RESULTADO_COTIZACION = "com.imocom.intelcom.ws.ebs.vo.entities.CotizacionesVO";
+    String WS_PROCESS_ENTITY_OPORTUNIDAD_CREACION = "com.imocom.intelcom.ws.ebs.vo.entities.OportunidadBPMVO";
+    String WS_PROCESS_ENTITY_CLIENTE_ACTUALIZACION = "com.imocom.intelcom.ws.ebs.vo.entities.ResultadoVisitaVO";
+    String WS_PROCESS_ENTITY_ASIGNACION_CANALES = "com.imocom.intelcom.ws.ebs.vo.entities.AsignacionCanalesVO";
+
+    //Variables de profileImage
+    String PROFILE_PATH = "/home/oracle/images/";
+    String IMAGE_DEFAULT = "user_logo.jpg";
+
+    //Plantilla Cotizaciones Automatica
+    String TEMPLATE_COTIZACIONES = "/home/oracle/template/plantilla.docx";
+    
+    String TEMP_FERIA = "FERIA";
+
+    String LEAD_ESTADO_NUEVO = "NUEVO";
+    String LEAD_ESTADO_CANCELADO = "CANCELADO";
+    String LEAD_ESTADO_REASIGANDO = "REASIGANDO";
+    String LEAD_ESTADO_CREACION_OPORTUNIDAD = "CREACION_OPORTUNIDAD";
+    
+    String ORIGEN_DOC_CLIENTE_CONTACTO_ACTUALIZAR_HABEASDATA = "CLIENTES_CONTACTO_ACTUALIZAR_HABEASDATA";
+    String ORIGEN_DOC_CLIENTE_CONTACTO_ACTUALIZAR_SENSIBLES = "CLIENTES_CONTACTO_ACTUALIZAR_SENSIBLES";
+    String ORIGEN_DOC_CLIENTE_CONTACTO_PROSPECTO = "CLIENTES_CONTACTO_PROSPECTO";
+    
+}

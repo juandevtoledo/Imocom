@@ -1,0 +1,13 @@
+<adapter-config name="ConsultaAsesoresVisitasEBSAdapter" adapter="Database Adapter" wsdlLocation="ConsultaAsesoresVisitasEBSAdapter.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="ConsultaAsesoresVisitasEBSAdapter_ptt" operation="ConsultaAsesoresVisitasEBSAdapter">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="SELECT n.CREATION_DATE ,rs.SOURCE_NAME FROM JTF_NOTES_B n, JTF_NOTES_TL ntl, HZ_PARTIES p, JTF_RS_RESOURCE_EXTNS rs WHERE ntl.JTF_NOTE_ID    = n.JTF_NOTE_ID AND n.SOURCE_OBJECT_ID   = p.PARTY_ID AND n.CREATED_BY         = rs.USER_ID AND ntl.LANGUAGE         = 'ESA' AND n.SOURCE_OBJECT_CODE = 'PARTY' AND p.JGZZ_FISCAL_CODE LIKE #nit AND n.CREATION_DATE  IN (SELECT max(NOTE.CREATION_DATE) FROM JTF_NOTES_B NOTE WHERE NOTE.SOURCE_OBJECT_ID =  n.SOURCE_OBJECT_ID AND  NOTE.SOURCE_OBJECT_CODE = 'PARTY' AND NOTE.CREATED_BY = RS.USER_ID)"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

@@ -1,0 +1,25 @@
+<?binding.jca consultarMarcasPorLinea_db.jca?>
+<wsdl:definitions name="consultarMarcasPorLinea" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/consultarMarcasPorLinea" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/consultarMarcasPorLinea" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/consultarMarcasPorLinea" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="consultarMarcasPorLinea_plt">
+        <plt:role name="consultarMarcasPorLinea_role">
+            <plt:portType name="tns:consultarMarcasPorLinea_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/consultarMarcasPorLinea" schemaLocation="xsd/consultarMarcasPorLinea.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="consultarMarcasPorLineaInput_msg">
+        <wsdl:part name="consultarMarcasPorLineaInput_msg" element="db:consultarMarcasPorLineaInput"/>
+    </wsdl:message>
+    <wsdl:message name="consultarMarcasPorLineaOutputCollection_msg">
+        <wsdl:part name="consultarMarcasPorLineaOutputCollection" element="db:consultarMarcasPorLineaOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="consultarMarcasPorLinea_ptt">
+        <wsdl:operation name="consultarMarcasPorLinea">
+            <wsdl:input message="tns:consultarMarcasPorLineaInput_msg"/>
+            <wsdl:output message="tns:consultarMarcasPorLineaOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

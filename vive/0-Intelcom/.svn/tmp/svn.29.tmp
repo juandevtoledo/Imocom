@@ -1,0 +1,393 @@
+/*
+ * Copyright (c) 2014 FONADE. All Rights Reserved.
+ * 
+ * This software is the confidential and proprietary information of FONADE.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of FONADE.
+ */
+
+package com.imocom.intelcom.persistence.entities;
+
+import com.imocom.intelcom.persistence.AbstractEntity;
+import com.imocom.intelcom.persistence.IDataModel;
+import com.imocom.intelcom.util.utility.DateUtil;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+/**
+ * <strong>Aplicación</strong>     : FONADE Interoperabilidad GEL-XML.
+ * <br/>
+ * <br/>
+ * <strong>Date</strong>           : Oct 27, 2014
+ * <br/><br/>
+ * <strong>Target</strong>         : 
+ *
+ * @author Carlos Guzman (cguzman) - PointMind S.A.S. - carlos.guzman@pointmind.com
+ *
+ */
+@Entity
+@Table(name = "VISITA")
+@NamedQueries({
+    @NamedQuery(name = "Visita.findAll", query = "SELECT v FROM Visita v"),
+    @NamedQuery(name = "Visita.findByIdvisita", query = "SELECT v FROM Visita v WHERE v.idvisita = :idvisita"),
+    @NamedQuery(name = "Visita.findByIdcliente", query = "SELECT v FROM Visita v WHERE v.idcliente = :idcliente"),
+    @NamedQuery(name = "Visita.findByAsuntovisita", query = "SELECT v FROM Visita v WHERE v.asuntovisita = :asuntovisita"),
+    @NamedQuery(name = "Visita.findByResultadovisita", query = "SELECT v FROM Visita v WHERE v.resultadovisita = :resultadovisita"),
+    @NamedQuery(name = "Visita.findByFechacreacion", query = "SELECT v FROM Visita v WHERE v.fechacreacion = :fechacreacion"),
+    @NamedQuery(name = "Visita.findByFechainicio", query = "SELECT v FROM Visita v WHERE v.fechainicio = :fechainicio"),
+    @NamedQuery(name = "Visita.findByFechafinal", query = "SELECT v FROM Visita v WHERE v.fechafinal = :fechafinal"),
+    @NamedQuery(name = "Visita.findByFechamodificacion", query = "SELECT v FROM Visita v WHERE v.fechamodificacion = :fechamodificacion"),
+    @NamedQuery(name = "Visita.findByFecharegistroresultados", query = "SELECT v FROM Visita v WHERE v.fecharegistroresultados = :fecharegistroresultados"),
+    @NamedQuery(name = "Visita.findByUbicacion", query = "SELECT v FROM Visita v WHERE v.ubicacion = :ubicacion"),
+    @NamedQuery(name = "Visita.findByAccionesGeneradas", query = "SELECT v FROM Visita v WHERE v.accionesGeneradas = :accionesGeneradas"),
+    @NamedQuery(name = "Visita.findByClienteTemporal", query = "SELECT v FROM Visita v WHERE v.clienteTemporal = :clienteTemporal"),
+    @NamedQuery(name = "Visita.buscarEventosXFechaAsesor", query = "SELECT v FROM Visita v WHERE v.idasesor = :idAsesor and v.fechainicio BETWEEN :fechainicio AND :fechafinal"),
+    @NamedQuery(name = "Visita.findByAsesorCliente", query = "SELECT v FROM Visita v WHERE  v.idcliente = :idCliente and v.idasesor = :idAsesor"),
+    @NamedQuery(name = "Visita.findByAsesorClientesXFechaAsesor", query = "SELECT v FROM Visita v WHERE  v.idcliente = :idCliente and v.idasesor = :idAsesor and v.fechainicio = :fechainicio")
+})
+
+public class Visita extends AbstractEntity implements Serializable, IDataModel {
+    private static final long serialVersionUID = 1L;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO, generator="Visita_seq_gen")
+    @SequenceGenerator(name="Visita_seq_gen", sequenceName="SEQ_VISITA", allocationSize = 1)
+    @Column(name = "IDVISITA")
+    private Long idvisita;
+    
+    @Column(name = "IDCLIENTE")
+    private Long idcliente;
+    
+    @Column(name = "ASUNTOVISITA")
+    private String asuntovisita;
+    
+    @Column(name = "RESULTADOVISITA")
+    private String resultadovisita;
+    
+    @Column(name = "FECHACREACION")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechacreacion;
+    
+    @Column(name = "FECHAINICIO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechainicio;
+    
+    @Column(name = "FECHAFINAL")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechafinal;
+    
+    @Column(name = "FECHAMODIFICACION")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechamodificacion;
+    
+    @Column(name = "FECHAREGISTRORESULTADOS")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecharegistroresultados;
+    
+    @Column(name = "UBICACION")
+    private String ubicacion;
+    
+    @Column(name = "ACCIONES_GENERADAS")
+    private String accionesGeneradas;
+    
+    @Column(name = "CLIENTE_TEMPORAL")
+    private String clienteTemporal;
+    
+    @OneToMany(mappedBy = "idVisitagenerador")
+    private Set<Cotizacion> cotizacionSet;
+    
+    @OneToMany(mappedBy = "idVisita", fetch = FetchType.EAGER)
+    private Set<InvitadoVisita> invitadoVisitaSet;
+    
+    @JoinColumn(name = "ID_ESTADO", referencedColumnName = "ID_TIPO")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Tipo idEstado;
+    
+    @JoinColumn(name = "ID_TIPOVISITA", referencedColumnName = "ID_TIPO")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Tipo idTipovisita;
+    
+    @JoinColumn(name = "IDASESOR", referencedColumnName = "ID_USUARIO")
+    @ManyToOne
+    private Usuario idasesor;
+    
+    @OneToMany(mappedBy = "idVisitagenerador")
+    private Set<Visita> visitaSet;
+    
+    @JoinColumn(name = "ID_VISITAGENERADOR", referencedColumnName = "IDVISITA")
+    @ManyToOne
+    private Visita idVisitagenerador;
+    
+    @OneToMany(mappedBy = "idVisita", fetch = FetchType.EAGER)
+    private Set<OportunidadVisita> oportunidadVisitaSet;
+    
+    @Transient
+    private String nombreOportunidad;
+
+    @Transient
+    private String nombreCliente;
+
+    public Visita() {
+    }
+
+    public Visita(Long idvisita) {
+        this.idvisita = idvisita;
+    }
+
+    public Long getIdvisita() {
+        return idvisita;
+    }
+
+    public void setIdvisita(Long idvisita) {
+        this.idvisita = idvisita;
+    }
+
+    public Long getIdcliente() {
+        return idcliente;
+    }
+
+    public void setIdcliente(Long idcliente) {
+        this.idcliente = idcliente;
+    }
+
+    public String getAsuntovisita() {
+        return asuntovisita;
+    }
+
+    public void setAsuntovisita(String asuntovisita) {
+        this.asuntovisita = asuntovisita;
+    }
+
+    public String getResultadovisita() {
+        return resultadovisita;
+    }
+
+    public void setResultadovisita(String resultadovisita) {
+        this.resultadovisita = resultadovisita;
+    }
+
+    public Date getFechacreacion() {
+        return fechacreacion;
+    }
+
+    public void setFechacreacion(Date fechacreacion) {
+        this.fechacreacion = fechacreacion;
+    }
+
+    public Date getFechainicio() {
+        return fechainicio;
+    }
+
+    public void setFechainicio(Date fechainicio) {
+        this.fechainicio = fechainicio;
+    }
+
+    public Date getFechafinal() {
+        return fechafinal;
+    }
+
+    public void setFechafinal(Date fechafinal) {
+        this.fechafinal = fechafinal;
+    }
+
+    public Date getFechamodificacion() {
+        return fechamodificacion;
+    }
+
+    public void setFechamodificacion(Date fechamodificacion) {
+        this.fechamodificacion = fechamodificacion;
+    }
+
+    public Date getFecharegistroresultados() {
+        return fecharegistroresultados;
+    }
+
+    public void setFecharegistroresultados(Date fecharegistroresultados) {
+        this.fecharegistroresultados = fecharegistroresultados;
+    }
+
+    public String getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(String ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    public String getAccionesGeneradas() {
+        return accionesGeneradas;
+    }
+
+    public void setAccionesGeneradas(String accionesGeneradas) {
+        this.accionesGeneradas = accionesGeneradas;
+    }
+
+    public String getClienteTemporal() {
+        return clienteTemporal;
+    }
+
+    public void setClienteTemporal(String clienteTemporal) {
+        this.clienteTemporal = clienteTemporal;
+    }
+
+    public Set<Cotizacion> getCotizacionSet() {
+        return cotizacionSet;
+    }
+
+    public void setCotizacionSet(Set<Cotizacion> cotizacionSet) {
+        this.cotizacionSet = cotizacionSet;
+    }
+
+    public Set<InvitadoVisita> getInvitadoVisitaSet() {
+        return invitadoVisitaSet;
+    }
+
+    public void setInvitadoVisitaSet(Set<InvitadoVisita> invitadoVisitaSet) {
+        this.invitadoVisitaSet = invitadoVisitaSet;
+    }
+
+    public Tipo getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(Tipo idEstado) {
+        this.idEstado = idEstado;
+    }
+
+    public Tipo getIdTipovisita() {
+        return idTipovisita;
+    }
+
+    public void setIdTipovisita(Tipo idTipovisita) {
+        this.idTipovisita = idTipovisita;
+    }
+
+    public Usuario getIdasesor() {
+        return idasesor;
+    }
+
+    public void setIdasesor(Usuario idasesor) {
+        this.idasesor = idasesor;
+    }
+
+    public Set<Visita> getVisitaSet() {
+        return visitaSet;
+    }
+
+    public void setVisitaSet(Set<Visita> visitaSet) {
+        this.visitaSet = visitaSet;
+    }
+
+    public Visita getIdVisitagenerador() {
+        return idVisitagenerador;
+    }
+
+    public void setIdVisitagenerador(Visita idVisitagenerador) {
+        this.idVisitagenerador = idVisitagenerador;
+    }
+
+    public Set<OportunidadVisita> getOportunidadVisitaSet() {
+        return oportunidadVisitaSet;
+    }
+
+    public void setOportunidadVisitaSet(Set<OportunidadVisita> oportunidadVisitaSet) {
+        this.oportunidadVisitaSet = oportunidadVisitaSet;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (idvisita != null ? idvisita.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Visita)) {
+            return false;
+        }
+        Visita other = (Visita) object;
+        if ((this.idvisita == null && other.idvisita != null) || (this.idvisita != null && !this.idvisita.equals(other.idvisita))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.imocom.intelcom.persistence.entities.Visita[ idvisita=" + idvisita + " ]";
+    }
+    
+    public String getKeyModel() {
+        if (this.idvisita != null)
+            return String.valueOf(this.idvisita);
+        
+        return null;
+    }
+    
+    public String getFechaVisitaMostrar(){
+        if(getFechainicio()!=null){
+            return DateUtil.formatShortTime(getFechainicio());
+        }
+        return null;
+    }
+
+    public String getFechaModificacionMostrar(){
+        if(getFechamodificacion()!=null){
+            return DateUtil.formatShortTime(getFechamodificacion());
+        }
+        return null;
+    }
+
+    public String getHoraIniVisitaMostrar(){
+        if(getFechainicio()!=null){
+            return DateUtil.formatTime(getFechainicio());
+        }
+        return null;
+    }
+
+    public String getHoraFinVisitaMostrar(){
+        if(getFechafinal()!=null){
+            return DateUtil.formatTime(getFechafinal());
+        }
+        return null;
+    }
+    
+    public String getNombreOportunidad() {
+        return nombreOportunidad;
+    }
+
+    public void setNombreOportunidad(String nombreOportunidad) {
+        this.nombreOportunidad = nombreOportunidad;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+    
+    
+    
+}

@@ -1,0 +1,34 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDetalleOportunidadEBSAdapter" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDetalleOportunidadEBSAdapter" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsultaDetalleOportunidadEBSAdapterInput" type="ConsultaDetalleOportunidadEBSAdapterInput"/>
+   <xs:complexType name="ConsultaDetalleOportunidadEBSAdapterInput">
+      <xs:sequence>
+         <xs:element name="v_lead_id" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsultaDetalleOportunidadEBSAdapterOutputCollection" type="ConsultaDetalleOportunidadEBSAdapterOutputCollection"/>
+   <xs:complexType name="ConsultaDetalleOportunidadEBSAdapterOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsultaDetalleOportunidadEBSAdapterOutput" type="ConsultaDetalleOportunidadEBSAdapterOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsultaDetalleOportunidadEBSAdapterOutput">
+      <xs:sequence>
+         <xs:element name="NIT" type="xs:string" nillable="true"/>
+         <xs:element name="CLIENTE" type="xs:string" nillable="true"/>
+         <xs:element name="ID_OPORTUNIDAD" type="xs:decimal" nillable="true"/>
+         <xs:element name="NOMBRE_OPORTUNIDAD" type="xs:string" nillable="true"/>
+         <xs:element name="CANAL_ENTRADA" type="xs:string" nillable="true"/>
+         <xs:element name="MONTO" type="xs:decimal" nillable="true"/>
+         <xs:element name="MONEDA" type="xs:string" nillable="true"/>
+         <xs:element name="ESTADO_OPORTUNIDAD" type="xs:string" nillable="true"/>
+         <xs:element name="FECHA_CIERRE_ESTIMADA" type="xs:string" nillable="true"/>
+         <xs:element name="ETAPA_OPORTUNIDAD" type="xs:string" nillable="true"/>
+         <xs:element name="PROBABILIDAD_EXITO_IMOCOM" type="xs:string" nillable="true"/>
+         <xs:element name="PR_EJECUCION_IMOCOM" type="xs:string" nillable="true"/>
+         <xs:element name="CLOSE_REASON" type="xs:string" nillable="true"/>
+         <xs:element name="TIPOOP" type="xs:string" nillable="true"/>
+         <xs:element name="FILE_ORDENCOMPRA" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

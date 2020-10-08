@@ -1,0 +1,366 @@
+/*
+ * Copyright (c) 2014 IMOCOM. All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of IMOCOM.
+ * ("Confidential Information").
+ * It may not be copied or reproduced in any manner without the express
+ * written permission of IMOCOM.
+ *
+ *
+ */
+package com.imocom.intelcom.util.utility;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TimeZone;
+import org.apache.log4j.Logger;
+
+
+/**
+ * <strong>Aplicación</strong> : IMOCOM Sistema de inteligencia comercial
+ * <br/>
+ * <br/>
+ * <strong>Date</strong> : Aug 26, 2014
+ * <br/><br/>
+ * <strong>Target</strong> : Extended date application class implementation
+ *
+ * @author Carlos Guzman (cguzman) - PointMind S.A.S. -
+ * carlos.guzman@pointmind.com
+ *
+ */
+public final class DateUtil {
+     private static final Logger logger = Logger.getLogger(DateUtil.class);
+    public static final String TIME_ZONE = "America/Bogota";
+    public static final String GEL_STANDARD_DATE_FORMAT = "dd/MM/yyyy";
+     public static final String GEL_STANDARD_DATE_FORMAT_YEAR_SEG = "dd/MM/yy";
+    public static final String GEL_STANDARD_DATE_FORMAT_YEAR = "MM/dd/yy";
+    public static final String GEL_STANDARD_DATETIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    public static final String EXCHANGE_DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String BPM_DATETIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
+    public static final String SOA_DATETIME_FORMAT = "yyyy-MM-dd";
+
+    private static final SimpleDateFormat LONG_FORMAT = new SimpleDateFormat(GEL_STANDARD_DATETIME_FORMAT);
+    private static final SimpleDateFormat SHORT_FORMAT = new SimpleDateFormat(GEL_STANDARD_DATE_FORMAT);
+    //private static HashMap<String, String> _monthText = new HashMap<String, String>();
+
+    private static HashMap<String, Integer> _loadMonth() {
+        HashMap<String, Integer> _monthText = new HashMap<String, Integer>();
+        _monthText.put("JAN", 0);
+        _monthText.put("FEB", 1);
+        _monthText.put("MAR", 2);
+        _monthText.put("APR", 3);
+        _monthText.put("MAY", 4);
+        _monthText.put("JUN", 5);
+        _monthText.put("JUL", 6);
+        _monthText.put("AUG", 7);
+        _monthText.put("SEP", 8);
+        _monthText.put("OCT", 9);
+        _monthText.put("NOV", 10);
+        _monthText.put("DEC", 11);
+        return _monthText;
+    }
+
+    /**
+     * Metodo que recive un string en formato bpm y lo convierte en un Date
+     *
+     * @param arg
+     * @return
+     */
+    public static Date getStringEBSTIME(String arg) {
+        try {
+            if(arg!=null&&!arg.equals("")){
+            String _dateInput[] = arg.split("-");
+            HashMap<String, Integer> month = DateUtil._loadMonth();
+            String _dateString = _dateInput[0] + "/" + (month.get(_dateInput[1]) + 1) + "/" + _dateInput[2];
+
+            SimpleDateFormat formatter = new SimpleDateFormat(GEL_STANDARD_DATE_FORMAT_YEAR_SEG);
+
+            return formatter.parse(_dateString);
+            }
+        } catch (ParseException ex) {
+            return new Date();
+        }
+        return Calendar.getInstance().getTime();
+    }
+
+    /**
+     * Metodo que recive un string en formato bpm y lo convierte en un Date
+     *
+     * @param arg
+     * @return
+     */
+    public static Date getStringBMPToDate(String arg) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(BPM_DATETIME_FORMAT);
+            return formatter.parse(arg);
+        } catch (ParseException ex) {
+            return new Date();
+        }
+    }
+
+    public static Date getStringStandartToDate(String arg) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(GEL_STANDARD_DATE_FORMAT);
+            return formatter.parse(arg);
+        } catch (ParseException ex) {
+            return new Date();
+        }
+    }
+
+    public static Date getStringStandartToDateYear(String arg) {
+        try {
+             logger.info("[READ EXCEL FORMAT] : "+GEL_STANDARD_DATE_FORMAT_YEAR);
+             logger.info("[READ EXCEL ARG] : "+arg);
+            SimpleDateFormat formatter = new SimpleDateFormat(GEL_STANDARD_DATE_FORMAT_YEAR);
+            logger.info("[READ EXCEL STRING] : "+formatter.parse(arg).toString());
+            return formatter.parse(arg);
+        } catch (ParseException ex) {
+            return new Date();
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static Date getAppCurrentDate() {
+        //long dateTimeLong = Long.valueOf(dateRequestToValidate);
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
+        return calendar.getTime();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static String formatTime(Date arg) {
+
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public static String formatTime24h(Date arg) {
+
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+
+    /**
+     *
+     * @param timeMills
+     * @return
+     */
+    public static Date getDateFromTimeMillsString(long timeMills) {
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(TIME_ZONE));
+        calendar.setTimeInMillis(timeMills);
+
+        return calendar.getTime();
+
+    }
+
+    /**
+     *
+     * @param date
+     * @return
+     */
+    public static String getDateCompleteFormat(Date date) {
+        return LONG_FORMAT.format(date);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static String formatShortTime(Date arg) {
+
+        SimpleDateFormat format = new SimpleDateFormat(GEL_STANDARD_DATE_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+
+    public static String formatShortDate(Date arg) {
+
+        SimpleDateFormat format = new SimpleDateFormat(GEL_STANDARD_DATE_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+
+    public static String formatShortDateTime(Date arg) {
+
+        SimpleDateFormat format = new SimpleDateFormat(GEL_STANDARD_DATETIME_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+
+    public static String formatExchangeTime(Date arg) {
+
+        SimpleDateFormat format = new SimpleDateFormat(EXCHANGE_DATETIME_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+
+    public static String formatBPMTime(Date arg) {
+
+        if( arg == null ){
+            return "";
+        }
+        SimpleDateFormat format = new SimpleDateFormat(BPM_DATETIME_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+
+    public static String formatSOAtime(Date arg) {
+
+        SimpleDateFormat format = new SimpleDateFormat(SOA_DATETIME_FORMAT);
+        format.setTimeZone(TimeZone.getTimeZone(TIME_ZONE));
+
+        String time = format.format(arg);
+
+        return time;
+    }
+
+    public static List<String> valoresHoraCombo() {
+        List<String> listaValoresHora = new ArrayList<String>();
+        for (int i = 0; i < 24; i++) {
+            String valor = String.valueOf(i);
+            //Completamos el valor de hora a 2 digitos
+            if (valor.length() < 2) {
+                valor = "0" + valor;
+            }
+            //Completamos el valor de minutos
+            listaValoresHora.add(valor + ":00");
+            listaValoresHora.add(valor + ":30");
+        }
+        return listaValoresHora;
+    }
+
+    /**
+     * Metodo que valida si la hora inicial es menor que la hora final.las horas
+     * a comparar son 2 strings con el formato hh:mm
+     *
+     * @param horaIni
+     * @param horaFin
+     * @return
+     */
+    public static boolean validarHorasVisita(String horaIni, String horaFin) {
+
+        Calendar fechaIni = Calendar.getInstance();
+        Calendar fechaFin = Calendar.getInstance();
+
+        int horaIniInt = Integer.parseInt(horaIni.substring(0, 2));
+        int horaFinInt = Integer.parseInt(horaFin.substring(0, 2));
+        int minutoIniInt = Integer.parseInt(horaIni.substring(3, 5));
+        int minutoFinInt = Integer.parseInt(horaFin.substring(3, 5));
+        //Seteo Horas , Minutos y Segundos
+        fechaIni.set(Calendar.HOUR_OF_DAY, horaIniInt);
+        fechaFin.set(Calendar.HOUR_OF_DAY, horaFinInt);
+
+        fechaIni.set(Calendar.MINUTE, minutoIniInt);
+        fechaFin.set(Calendar.MINUTE, minutoFinInt);
+
+        fechaIni.set(Calendar.SECOND, 0);
+        fechaFin.set(Calendar.SECOND, 0);
+
+        return fechaFin.after(fechaIni);
+
+    }
+    /*
+     public static List<String> valoresMinutoCombo() {
+     List<String> listaValoresMinutos = null;
+     listaValoresMinutos = new ArrayList<String>();
+     for (int i = 0; i < 60; i++) {
+     //verificamos si es múltiplo de 10
+     if ((i % 10) == 0) {
+     listaValoresMinutos.add(String.valueOf(i));
+     }
+     }
+     return listaValoresMinutos;
+     }
+     */
+
+    /**
+     * metodo que recibe un objeto date y aumenta las horas y minutos indicadas
+     *
+     * @param fecha
+     * @param horas
+     * @param minutos
+     * @return
+     */
+    public static Date armarFechaEvento(Date fecha, int horas, int minutos) {
+
+        Calendar cal = new GregorianCalendar();
+        cal.setTimeInMillis(fecha.getTime());
+        cal.add(Calendar.HOUR_OF_DAY, horas);
+        cal.add(Calendar.MINUTE, minutos);
+
+        return cal.getTime();
+    }
+
+    public static Date fechaActualIni() {
+        Calendar fechaInicio = Calendar.getInstance();
+        fechaInicio.set(Calendar.HOUR_OF_DAY, 0);
+        fechaInicio.set(Calendar.MINUTE, 0);
+        fechaInicio.set(Calendar.SECOND, 0);
+        return fechaInicio.getTime();
+
+    }
+
+    public static Date fechaActualFin() {
+        Calendar fechaFinal = Calendar.getInstance();
+        fechaFinal.set(Calendar.HOUR_OF_DAY, 23);
+        fechaFinal.set(Calendar.MINUTE, 59);
+        fechaFinal.set(Calendar.SECOND, 59);
+        return fechaFinal.getTime();
+    }
+
+    public static Boolean fechaEsMayorActual(Date fecha) {
+        Date actual = DateUtil.fechaActualIni();
+        if (fecha.before(actual)) {
+            return false;
+        }
+        return true;
+    }
+
+    public static Boolean fechaEsMenorActual(Date fecha) {
+        Date actual = DateUtil.fechaActualIni();
+        if (fecha.after(actual)) {
+            return false;
+        }
+        return true;
+    }
+
+}

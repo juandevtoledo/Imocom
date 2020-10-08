@@ -1,0 +1,30 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesByNombreEtapaByEstadoAdapter" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaOportunidadesByNombreEtapaByEstadoAdapter" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterInput" type="ConsultaOportunidadesByNombreEtapaByEstadoAdapterInput"/>
+   <xs:complexType name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterInput">
+      <xs:sequence>
+         <xs:element name="v_estado" type="xs:string" nillable="true"/>
+         <xs:element name="v_nombre_oportunidad" type="xs:string" nillable="true"/>
+         <xs:element name="v_etapa" type="xs:string" nillable="true"/>
+         <xs:element name="v_id_asesor" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutputCollection" type="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutputCollection"/>
+   <xs:complexType name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutput" type="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsultaOportunidadesByNombreEtapaByEstadoAdapterOutput">
+      <xs:sequence>
+         <xs:element name="LEAD_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="NIT" type="xs:string" nillable="true"/>
+         <xs:element name="Cliente" type="xs:string" nillable="true"/>
+         <xs:element name="Descripcion" type="xs:string" nillable="true"/>
+         <xs:element name="etapa_oportunidad" type="xs:string" nillable="true"/>
+         <xs:element name="SALES_STAGE_ID" type="xs:decimal" nillable="true"/>
+         <xs:element name="WIN_PROBABILITY" type="xs:decimal" nillable="true"/>
+         <xs:element name="USER_NAME" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

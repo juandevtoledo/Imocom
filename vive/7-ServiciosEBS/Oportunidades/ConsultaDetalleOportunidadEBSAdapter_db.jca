@@ -1,0 +1,13 @@
+<adapter-config name="ConsultaDetalleOportunidadEBSAdapter" adapter="Database Adapter" wsdlLocation="ConsultaDetalleOportunidadEBSAdapter.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="ConsultaDetalleOportunidadEBSAdapter_ptt" operation="ConsultaDetalleOportunidadEBSAdapter">
+    <interaction-spec className="oracle.tip.adapter.db.DBPureSQLInteractionSpec">
+      <property name="SqlString" value="SELECT HZ_PARTIES.JGZZ_FISCAL_CODE NIT, HZ_PARTIES.PARTY_NAME CLIENTE,  AS_LEADS_ALL.LEAD_ID ID_OPORTUNIDAD,   AS_LEADS_ALL.DESCRIPTION NOMBRE_OPORTUNIDAD,  AS_LEADS_ALL.CHANNEL_CODE CANAL_ENTRADA,  AS_LEADS_ALL.TOTAL_AMOUNT MONTO,    AS_LEADS_ALL.CURRENCY_CODE MONEDA,  AS_LEADS_ALL.STATUS ESTADO_OPORTUNIDAD,  AS_LEADS_ALL.ATTRIBUTE6 FECHA_CIERRE_ESTIMADA,   (SELECT AS_SALES_STAGES_ALL_TL.NAME  FROM AS_SALES_STAGES_ALL_TL  WHERE AS_SALES_STAGES_ALL_TL.SALES_STAGE_ID = AS_LEADS_ALL.SALES_STAGE_ID   AND AS_SALES_STAGES_ALL_TL.LANGUAGE LIKE 'ESA'  ) etapa_oportunidad,    (SELECT IMCM_PROB_OPORIMO.DESCRIPCION FROM IMCM_PROB_OPORIMO WHERE AS_LEADS_ALL.attribute4 = IMCM_PROB_OPORIMO.COD_OPORIMO ) PROBABILIDAD_EXITO_IMOCOM,  (SELECT IMCM_PROB_OPORCLIE.DESCRIPCION FROM IMCM_PROB_OPORCLIE  WHERE AS_LEADS_ALL.attribute3 = IMCM_PROB_OPORCLIE.COD_OPOCLIE ) PR_EJECUCION_IMOCOM,  CLOSE_REASON,AS_LEADS_ALL.ATTRIBUTE5 AS TIPOOP ,AS_LEADS_ALL.ATTRIBUTE7 AS FILE_ORDENCOMPRA  FROM AS_LEADS_ALL,   HZ_PARTIES WHERE AS_LEADS_ALL.CUSTOMER_ID = HZ_PARTIES.PARTY_ID AND AS_LEADS_ALL.LEAD_ID LIKE #v_lead_id"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <input/>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

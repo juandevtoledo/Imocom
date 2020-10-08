@@ -1,0 +1,14 @@
+<adapter-config name="CargaDeOportunidadesEBSAdapter" adapter="Database Adapter" wsdlLocation="CargaDeOportunidadesEBSAdapter.wsdl" xmlns="http://platform.integration.oracle/blocks/adapter/fw/metadata">
+  
+  <connection-factory location="eis/DB/EBS_Imocom" UIConnectionName="IMOCOM_EBS" adapterRef=""/>
+  <endpoint-interaction portType="CargaDeOportunidadesEBSAdapter_ptt" operation="CargaDeOportunidadesEBSAdapter">
+    <interaction-spec className="oracle.tip.adapter.db.DBStoredProcedureInteractionSpec">
+      <property name="SchemaName" value="APPS"/>
+      <property name="PackageName" value="INTELCOM_OPORTUNIDADES"/>
+      <property name="ProcedureName" value="CARGAR_OPORTUNIDAD"/>
+      <property name="GetActiveUnitOfWork" value="false"/>
+    </interaction-spec>
+    <output/>
+  </endpoint-interaction>
+
+</adapter-config>

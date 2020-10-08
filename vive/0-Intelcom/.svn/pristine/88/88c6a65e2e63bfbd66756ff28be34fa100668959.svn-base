@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="cotizacion-crear-form" enctype="multipart/form-data" >
+            <p><h1 align="center">Solicitar Cotización</h1></p> 
+            <p:separator style="width:90%" />  
+            
+            <h2 align="center">Información Básica de la Cotización</h2>
+            <h:panelGrid columns="2"  cellpadding="4" width="90%" >
+            
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_oprtunidad" value="Oportunidad:" styleClass="labelForm" />
+                    <p:commandButton id="btn_add_oportunidad"  onclick="PF('consulta_oprt').show();" value=" " update=":template:form-oportunidad-consultados:tablaOportunidadesAsesor" icon="ui-icon-search" immediate="true" style="display: inline-block !important"  />
+                </h:panelGroup>
+                <p:inputText id="oportunidadSeleccionada" value="#{cotizacionesCrearBean.oportunidadSelect.nombreOportunidad}"/>
+                <p:outputLabel value="Nombre Cliente:" styleClass="labelForm"/>
+                <p:inputText id="oportunidadClienteNombre" value="#{cotizacionesCrearBean.oportunidadSelect.nombreCliente}" disabled="true"/>
+                <p:outputLabel value="Tipo de Oferta:" styleClass="labelForm"/>
+                <p:selectOneMenu id="selectTipo" value="#{cotizacionesCrearBean.tipo}" >
+                    <p:ajax process="selectTipo" immediate="true" partialSubmit="true" event="valueChange" listener="#{cotizacionesCrearBean.clearProductosList}"  update=":template:form-productos-consultados:tablaProductosConsultados,:template:form-productos-consultados:panelgrouptipopr,panel_add_producto,tablaProductosSeleccionados"/>
+                    <f:selectItems value="#{cotizacionesCrearBean.tipoOfertaCotizacion}"  
+                                   var="tipo" itemLabel="#{tipo.tipoEtiqueta}"  
+                                   itemValue="#{tipo.tipoValor}"/> 
+                </p:selectOneMenu>              
+                <p:outputLabel value="Requiere Aprobación:" styleClass="labelForm"/>
+                <p:selectBooleanCheckbox id="reqApr" value="#{cotizacionesCrearBean.requeiereAprobacion}" >
+                    <p:ajax process="reqApr" immediate="true" partialSubmit="true" event="valueChange" update="fileAdj,fileAdjLbl,ol_incoterm11,ol_incoterm12,select-tipo-inconterm11,select-tipo-inconterm12"/>
+                </p:selectBooleanCheckbox>
+                                
+                <h:panelGroup style="width: 100%" id="panel_add_producto">
+                    <p:outputLabel id="req_ol_pr" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_req_ol_pr" value="Producto:" styleClass="labelForm" />
+                    <p:commandButton id="btn_add_producto" action="#{cotizacionesCrearBean.loadProductos}" update=":template:form-productos-consultados:tablaProductosConsultados,:template:form-productos-consultados:panel_id_marca,tablaProductosSeleccionados" onclick="PF('consulta_prod').show();" value=" " icon="ui-icon-search" immediate="true" style="display: inline-block !important" rendered="#{cotizacionesCrearBean.agregarProductos}" />
+                </h:panelGroup>             
+
+                <p:dataTable id="tablaProductosSeleccionados" value="#{cotizacionesCrearBean.selectProductoCotizacion}"  var="producto" styleClass="tablaresultados" tableStyleClass="detailTable">
+
+                    <p:column id="col_id_codigo" headerText="Código" styleClass="campoOculto">
+                        <h:outputText id="ot_t_codigo" value="#{producto.codigo}" />
+                    </p:column>
+                    <p:column id="col_nombre" headerText="Nombre" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_t_nombre" value="#{producto.nombre}" />
+                    </p:column>
+                    <p:column id="col_id_marca" headerText="Marca" styleClass="campoOculto">
+                        <h:outputText id="labelMarca" value="Marca" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_vunitario" value="#{producto.marca}" />
+                    </p:column>    
+                    <p:column id="col_id_modelo" headerText="Modelo" styleClass="campoOculto">
+                        <h:outputText id="ot_t_modelo" value="#{producto.modelo}" />
+                    </p:column>
+                    <p:column id="col_id_cantidad" headerText="Cantidad">
+                        <h:outputText id="labelCantidad" value="Cantidad" styleClass="labelRows "/>
+                        <h:inputText id="ipt_cantidad" value="#{producto.cantidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column headerText="Borrar">
+                        <p:commandButton action="#{cotizacionesCrearBean.borrarProducto}" value="Borrar" process="@all" update="@form" immediate="true" styleClass="backGIntelcom">
+                            <f:setPropertyActionListener target="#{cotizacionesCrearBean.productoBorrar}" value="#{producto}"   />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+                 <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_incoterm" value="Incoterm:" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:selectOneMenu id="select-tipo-inconterm" value="#{cotizacionesCrearBean.incotermLong}"   >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{cotizacionesCrearBean.listaIncoterm}" 
+                                   var="typIncoterm" itemLabel="#{typIncoterm.tipoEtiqueta}" itemValue="#{typIncoterm.idTipo}"  />  
+                </p:selectOneMenu>                  
+                
+            </h:panelGrid>
+            
+            <p:separator style="width:90%" />  
+            <h2 align="center">Fechas asociadas</h2>
+            <h:panelGrid columns="2"  cellpadding="4" width="90%" >
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_fl" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_req_ol_fl" value="Fecha Limite Generación:" styleClass="labelForm" />
+                </h:panelGroup>    
+                <p:calendar id="btn_fecha" value="#{cotizacionesCrearBean.cotizacion.fechavencimientosolicitud}"  readonlyInput="true" pattern="dd-MMM-yyyy"  required="true"  requiredMessage="Campo Fecha Vencimiento Solicitud es Requerido"/>
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_fl2" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_req_ol_fl2" value="Fecha Estimada Pedido Venta:" styleClass="labelForm" />
+                </h:panelGroup>    
+                <p:calendar id="btn_fecha2" value="#{cotizacionesCrearBean.cotizacion.fechaEstimadaPedidoVenta}"  readonlyInput="true" pattern="dd-MMM-yyyy"  required="true"  requiredMessage="Campo Fecha Pedido Venta es Requerido"/>
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_fl3" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_req_ol_fl3" value="Fecha Estimada Entrega:" styleClass="labelForm" />
+                </h:panelGroup>    
+                <p:calendar id="btn_fecha3" value="#{cotizacionesCrearBean.cotizacion.fechaEstimadaEntrega}"  readonlyInput="true" pattern="dd-MMM-yyyy"  required="true"  requiredMessage="Campo Fecha Estimada Entrega es Requerido"/>
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_fl4" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_req_ol_fl4" value="Fecha Estimada Facturación:" styleClass="labelForm" />
+                </h:panelGroup>    
+                <p:calendar id="btn_fecha4" value="#{cotizacionesCrearBean.cotizacion.fechaEstimadaFacturacion}"  readonlyInput="true" pattern="dd-MMM-yyyy"  required="true"  requiredMessage="Campo Fecha Estimada Facturación es Requerido"/>                
+                      
+            </h:panelGrid>
+            <p:separator style="width:90%" />  
+            <h:panelGrid columns="2"  cellpadding="4" width="90%" >               
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_dirigida" value="(*)" styleClass="requerido" />
+                    <p:outputLabel value="Dirigida a:" styleClass="labelForm"/>  
+                </h:panelGroup>             
+                <p:inputText id="cotDirigida" value="#{cotizacionesCrearBean.cotizacion.dirigida}" required="true" requiredMessage="Dirigido a es Requerido."/>
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Teléfono:" styleClass="labelForm"/>  
+                </h:panelGroup>               
+                <p:inputText id="cotTelefono" value="#{cotizacionesCrearBean.cotizacion.telefono}"/>
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Dirección:" styleClass="labelForm"/>  
+                </h:panelGroup>               
+                <p:inputText id="cotDireccion" value="#{cotizacionesCrearBean.cotizacion.direccion}" required="true"  requiredMessage="Dirección es Requerido"/>
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Correo:" styleClass="labelForm"/>  
+                </h:panelGroup>                
+                <p:inputText id="cotCorreo" value="#{cotizacionesCrearBean.cotizacion.correo}" >
+                </p:inputText>
+                
+                <p:outputLabel value="Observación:" styleClass="labelForm"/>
+                <p:inputTextarea id="btn_observacion" value="#{cotizacionesCrearBean.cotizacion.observacionasesor}"  />            
+                
+            </h:panelGrid>
+            
+            <p:separator style="width:90%" />
+            <h3 align="center">Información de la Competencia</h3>
+            <h:panelGrid columns="2"  cellpadding="4" width="90%" >    
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Nombre de Competencia" styleClass="labelForm"/>  
+                </h:panelGroup>               
+                <p:inputText value="#{cotizacionesCrearBean.cotizacion.inteligenciaCompetencia}" maxlength="290" />
+                
+                <p:outputLabel value="Criterio de Competencia" styleClass="labelForm" />
+                <h:panelGroup style="width: 100%">
+                    <p:selectOneMenu value="#{cotizacionesCrearBean.cotizacion.inteligenciaRazon}">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{cotizacionesCrearBean.listaRazonCompetenciaDTO}"
+                                       var="typTipo" itemLabel="#{typTipo.valor}" itemValue="#{typTipo.clave}" />
+                    </p:selectOneMenu>                    
+                </h:panelGroup>
+                
+                <p:outputLabel value="Observación de la competencia" styleClass="labelForm"/>
+                <p:inputTextarea value="#{cotizacionesCrearBean.cotizacion.inteligenciaObservaciones}" maxlength="1900" />         
+
+            </h:panelGrid>
+            
+            <p:separator style="width:90%" />  
+            <h3 align="center">Otros</h3>
+            <h:panelGrid columns="2"  cellpadding="4" width="90%" >
+                
+                <h:panelGroup style="width: 100%" id="ol_incoterm11">
+                    <p:outputLabel rendered="#{!cotizacionesCrearBean.requeiereAprobacion}" value="Tiene descuento:" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="select-tipo-inconterm11" >
+                    <p:selectOneMenu rendered="#{!cotizacionesCrearBean.requeiereAprobacion}" value="#{cotizacionesCrearBean.cotizacion.tieneDescuento}" >
+                        <f:selectItem itemLabel="NO" itemValue="NO" />
+                        <f:selectItem itemLabel="SI" itemValue="SI" />
+                    </p:selectOneMenu>
+                </h:panelGroup>
+                
+                <h:panelGroup style="width: 100%" id="ol_incoterm12">
+                    <p:outputLabel rendered="#{!cotizacionesCrearBean.requeiereAprobacion}" value="Porcentaje descuento:" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="select-tipo-inconterm12" >
+                    <p:selectOneMenu rendered="#{!cotizacionesCrearBean.requeiereAprobacion}" value="#{cotizacionesCrearBean.cotizacion.porcentajeDescuento}"   > 
+                        <f:selectItems value="#{cotizacionesCrearBean.porcentajeDescuentos}" 
+                                       var="tipo" itemLabel="#{tipo.valor}" itemValue="#{tipo.clave}"  />  
+                    </p:selectOneMenu>
+                </h:panelGroup>
+                
+                 <h:panelGroup style="width: 100%" id="fileAdjLbl">
+                    <p:outputLabel value="Archivo Lista de Chequeo :" styleClass="labelForm" rendered="#{cotizacionesCrearBean.requeiereAprobacion}"/>
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="fileAdj">
+                    <p:fileUpload value="#{cotizacionesCrearBean.file}" mode="simple" rendered="#{cotizacionesCrearBean.requeiereAprobacion}"/>
+                </h:panelGroup>   
+            </h:panelGrid>
+            
+            <p:messages id="messagesPopup" showDetail="true" autoUpdate="true" showSummary="false" styleClass="messagesForm" />       
+            <h:panelGrid  columns="3" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton id="btn_crear" value="Enviar"   ajax="false"  actionListener="#{cotizacionesCrearBean.enviarAction}"  styleClass="backGIntelcom" onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"/>
+                <p:commandButton id="btn_regresar" value="Regresar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom">
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:cotizaciones-consultar" />
+                </p:commandButton>
+            </h:panelGrid>
+        </h:form>
+        <p:dialog header="Añadir Producto" widgetVar="consulta_prod" showEffect="pop" >
+            <h:form id="form-productos-consultados" >             
+                <h:panelGroup style="width: 100%" id="panelgrouptipopr" >
+                    <h:panelGrid  columns="2" id="grid_consulta_inventario"  cellpadding="5" width="90%" rendered="#{!cotizacionesCrearBean.isTipoPrincipal}">
+
+                        <p:outputLabel value="Línea" styleClass="labelForm"/>
+                        <p:selectOneMenu id="selectLinea" value="#{inventarioConsultaFacesBean.linea}" >
+                            <p:ajax process="selectLinea"  listener="#{inventarioConsultaFacesBean.listaMarcaPorLinea}" event="valueChange" update="panel_id_marca" />
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <f:selectItems value="#{cotizacionesCrearBean.contadorCotLinea}"  
+                                           var="linea" itemLabel="#{linea.idlinea}"  
+                                           itemValue="#{linea.idlinea}"/> 
+                        </p:selectOneMenu>
+
+                        <p:outputLabel id="ol_tipo" value="Tipo de Producto" styleClass="labelForm" /> 
+                        <p:selectOneMenu id="sor_tipo" value="#{inventarioConsultaFacesBean.tipoProducto}"    >   
+                            <f:selectItem itemLabel="" itemValue=""/>
+                            <f:selectItems value="#{inventarioConsultaFacesBean.listaTiposProducto}" var="typProd" itemLabel="#{typProd.tipoEtiqueta}" itemValue="#{typProd.tipoValor}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel id="ol_marca" value="Marca" styleClass="labelForm" />
+                        <h:panelGroup style="width: 100%" id="panel_id_marca">
+                            <p:selectOneMenu id="selectMarca" value="#{inventarioConsultaFacesBean.marca}" >
+                                <f:selectItem itemLabel="" itemValue=""/>
+                                <p:ajax process="selectMarca"  event="valueChange" listener="#{inventarioConsultaFacesBean.listaModeloXMarcas}" update="panel_id_modelo"/>
+                                <f:selectItems value="#{inventarioConsultaFacesBean.listaMarcas}"  
+                                               var="tipo" itemLabel="#{tipo.nombre}"  
+                                               itemValue="#{tipo.nombre}"/> 
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel id="ol_modelo" value="Modelo" styleClass="labelForm" />
+                        <h:panelGroup style="width: 100%" id="panel_id_modelo">
+                            <p:selectOneMenu id="selectModelo" value="#{inventarioConsultaFacesBean.modelo}" >
+                                <p:ajax process="selectModelo"  event="valueChange"/>
+                                <f:selectItem itemLabel="" itemValue=""/>
+                                <f:selectItems value="#{inventarioConsultaFacesBean.listaModelos}"  
+                                               var="tipo" itemLabel="#{tipo.nombre}"  
+                                               itemValue="#{tipo.nombre}"/> 
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+
+                        <p:outputLabel id="ol_descripcion" value="Descripción" styleClass="labelForm" />
+                        <p:inputText id="it_descripcion" value="#{inventarioConsultaFacesBean.descripcion}"  />
+                        <input type="hidden" name="hidden1" value="crear-cotizacion" />
+                        <p:messages id="messagesPopup" showDetail="true" autoUpdate="true" styleClass="messagesForm" />     
+
+                    </h:panelGrid>
+                    <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" rendered="#{!cotizacionesCrearBean.isTipoPrincipal}">
+                        <p:commandButton id="btn_buscar" value="Buscar" update="tablaProductosConsultados,btn_buscar"  actionListener="#{inventarioConsultaFacesBean.buscarAction}" styleClass="backGIntelcom"  onerror="this.disabled=true;" onclick="this.disabled = true;" oncomplete="this.disabled=false;"/>                                                
+                    </h:panelGrid>
+                </h:panelGroup>
+                <p:dataTable  id="tablaProductosConsultados" var="producto" value="#{cotizacionesCrearBean.productoCotizacion}" emptyMessage="Sin registros"  styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column id="col_bcodigo" headerText="Código Producto" styleClass="campoOculto">
+                        <h:outputText id="ot_st_bcodigo" value="#{producto.codigo}" />
+                    </p:column>
+                    <p:column id="col_bnombre" headerText="Nombre Producto" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_st_bnombre" value="#{producto.nombre}" />
+                    </p:column>
+
+                    <p:column id="col_bmarca" headerText="Marca" styleClass="campoOculto">
+                        <h:outputText id="ot_st_bmarca" value="#{producto.marca}" />
+                    </p:column>
+
+                    <p:column id="col_bmodelo" headerText="Modelo" styleClass="campoOculto">
+                        <h:outputText id="ot_st_bmodelo" value="#{producto.modelo}" />
+                    </p:column>
+
+                    <p:column headerText="Acción">
+                        <p:commandButton action="#{cotizacionesCrearBean.agregarProducto}" onclick="PF('consulta_prod').hide();" value="Agregar" update=":template:cotizacion-crear-form:tablaProductosSeleccionados,:template:cotizacion-crear-form:panel_add_producto,tablaProductosConsultados" immediate="true" styleClass="backGIntelcom">
+                            <f:setPropertyActionListener target="#{cotizacionesCrearBean.productoAgregar}" value="#{producto}"   />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Consultar Oportunidad" widgetVar="consulta_oprt" showEffect="pop"  >
+            <h:form id="form-oportunidad-consultados">
+                <h:panelGrid  columns="2" id="grid_consulta_inventario"  cellpadding="5" width="90%">
+                    <p:outputLabel id="ol_nombreop" value="Nombre Oportunidad" styleClass="labelForm" />
+                    <p:inputText id="it_marca" value="#{cotizacionesCrearBean.nombreOportunidadSearch}" />
+                </h:panelGrid>
+                <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                    <p:commandButton id="btn_buscar_op" value="Buscar" update="tablaOportunidadesAsesor" action="#{cotizacionesCrearBean.loadOportunidad}"   styleClass="backGIntelcom" />                    
+                </h:panelGrid>
+                <p:dataTable  id="tablaOportunidadesAsesor" var="oportunidad" value="#{cotizacionesCrearBean.oportunidades}" emptyMessage="Sin registros"  styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column id="col_nopor" headerText="Nombre Oportunidad" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_st_nopor" value="#{oportunidad.nombreOportunidad}" />
+                    </p:column>
+                    <p:column id="col_idOpoer" headerText="Id Oportunidad">
+                        <h:outputText id="labelidOpoer" value="Id Oportunidad" styleClass="labelRows "/>
+                        <h:outputText id="ot_st_idOpoer" value="#{oportunidad.idOportunidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_ncliente" headerText="Nombre Cliente">
+                        <h:outputText id="labelNombreCliente" value="Nombre Cliente" styleClass="labelRows "/>
+                        <h:outputText id="ot_st_ncliente" value="#{oportunidad.nombreCliente}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_etapa" headerText="Etapa">
+                        <h:outputText id="labelEtapa" value="Etapa" styleClass="labelRows "/>
+                        <h:outputText id="ot_etapa" value="#{oportunidad.etapaOportunidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton value="Agregar" action="#{cotizacionesCrearBean.loadProductosOportunidad}" process="@all" update=":template:cotizacion-crear-form:oportunidadSeleccionada,:template:cotizacion-crear-form:oportunidadClienteNombre,:template:form-productos-consultados:tablaProductosConsultados" immediate="true" styleClass="backGIntelcom" onclick="PF('consulta_oprt').hide();">
+                            <f:setPropertyActionListener target="#{cotizacionesCrearBean.oportunidadSelect}" value="#{oportunidad}"   />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>  

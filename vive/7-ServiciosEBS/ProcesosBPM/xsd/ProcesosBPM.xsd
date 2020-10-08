@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.5. --><xs:schema xmlns:tns="http://com.imocom.intelcom.ws.ebs.interfaces/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://com.imocom.intelcom.ws.ebs.interfaces/">
+
+<xs:element name="ImocomWebFault" nillable="true" type="tns:ImocomWebFault"/>
+
+<xs:element name="OportunidadNotaVO" type="tns:OportunidadNotaVO"/>
+
+<xs:element name="ProcesosBPMResponseVO" type="tns:ProcesosBPMResponseVO"/>
+
+<xs:element name="actualizacionCliente" type="tns:actualizacionCliente"/>
+
+<xs:element name="actualizacionClienteResponse" type="tns:actualizacionClienteResponse"/>
+
+<xs:element name="procesoResultadoVisita" type="tns:procesoResultadoVisita"/>
+
+<xs:element name="procesoResultadoVisitaResponse" type="tns:procesoResultadoVisitaResponse"/>
+
+<xs:element name="producto" type="tns:ProductoVO"/>
+
+<xs:element name="resultadoVisita" type="tns:ResultadoVisitaVO"/>
+
+<xs:complexType name="actualizacionCliente">
+<xs:sequence>
+<xs:element name="request" type="tns:ResultadoVisitaVO" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ResultadoVisitaVO">
+<xs:sequence>
+<xs:element name="nombreUsuario" type="xs:string" minOccurs="0"/>
+<xs:element name="creacionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="idClienteVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoEventoVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="estadoEventoVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="idEventoGeneradorVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="asuntoEventoVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="resultadoEventoVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaCreacionVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaInicioVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaFinalVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaModificacionVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaRegistroResultadosVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="ubicacionVisita" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreOportunidadOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idClienteOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreClienteOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idUsuarioModificadorOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idTipoOportunidadOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreTipoOportunidadOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idIncotermOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreIncotermOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idTipoMonedaOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idCanalEntradaOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="probabilidadProyectoOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="probabilidadImocomOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="observacionOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="montoOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaCreacionOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaEstimadaCierreOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="fechaModificacionOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idEtapaOportunidadOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="idEstadoOportunidadOportunidad" type="xs:string" minOccurs="0"/>
+<xs:element name="nitClienteProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreClienteProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreContactoProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="cargoContactoProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="telefonoContactoProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="correoContactoProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="idPaisDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="nombrePaisDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="idDepartamentoDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreDepartamentoDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="idCiudadDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="ciudadDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="direccionDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="telefonoPrincipalDireccionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="idLineaProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoLineaProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="idSectorIndustrialProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreSectorIndustriaProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="observacionProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="oportunidadProducto" type="tns:ProductoVO" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="oportunidadNota" type="tns:OportunidadNotaVO" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="nombreRepresentantelegal" type="xs:string" minOccurs="0"/>
+<xs:element name="cedulaRepresentantelegal" type="xs:string" minOccurs="0"/>
+<xs:element name="nombreGerentelegal" type="xs:string" minOccurs="0"/>
+<xs:element name="cedulaGerentelegal" type="xs:string" minOccurs="0"/>
+<xs:element name="idContactoProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="celularContactoProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="idCargoContactoProspecto" type="xs:string" minOccurs="0"/>
+<xs:element name="indicativo" type="xs:string" minOccurs="0"/>
+<xs:element name="apellidoCliente" type="xs:string" minOccurs="0"/>
+<xs:element name="apellidoGerenteGeneral" type="xs:string" minOccurs="0"/>
+<xs:element name="apellidoRepresentanteLegal" type="xs:string" minOccurs="0"/>
+<xs:element name="indicativoContacto" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ProductoVO">
+<xs:sequence>
+<xs:element name="codigo" type="xs:string" minOccurs="0"/>
+<xs:element name="nombre" type="xs:string" minOccurs="0"/>
+<xs:element name="division" type="xs:string" minOccurs="0"/>
+<xs:element name="linea" type="xs:string" minOccurs="0"/>
+<xs:element name="tecnologia" type="xs:string" minOccurs="0"/>
+<xs:element name="familia" type="xs:string" minOccurs="0"/>
+<xs:element name="marca" type="xs:string" minOccurs="0"/>
+<xs:element name="cantidad" type="xs:string" minOccurs="0"/>
+<xs:element name="precioLista" type="xs:string" minOccurs="0"/>
+<xs:element name="moneda" type="xs:string" minOccurs="0"/>
+<xs:element name="descripcion" type="xs:string" minOccurs="0"/>
+<xs:element name="modelo" type="xs:string" minOccurs="0"/>
+<xs:element name="tipoProducto" type="xs:string" minOccurs="0"/>
+<xs:element name="valorUnitario" type="xs:string" minOccurs="0"/>
+<xs:element name="bodega" type="xs:string" minOccurs="0"/>
+<xs:element name="unidad" type="xs:string" minOccurs="0"/>
+<xs:element name="precioListaSinFormato" type="xs:string" minOccurs="0"/>
+<xs:element name="linkCaracteristicas" type="xs:string" minOccurs="0"/>
+<xs:element name="linkAccesorios" type="xs:string" minOccurs="0"/>
+<xs:element name="linkVideo" type="xs:string" minOccurs="0"/>
+<xs:element name="linkImg" type="xs:string" minOccurs="0"/>
+<xs:element name="organizationId" type="xs:string" minOccurs="0"/>
+<xs:element name="fecha" type="xs:string" minOccurs="0"/>
+<xs:element name="asesor" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="OportunidadNotaVO">
+<xs:sequence>
+<xs:element name="idOportunida" type="xs:string" minOccurs="0"/>
+<xs:element name="notaOportunidad" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="actualizacionClienteResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:ProcesosBPMResponseVO" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ProcesosBPMResponseVO">
+<xs:sequence>
+<xs:element name="resultadoOperacion" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ImocomWebFault">
+<xs:sequence>
+<xs:element name="faultCode" type="xs:string" minOccurs="0"/>
+<xs:element name="faultString" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="procesoResultadoVisita">
+<xs:sequence>
+<xs:element name="request" type="tns:ResultadoVisitaVO" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="procesoResultadoVisitaResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:ProcesosBPMResponseVO" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

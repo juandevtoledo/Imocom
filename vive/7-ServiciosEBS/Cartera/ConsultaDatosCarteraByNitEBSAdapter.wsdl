@@ -1,0 +1,25 @@
+<?binding.jca ConsultaDatosCarteraByNitEBSAdapter_db.jca?>
+<wsdl:definitions name="ConsultaDatosCarteraByNitEBSAdapter" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Cartera/ConsultaDatosCarteraByNitEBSAdapter" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDatosCarteraByNitEBSAdapter" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Cartera/ConsultaDatosCarteraByNitEBSAdapter" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="ConsultaDatosCarteraByNitEBSAdapter_plt">
+        <plt:role name="ConsultaDatosCarteraByNitEBSAdapter_role">
+            <plt:portType name="tns:ConsultaDatosCarteraByNitEBSAdapter_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDatosCarteraByNitEBSAdapter" schemaLocation="xsd/ConsultaDatosCarteraByNitEBSAdapter.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ConsultaDatosCarteraByNitEBSAdapterInput_msg">
+        <wsdl:part name="ConsultaDatosCarteraByNitEBSAdapterInput_msg" element="db:ConsultaDatosCarteraByNitEBSAdapterInput"/>
+    </wsdl:message>
+    <wsdl:message name="ConsultaDatosCarteraByNitEBSAdapterOutputCollection_msg">
+        <wsdl:part name="ConsultaDatosCarteraByNitEBSAdapterOutputCollection" element="db:ConsultaDatosCarteraByNitEBSAdapterOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="ConsultaDatosCarteraByNitEBSAdapter_ptt">
+        <wsdl:operation name="ConsultaDatosCarteraByNitEBSAdapter">
+            <wsdl:input message="tns:ConsultaDatosCarteraByNitEBSAdapterInput_msg"/>
+            <wsdl:output message="tns:ConsultaDatosCarteraByNitEBSAdapterOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

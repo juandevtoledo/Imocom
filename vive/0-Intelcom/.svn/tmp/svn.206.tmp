@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="client-onsultar-doc-form">
+            <p><h1 align="center">Consulta Documentos</h1></p> 
+            <p:separator style="width:90%" styleClass="separadores"/>   
+            <h:panelGrid columns="2" id="grid_nit"  cellpadding="5" width="90%" >
+                
+                <p:outputLabel id="ol_nombre_cliente" value="Nombre Cliente" styleClass="labelForm" />
+                <p:outputLabel id="it_nombre" value="#{clientesActualizarFacesBean.detalleCliente.nombre}"  />
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_tipoc" value="Tipo" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="tipoc">
+                    <p:selectOneMenu value="#{clientesActualizarFacesBean.consultarDocumentoClienteTipo}">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{clientesActualizarFacesBean.listaClaveValorTipoDTOConsulta}"
+                                       var="typTipo" itemLabel="#{typTipo.valor}" itemValue="#{typTipo.clave}" />
+                    </p:selectOneMenu>                    
+                </h:panelGroup>
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_titulodoc" value="Año" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="titulodoc">
+                    <p:selectOneMenu value="#{clientesActualizarFacesBean.consultarDocumentoClienteTitulo}">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value ="#{clientesActualizarFacesBean.listaClaveValorTituloDTO}"
+                                       var="typTipo" itemLabel="#{typTipo.valor}" itemValue="#{typTipo.clave}" />
+                    </p:selectOneMenu>                    
+                </h:panelGroup>
+                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="ol_nombre_doc" value="Nombre del documento" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_nombre_doc" value="#{clientesActualizarFacesBean.consultarDocumentoClienteNombre}" />
+                
+                
+            </h:panelGrid>
+            
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+
+            <h:panelGrid  columns="3" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton value="Regresar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom">
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:clientes-detalle" />
+                </p:commandButton>
+                <p:commandButton id="btn_actualizar_cli" onclick="this.disabled=true;" oncomplete="this.disabled=false;" onerror="this.disabled=false;" update="@form" value="Buscar Documento" actionListener="#{clientesActualizarFacesBean.documentosClienteBuscarAction}" styleClass="backGIntelcom" />
+                <p:commandButton value="Cargar Documentos" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom">
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:consultadocumento-cargar" />
+                </p:commandButton>
+            </h:panelGrid>
+
+            <br />
+            <p:dataTable  id="tablaresultadosdos" var="doc" value="#{clientesActualizarFacesBean.listaDocumentosClienteDTO}"
+                          emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+
+                <p:column id="col_nombre" headerText="Nombre del Cliente" styleClass="justificarIzquierda" >
+                    <h:outputText value="#{doc.nombreCliente}" />
+                </p:column>
+
+                <p:column headerText="Tipo">                    
+                    <h:outputText value="#{doc.tipo}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column headerText="Título">
+                    <h:outputText value="#{doc.titulo}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column headerText="Nombre del Documento">
+                    <h:outputText value="#{doc.nombreDocumento}" styleClass="detailRows"/>
+                </p:column>
+                
+                <p:column headerText="Documento">
+                    <a href="#{doc.urlDocContent}" target="_blank" >Ver documento</a>
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+</ui:composition>  

@@ -1,0 +1,73 @@
+/*
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
+package com.imocom.intelcom.ws.service;
+
+import com.imocom.intelcom.commons.exceptions.CommonException;
+import com.imocom.intelcom.ws.support.ServiciosEBSImocomClient;
+import com.imocom.intelcom.ws.exception.IntelcomMiddlewareException;
+import com.imocom.intelcom.ws.fault.IntelcomMiddlewareFault;
+import com.imocom.intelcom.ws.interfaces.IIntelcomMiddleware;
+import com.imocom.intelcom.ws.interfaces.jaxws.MiddlewareServiceRequestVO;
+import com.imocom.intelcom.ws.util.WebserviceUtil;
+import javax.jws.WebService;
+import javax.xml.bind.JAXBException;
+import org.apache.log4j.Logger;
+
+/**
+ * <strong>Aplicación</strong>     : IMOCOM Sistema de Inteligencia comercial.
+ * <br/>
+ * <br/>
+ * <strong>Date</strong>           : Nov 15, 2014
+ * <br/><br/>
+ * <strong>Target</strong>         :
+ *
+ * @author Carlos Guzman (cguzman) - PointMind S.A.S. - carlos.guzman@pointmind.com
+ *
+ */
+@WebService(serviceName = "MiddlewareService",
+        endpointInterface = "com.imocom.intelcom.ws.interfaces.IIntelcomMiddleware",
+        targetNamespace = "http://com.imocom.intelcom.ws.interfaces/")
+public class IntelcomMiddlewareService implements IIntelcomMiddleware {
+    
+    private static final Logger logger = Logger.getLogger(IntelcomMiddlewareService.class);
+    private final ServiciosEBSImocomClient _client = new ServiciosEBSImocomClient();
+    private static final String MENSAJE_LOG = "Error durante la construccion de la respuesta del webservice de servicios de EBS IMOCOM";
+    
+    
+    /**
+     *
+     * @param request
+     * @return
+     * @throws com.imocom.intelcom.ws.exception.IntelcomMiddlewareException
+     * @throws CommonException
+     */
+    public String doProcess(MiddlewareServiceRequestVO request) throws IntelcomMiddlewareException {
+        
+        try {
+            Object response = _client.consumeService(request);
+            String responseString="";
+            if(response!=null){
+                responseString = WebserviceUtil.marshal(response);
+            }
+            return responseString;
+        } catch (CommonException ex) {
+            logger.error(MENSAJE_LOG.concat(", detalles: ".concat(ex.getMessage())));
+            
+            IntelcomMiddlewareFault fault = new IntelcomMiddlewareFault();
+            fault.setFaultCode("MID-001");
+            fault.setFaultInfo("detalles: ".concat(ex.getMessage()));
+            
+            throw new IntelcomMiddlewareException(MENSAJE_LOG, fault); 
+        } catch (JAXBException ex) {
+            logger.error(MENSAJE_LOG.concat(", detalles: ".concat(ex.getMessage())));
+            
+            IntelcomMiddlewareFault fault = new IntelcomMiddlewareFault();
+            fault.setFaultCode("MID-002");
+            fault.setFaultInfo("detalles: ".concat(ex.getMessage()));
+            throw new IntelcomMiddlewareException(MENSAJE_LOG, fault); 
+        }        
+    }
+}

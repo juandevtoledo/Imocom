@@ -1,0 +1,8 @@
+6/01/2015 04:25:09 PM oracle.mds
+NOTIFICATION: La instancia de PManager se ha creado sin soporte de varios contenidos, ya que el indicador de JVM "oracle.multitenant.enabled" no se ha definido para activar el soporte de varios contenidos.
+6/01/2015 04:25:09 PM oracle.security.jps.internal.config.xml.XmlConfigurationFactory initDefaultConfiguration
+GRAVE: java.io.FileNotFoundException: .\config\jps-config.xml (El sistema no puede encontrar la ruta especificada)
+6/01/2015 04:25:09 PM oracle.mds
+NOTIFICATION: La auditoría se ha desactivado para el componente MDS.
+6/01/2015 04:25:09 PM oracle.fabric.common.wsdl.SchemaManager isIncrementalBuildSupported
+INFO: XMLSchema incremental build enabled.

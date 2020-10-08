@@ -1,0 +1,25 @@
+<?binding.jca DetalleProducto_db.jca?>
+<wsdl:definitions name="DetalleProducto" targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/DetalleProducto" xmlns:db="http://xmlns.oracle.com/pcbpel/adapter/db/DetalleProducto" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/ServiciosEBS/Productos/DetalleProducto" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/">
+    <plt:partnerLinkType name="DetalleProducto_plt">
+        <plt:role name="DetalleProducto_role">
+            <plt:portType name="tns:DetalleProducto_ptt"/>
+        </plt:role>
+    </plt:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/DetalleProducto" schemaLocation="xsd/DetalleProducto.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="DetalleProductoInput_msg">
+        <wsdl:part name="DetalleProductoInput_msg" element="db:DetalleProductoInput"/>
+    </wsdl:message>
+    <wsdl:message name="DetalleProductoOutputCollection_msg">
+        <wsdl:part name="DetalleProductoOutputCollection" element="db:DetalleProductoOutputCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="DetalleProducto_ptt">
+        <wsdl:operation name="DetalleProducto">
+            <wsdl:input message="tns:DetalleProductoInput_msg"/>
+            <wsdl:output message="tns:DetalleProductoOutputCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

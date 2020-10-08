@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>404 Página no encontrada</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link href="/vive/css/interop-gelxml.css" rel="stylesheet" type="text/css" />
+        <link href="//fonts.googleapis.com/css?family=Open+Sans Condensed:300italic,300,700" rel="stylesheet" type="text/css" />
+        
+    </head>
+    <body style="margin: 0px; background-color: #f9f9f9;">
+        <div id="layout" style="width: 100%; border: none; padding: 0px">
+            <div id="header" class="borderTopHeader borderBottomHeader"></div>
+            
+            <div id="content" style="width: 100%;">
+                <br /><br /><br /><br />
+                <div class="generic-div" style="height: 100%; display: block; float: inside">
+                    <center>
+                        <table style="border: none; width: 80%; background-color: #f9f9f9;">
+                            <tr style="background-color: #f9f9f9; border: none">
+                                <td rowspan="2" style="border: none">
+                                    <img src="/vive/images/Erroricon.PNG" alt="error" width="100%"/>                        
+                                </td>
+                                <td style="border: none"><h1 style="text-align: center">404 - RECURSO SOLICITADO NO ENCONTRADO</h1></td>
+                                
+                            </tr>
+                            <tr style="background-color: #f9f9f9; border: none">
+                                <td style="border: none">
+                                    <p style="text-align: center">Sr usuario, la página la página o recurso solicitado no fue encontrado, es posible la página solicitada no exista. <a href="/vive/pages/secured/index_m.jsf?faces-redirect=true">Regresar</a></p>
+                                </td>
+                            </tr>           
+                        </table>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

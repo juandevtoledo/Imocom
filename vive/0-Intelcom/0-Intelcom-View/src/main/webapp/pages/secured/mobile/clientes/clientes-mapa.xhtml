@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml">
+
+    <f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE" />
+
+    <ui:define name="content">
+        <h:form id="client-map-form">
+            <p><h1 align="center">Mapa Clientes</h1></p> 
+
+            <h:inputHidden id="userdata" value="#{userSession.usuario.nombre}" />   
+            <div id="panel-map" style="text-align: center;">
+                <section id="wrapper">
+                    <meta name="viewport" content="initial-scale = 1.0,maximum-scale = 1.0"/>
+
+                    <script type="text/javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+                    
+                    <article>
+                        <p>Localizando Ubicación: <span id="status">localizando...</span></p>
+                    </article>
+                    <script type="text/javascript">
+
+                        function success(position) {
+                            var s = document.querySelector('#status');
+
+                            if (s.className == 'success') {
+                                // not sure why we're hitting this twice in FF, I think it's to do with a cached result coming back    
+                                return;
+                            }
+
+                            s.innerHTML = "Localizado";
+                            s.className = 'success';
+
+                            // Tomando coordenadas geolocalizadas del usuario
+
+                            var clientOpts = {
+                                zoom: 15,
+                                center: coords,
+                                mapTypeControl: false,
+                                navigationControlOptions: {style: google.maps.NavigationControlStyle.SMALL},
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            };
+
+                            map = PF('wmap');
+                            map.getMap().setOptions(clientOpts);
+
+                            // Tomando datos del usuario en sesion
+                            var userData = document.getElementById("template:client-map-form:userdata");
+
+                            // Creando marca para el usuario geolocalizado
+                            var marker = new google.maps.Marker({
+                                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+                                position: coords,
+                                title: userData + ", Tu estás aquí! (at least within a " + position.coords.accuracy + " meter radius)"
+                            });
+
+                            // Añadiendo marca de usuario geolocalizado al mapa
+                            map.addOverlay(marker);
+                            var redirectPage = "redirect('?REDIRECT=outcome:perfil')";
+
+                            var contentWindow = '<h3> Sr. ' + userData.value + ', ud está aquí!</h3>' +
+                                    '<h4><a id="link_user_profile" href="javascript:void(0)" class="ui-commandlink ui-widget" onclick="' + redirectPage + '">Editar perfil</a></h4>';
+
+                            // Creando la info del usuario
+                            map.infowindow = new google.maps.InfoWindow({
+                                content: contentWindow
+                            });
+
+                            map.infowindow.open(map.getMap(), marker);
+
+                            google.maps.event.addListener(marker, 'click', function () {
+                                map.infowindow.open(map.getMap(), marker);
+                            });
+                        }
+
+
+                        function initMap() {
+                            
+                            map = PF('wmap');                            
+                            //map = new google.maps.Map(PF('wmap'));
+                            //Agregar localidades de KML
+
+                            var kmlLocalidadesLayer = new google.maps.KmlLayer({
+                                url: 'http://bpm.imocom.com.co:7777/maps/LocalidadesBogota.kml',  
+                                map: map
+                            });
+                            
+                        }
+
+                        function error(msg) {
+                            var s = document.querySelector('#status');
+                            s.innerHTML = typeof msg == 'string' ? msg : "failed";
+                            s.className = 'fail';
+                            // console.log(arguments);
+                        }
+
+                        function redirect(params) {
+                            window.location.href = "#{request.contextPath}/goto" + params;
+                        }
+
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(success, error, {enableHighAccuracy: true});
+                        } else {
+                            error('not supported');
+                        }
+                    </script>
+
+                    <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB82ZsXm0Gj2bjZK0VWKrOXxAFf5icPNg"  type="text/javascript"></script>-->
+
+                    <p:gmap style="width:100%;height:450px" 
+                            mapTypeControl="false" 
+                            navigationControl="true" 
+                            zoom="15" 
+                            type="HYBRID" 
+                            center="4.701259054181096,-74.06543008983135" 
+                            widgetVar="wmap" 
+                            model="#{geoClientesFacesBean.mapModel}">
+
+                        <p:ajax event="overlaySelect" listener="#{geoClientesFacesBean.onMarkerSelect}" />
+
+                        <p:gmapInfoWindow id="infoWindow">
+                            <p:outputPanel style="text-align: center; display: block; margin: auto">                                
+                                <div style="width: 100%; float: none;">
+                                    <p style="line-height: 1.2em;">
+                                        <b>#{geoClientesFacesBean.marcaSeleccionada.title}</b>
+                                        <br /><i style='font-family: "PT Sans Narrow",sans-serif; font-size: 0.8em;'>#{geoClientesFacesBean.marcaSeleccionada.data['mail']}</i><br />    
+                                        #{geoClientesFacesBean.marcaSeleccionada.data['address']} <br />
+                                        #{geoClientesFacesBean.marcaSeleccionada.data['phone']} <br />
+                                        <p:commandLink id="link_view_detail" value="Ver detalle" action="#{geoClientesFacesBean.redirectDetalle}" process="@this" update="@form">
+                                            <f:setPropertyActionListener value="#{geoClientesFacesBean.marcaSeleccionada.data['client-data']}" target="#{geoClientesFacesBean.clienteSeleccionado}" />
+                                        </p:commandLink>    
+                                    </p>
+                                </div>
+                            </p:outputPanel>
+                        </p:gmapInfoWindow>
+                    </p:gmap>
+
+                </section>                
+                <br />                    
+            </div>                
+        </h:form>
+    </ui:define>
+</ui:composition> 

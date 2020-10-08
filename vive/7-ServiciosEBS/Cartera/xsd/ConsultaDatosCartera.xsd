@@ -1,0 +1,32 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xs:schema targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDatosCartera" xmlns="http://xmlns.oracle.com/pcbpel/adapter/db/ConsultaDatosCartera" elementFormDefault="qualified" attributeFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+   <xs:element name="ConsultaDatosCarteraInput" type="ConsultaDatosCarteraInput"/>
+   <xs:complexType name="ConsultaDatosCarteraInput">
+      <xs:sequence>
+         <xs:element name="v_nit" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="ConsultaDatosCarteraOutputCollection" type="ConsultaDatosCarteraOutputCollection"/>
+   <xs:complexType name="ConsultaDatosCarteraOutputCollection">
+      <xs:sequence>
+         <xs:element name="ConsultaDatosCarteraOutput" type="ConsultaDatosCarteraOutput" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="ConsultaDatosCarteraOutput">
+      <xs:sequence>
+         <xs:element name="NIT" type="xs:string" nillable="true"/>
+         <xs:element name="NOMBRE_CLIENTE" type="xs:string" nillable="true"/>
+         <xs:element name="CUPO_CREDITO" type="xs:string" nillable="true"/>
+         <xs:element name="TIPOCLIE" type="xs:string" nillable="true"/>
+         <xs:element name="CUPO_DISPONIBLE" type="xs:string" nillable="true"/>
+         <xs:element name="CARTERA_VENCIDA" type="xs:string" nillable="true"/>
+         <xs:element name="TIPO_DOC" type="xs:string" nillable="true"/>
+         <xs:element name="NUMERO_DOC" type="xs:string" nillable="true"/>
+         <xs:element name="FECHA_VENCIMIENTO" type="xs:string" nillable="true"/>
+         <xs:element name="DIAS_VENCIDOS" type="xs:decimal" nillable="true"/>
+         <xs:element name="VALOR_CARTERA" type="xs:string" nillable="true"/>
+         <xs:element name="VALOR_VENCIDO" type="xs:string" nillable="true"/>
+         <xs:element name="CENTRO_COSTOS" type="xs:string" nillable="true"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

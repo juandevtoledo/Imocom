@@ -1,0 +1,12 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}Copyright (c) 2014 IMOCOM. All Rights Reserved.
+${licensePrefix}
+${licensePrefix}This software is the confidential and proprietary information of IMOCOM.
+${licensePrefix}("Confidential Information").
+${licensePrefix}It may not be copied or reproduced in any manner without the express
+${licensePrefix}written permission of IMOCOM.
+<#if licenseLast??>
+${licenseLast}
+</#if>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mobile">
+          
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="google-translate-customization" content="d34ce6b8f9bd19c7-3390f5d7a6014524-g9c7610a90f1a5b26-26"></meta>
+        <link href="#{request.contextPath}/css/interop-gelxml.css" rel="stylesheet" type="text/css" />
+        <link href="//fonts.googleapis.com/css?family=Open+Sans Condensed:300italic,300,700" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="#{request.contextPath}/js/general-validations.js" />
+            
+        <title>400 Bad Request - Interoperabilidad GEL-XML</title>
+            
+        <p:ajaxStatus onstart="statusDialog.show();" id="ajaxStatusTemplate" onsuccess="statusDialog.hide();" oncomplete="statusDialog.hide();"
+                      onerror="statusDialog.hide();" />
+        <p:dialog modal="true" widgetVar="statusDialog" showHeader="false"
+                  draggable="false" closable="false" resizable="false" visible="false"
+                  position="center" maximizable="false" minimizable="false" height="21"
+                  width="245">
+            <p:graphicImage value="/images/bar-large-green.gif" />
+        </p:dialog>
+            
+    </h:head>
+    <h:body>
+        <h:form id="form-generic-error">
+            <div id="layout" style="width: 100%">
+                <div id="header" class="borderTopHeader borderBottomHeader" />
+                
+                <div id="content" style="width: 100%;">
+                    <br /><br /><br /><br />
+                    <div class="generic-div" style="height: 100%; display: block; float: inside;">
+                        <center>
+                            <table style="background-color: inherit; border: none; width: 80%;">
+                                <tr style="background-color: inherit; border: none">
+                                    <td rowspan="2" style="background-color: inherit; border: none">
+                                        <img src="/vive/images/Icon-Warning.png" alt="no autorizado" width="100%"/>                        
+                                    </td>
+                                    <td style="background-color: inherit; border: none"><h1 style="text-align: center">400 - PETICIÓN INVALIDA</h1></td>
+                                    
+                                </tr>
+                                <tr style="background-color: inherit; border: none">
+                                    <td style="background-color: inherit; border: none">
+                                        <p style="text-align: center">Sr usuario ud ha intentado acceder a la aplicación utilizando una petición inválida, intente nuevamente y si el problema persiste<br /></p>
+                                        <p style="text-align: center">conslte con el administrador. <br /></p>
+                                        <p style="text-align: center"><a href="javascript:close_window()">Cerrar Ventana</a></p>
+                                    </td>
+                                </tr>           
+                            </table>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </h:form>
+                
+    </h:body>
+</html>

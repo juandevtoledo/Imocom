@@ -1,0 +1,512 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.imocom.intelcom.view.beans;
+
+import com.imocom.intelcom.persistence.entities.ServiciosEbs;
+import com.imocom.intelcom.persistence.entities.Tipo;
+import com.imocom.intelcom.services.interfaces.IServiciosEBSLocal;
+import com.imocom.intelcom.services.interfaces.ITipoServiceLocal;
+import com.imocom.intelcom.services.util.ServiceException;
+import static com.imocom.intelcom.util.utility.Constants.PAGE_CLIENTES_CONSULTA_KEY;
+import static com.imocom.intelcom.util.utility.Constants.TIPO_CARGO;
+import static com.imocom.intelcom.util.utility.Constants.TIPO_SECTOR_INDUSTRIAL;
+import static com.imocom.intelcom.util.utility.Constants.WS_BPM_PROCESS_INVOCATION;
+import static com.imocom.intelcom.util.utility.Constants.WS_PROCESS_ENTITY_RESULTADO_VISITA;
+import static com.imocom.intelcom.util.utility.Constants.TIPO_PAIS;
+import com.imocom.intelcom.util.utility.Utils;
+import com.imocom.intelcom.view.AbstractFacesBean;
+import static com.imocom.intelcom.view.util.JSFUtils.getViewRedirect;
+import com.imocom.intelcom.ws.ebs.vo.entities.ResultadoVisitaVO;
+import com.imocom.intelcom.ws.exception.IntelcomMiddlewareException;
+import com.imocom.intelcom.ws.interfaces.jaxws.MiddlewareServiceRequestVO;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.xml.bind.JAXBException;
+import org.apache.log4j.Logger;
+
+/**
+ *
+ * @author rc
+ */
+@ManagedBean
+@ViewScoped
+
+public class ClientesProspectoCrearFacesBean extends AbstractFacesBean implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(CarteraConsultarFacesBean.class);
+    private static final long serialVersionUID = 1L;
+
+    private MiddlewareServiceRequestVO request;
+    private int numeroParametrosWS = 0;
+
+    private String nit;
+    private String empresa;
+    private String apellidoempresa;
+    private String pais;
+    private String departamento;
+    private String ciudad;
+    private String direccion;
+    private String telefono;
+    private String linea;
+    private String sector;
+    private String observacion;
+
+    private String contacto;
+    private String telefonoContacto;
+    private String cargo;
+    private String celular;
+    private String correo;
+
+    private String nombreRepresentantelegal;
+    private String apellidoRepresentantelegal;
+    private String cedulaRepresentantelegal;
+    private String nombreGerentelegal;
+    private String apellidoGerentelegal;
+    private String cedulaGerentelegal;
+
+    private boolean esPaisColombia;
+
+    private List<Tipo> listaSectores;
+    private List<Tipo> listaPaises;
+    private List<Tipo> listaCiudad;
+    private List<Tipo> listaDepto;
+    private List<Tipo> listaCargos;
+
+    @EJB
+    private IServiciosEBSLocal iServiciosESB;
+
+    @EJB
+    private ITipoServiceLocal iTipoService;
+
+    @Override
+    protected void build() {
+        try {
+            //Consulta de tipos de Cliente
+            listaSectores = iTipoService.findByTipoNombre(TIPO_SECTOR_INDUSTRIAL);
+            listaCargos = iTipoService.findByTipoNombre(TIPO_CARGO);
+            listaPaises = iTipoService.findByTipoNombre(TIPO_PAIS);
+            
+            //Se inicializan los valores para Colombia
+            pais = "" + userSession.getTipoPais_Colombia().getIdTipo();
+            listaDepto = iTipoService.findByTipoNombrePadre(userSession.getTipoPais_Colombia().getIdTipo());
+            esPaisColombia = true;
+            listaCiudad = null;
+            
+            if( getSessionMap().containsKey("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NIT") ){
+                nit = (String)getSessionMap().get("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NIT");
+                getSessionMap().remove("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NIT");
+            }
+            if( getSessionMap().containsKey("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NOMNRECLIENTE") ){
+                empresa = (String)getSessionMap().get("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NOMNRECLIENTE");
+                getSessionMap().remove("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NOMNRECLIENTE");
+            }
+            if( getSessionMap().containsKey("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NOMBRECONTACTO") ){
+                contacto = (String)getSessionMap().get("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NOMBRECONTACTO");
+                getSessionMap().remove("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_NOMBRECONTACTO");
+            }
+            if( getSessionMap().containsKey("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_APELLIDOCONTACTO") ){
+                apellidoempresa = (String)getSessionMap().get("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_APELLIDOCONTACTO");
+                getSessionMap().remove("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_APELLIDOCONTACTO");
+            }
+            if( getSessionMap().containsKey("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_TELEFONOCONTACTO") ){
+                telefonoContacto = (String)getSessionMap().get("");
+                celular = (String)getSessionMap().get("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_TELEFONOCONTACTO");
+                getSessionMap().remove("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_TELEFONOCONTACTO");
+            }
+            if( getSessionMap().containsKey("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_CORREOCONTACTO") ){
+                correo = (String)getSessionMap().get("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_CORREOCONTACTO");
+                getSessionMap().remove("PAGE_CLIENTES_PROSPECTO_CREAR_INFO_CORREOCONTACTO");
+            }
+
+            armarRequest();
+
+        } catch (ServiceException ex) {
+            logger.error(ex.getMessage());
+        }
+
+    }
+
+    private void armarRequest() {
+        try {
+            request = new MiddlewareServiceRequestVO();
+            ServiciosEbs servicio = iServiciosESB.findByUniqueName(WS_BPM_PROCESS_INVOCATION);
+            request.setEndpoint(servicio.getInterfazEndpoint());
+            request.setMethod(servicio.getMetodo());
+            request.setNamespacePort(servicio.getNamespace());
+            request.setServiceName(servicio.getQnameServicio());
+            request.setWsdlUrl(servicio.getUrlWsdl());
+            request.setInterfaceType(servicio.getTipoInterfaz());
+            //Cargamos el número de parametros
+            numeroParametrosWS = servicio.getNumeroParametros();
+
+        } catch (ServiceException ex) {
+            logger.error(ex.getMessage());
+        }
+    }
+
+    private boolean enviarSolicitud() {
+
+        try {
+            //Se validan campos no requeridos
+            this.cedulaRepresentantelegal= this.cedulaRepresentantelegal!= null ?this.cedulaRepresentantelegal.toUpperCase() :"";
+            this.cedulaGerentelegal= this.cedulaGerentelegal!= null ?this.cedulaGerentelegal.toUpperCase() :"";
+            this.nombreRepresentantelegal= this.nombreRepresentantelegal!= null ?this.nombreRepresentantelegal.toUpperCase() :"";
+            this.apellidoRepresentantelegal= this.apellidoRepresentantelegal!= null ?this.apellidoRepresentantelegal.toUpperCase() :"";
+            this.nombreGerentelegal= this.nombreGerentelegal!= null ?this.nombreGerentelegal.toUpperCase() :"";
+            this.apellidoGerentelegal= this.apellidoGerentelegal!= null ?this.apellidoGerentelegal.toUpperCase() :"";
+            //
+            ResultadoVisitaVO resultadoVisitaVO = new ResultadoVisitaVO();
+            resultadoVisitaVO.setNombreUsuario(userSession.getUserLogin());
+            resultadoVisitaVO.setCreacionProspecto("TRUE");
+            resultadoVisitaVO.setNitClienteProspecto(nit);
+            resultadoVisitaVO.setNombreClienteProspecto(empresa.toUpperCase());
+            resultadoVisitaVO.setApellidoCliente(apellidoempresa.toUpperCase());
+            resultadoVisitaVO.setCedulaRepresentantelegal(this.cedulaRepresentantelegal);
+            resultadoVisitaVO.setCedulaGerentelegal(this.cedulaGerentelegal);
+            resultadoVisitaVO.setNombreRepresentantelegal(this.nombreRepresentantelegal);
+            resultadoVisitaVO.setApellidoRepresentanteLegal(this.apellidoRepresentantelegal);
+            resultadoVisitaVO.setNombreGerentelegal(this.nombreGerentelegal);
+            resultadoVisitaVO.setApellidoGerenteGeneral(this.apellidoGerentelegal);
+            String paisDireccion = obtenerValorTipo(pais, listaPaises);
+
+            resultadoVisitaVO.setIdPaisDireccionProspecto(pais);
+            resultadoVisitaVO.setNombrePaisDireccionProspecto(paisDireccion);
+            if (esPaisColombia) {
+                resultadoVisitaVO.setIdCiudadDireccionProspecto(ciudad);
+                resultadoVisitaVO.setIdDepartamentoDireccionProspecto(departamento);
+                String ciudadDireccion = obtenerValorTipo(ciudad, listaCiudad);
+                String departamentoDireccion = obtenerValorTipo(departamento, listaDepto);
+                resultadoVisitaVO.setCiudadDireccionProspecto(ciudadDireccion);
+                resultadoVisitaVO.setNombreDepartamentoDireccionProspecto(departamentoDireccion);
+                Tipo departamentoTipo = iTipoService.findByTipoId(Long.parseLong(departamento));
+                Tipo indicativoCliente = iTipoService.findByTipoNombreEtiqueta("INDICATIVO",departamentoTipo.getTipoEtiqueta());
+                resultadoVisitaVO.setIndicativo(indicativoCliente.getTipoValor());
+                resultadoVisitaVO.setIndicativoContacto(indicativoCliente.getTipoValor());
+            } else {
+                resultadoVisitaVO.setCiudadDireccionProspecto(ciudad);
+                resultadoVisitaVO.setNombreDepartamentoDireccionProspecto(departamento);
+            }
+            resultadoVisitaVO.setDireccionDireccionProspecto(direccion);
+            resultadoVisitaVO.setTelefonoPrincipalDireccionProspecto(telefono);
+            resultadoVisitaVO.setIdLineaProspecto(linea);
+            resultadoVisitaVO.setIdSectorIndustrialProspecto(sector);
+            String sectorNombre = obtenerValorTipo(sector, listaSectores);
+            resultadoVisitaVO.setNombreSectorIndustriaProspecto(sectorNombre);
+            resultadoVisitaVO.setObservacionProspecto(observacion);
+
+            resultadoVisitaVO.setNombreContactoProspecto(contacto);
+            resultadoVisitaVO.setTelefonoContactoProspecto(telefonoContacto);
+            resultadoVisitaVO.setCelularContactoProspecto(celular);
+            resultadoVisitaVO.setCorreoContactoProspecto(correo);
+
+            String cargoNombre = obtenerValorTipo(cargo, listaCargos);
+            resultadoVisitaVO.setIdCargoContactoProspecto(cargo);
+            resultadoVisitaVO.setCargoContactoProspecto(cargoNombre);
+            
+
+            /**/
+            //se convierte el objeto a String
+            String strRequest = Utils.marshal(resultadoVisitaVO);
+
+            //se pasan los unicos 2 parámetros
+            String[] paramsService = new String[numeroParametrosWS];
+            paramsService[0] = strRequest;
+            paramsService[1] = WS_PROCESS_ENTITY_RESULTADO_VISITA;
+            request.setParams(paramsService);
+
+            userSession.getClientWs().consumeService(request);
+
+        } catch (IntelcomMiddlewareException ex) {
+            logger.error(ex.getMessage());
+            return false;
+        } catch (JAXBException ex) {
+            logger.error(ex.getMessage());
+            return false;
+        } catch (ServiceException ex) {
+            logger.error(ex.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    public void enviarAction(ActionEvent actionEvent) {
+
+        if (enviarSolicitud()) {
+            // Se redirecciona a la pagina de consulta
+            String outcome = getViewRedirect(PAGE_CLIENTES_CONSULTA_KEY);
+
+            try {
+                redirect(navigationFaces.navigation.get(outcome));
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+
+        } else {
+            performErrorMessages("Ha ocurrido un problema la solicitud de creación de prospecto no ha podido ser enviada ");
+        }
+
+    }
+
+    public String getNit() {
+        return nit;
+    }
+
+    public void setNit(String nit) {
+        this.nit = nit;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
+    }
+
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public void setLinea(String linea) {
+        this.linea = linea;
+    }
+
+    public String getSector() {
+        return sector;
+    }
+
+    public void setSector(String sector) {
+        this.sector = sector;
+    }
+
+    public List<Tipo> getListapaises() {
+        return listaPaises;
+    }
+
+    public void setListapaises(List<Tipo> listapaises) {
+        this.listaPaises = listapaises;
+    }
+
+    public List<Tipo> getListaSectores() {
+        return listaSectores;
+    }
+
+    public void setListaSectores(List<Tipo> listaSectores) {
+        this.listaSectores = listaSectores;
+
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    public String getTelefonoContacto() {
+        return telefonoContacto;
+    }
+
+    public void setTelefonoContacto(String telefonoContacto) {
+        this.telefonoContacto = telefonoContacto;
+    }
+
+    public List<Tipo> getListaCiudad() {
+        return listaCiudad;
+    }
+
+    public void setListaCiudad(List<Tipo> listaCiudad) {
+        this.listaCiudad = listaCiudad;
+    }
+
+    public List<Tipo> getListaDepto() {
+        return listaDepto;
+    }
+
+    public void setListaDepto(List<Tipo> listaDepto) {
+        this.listaDepto = listaDepto;
+    }
+
+    public void cargarDepto(ValueChangeEvent evento) throws ServiceException {
+        listaCiudad = null;
+        listaDepto = iTipoService.findByTipoNombrePadre(Long.parseLong(evento.getNewValue().toString(), 10));
+        esPaisColombia = evento.getNewValue().toString().equals("" + userSession.getTipoPais_Colombia().getIdTipo());
+    }
+
+    public void cargarCiudad(ValueChangeEvent evento) throws ServiceException {
+        listaCiudad = null;
+        listaCiudad = iTipoService.findByTipoNombrePadre(Long.parseLong(evento.getNewValue().toString(), 10));
+
+    }
+
+    public String obtenerValorTipo(String idTipoStr, List<Tipo> listaValores) {
+        Long idTipo = Long.parseLong(idTipoStr, 10);
+
+        for (Tipo item : listaValores) {
+            if (item.getIdTipo().equals(idTipo)) {
+                return item.getTipoValor();
+            }
+        }
+        return null;
+    }
+
+    public boolean isEsPaisColombia() {
+        return esPaisColombia;
+    }
+
+    public void setEsPaisColombia(boolean esPaisColombia) {
+        this.esPaisColombia = esPaisColombia;
+    }
+
+    public String getNombreRepresentantelegal() {
+        return nombreRepresentantelegal;
+    }
+
+    public void setNombreRepresentantelegal(String nombreRepresentantelegal) {
+        this.nombreRepresentantelegal = nombreRepresentantelegal;
+    }
+
+    public String getCedulaRepresentantelegal() {
+        return cedulaRepresentantelegal;
+    }
+
+    public void setCedulaRepresentantelegal(String cedulaRepresentantelegal) {
+        this.cedulaRepresentantelegal = cedulaRepresentantelegal;
+    }
+
+    public String getNombreGerentelegal() {
+        return nombreGerentelegal;
+    }
+
+    public void setNombreGerentelegal(String nombreGerentelegal) {
+        this.nombreGerentelegal = nombreGerentelegal;
+    }
+
+    public String getCedulaGerentelegal() {
+        return cedulaGerentelegal;
+    }
+
+    public void setCedulaGerentelegal(String cedulaGerentelegal) {
+        this.cedulaGerentelegal = cedulaGerentelegal;
+    }
+
+    public List<Tipo> getListaCargos() {
+        return listaCargos;
+    }
+
+    public void setListaCargos(List<Tipo> listaCargos) {
+        this.listaCargos = listaCargos;
+    }
+
+    public String getApellidoempresa() {
+        return apellidoempresa;
+    }
+
+    public void setApellidoempresa(String apellidoempresa) {
+        this.apellidoempresa = apellidoempresa;
+    }
+
+    public String getApellidoRepresentantelegal() {
+        return apellidoRepresentantelegal;
+    }
+
+    public void setApellidoRepresentantelegal(String apellidoRepresentantelegal) {
+        this.apellidoRepresentantelegal = apellidoRepresentantelegal;
+    }
+
+    public String getApellidoGerentelegal() {
+        return apellidoGerentelegal;
+    }
+
+    public void setApellidoGerentelegal(String apellidoGerentelegal) {
+        this.apellidoGerentelegal = apellidoGerentelegal;
+    }
+    
+    
+
+    
+    
+
+}

@@ -1,0 +1,183 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+
+    <ui:define name="content">
+        <h:form id="cotizacion-consultar">
+            <p><h1 align="center">Consultar Cotizaciones</h1></p>
+            <p:separator style="width:90%" />
+            <h:panelGrid columns="2" id="grid_nit" cellpadding="4" width="90%">
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Cliente:  " styleClass="labelForm"/>
+                    <p:commandButton onclick="PF('consulta_cli').show();" value=" " icon="ui-icon-search" type="button"   style="display: inline-block !important" immediate="true"  />
+                </h:panelGroup>
+                <p:inputText id="nombre_cliente" value="#{cotizacionesConsultarBean.nombreCliente}" />
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel value="Oportunidad:  " styleClass="labelForm"/>
+                    <p:commandButton id="btn_buscar_oportunudad" onclick="PF('consulta_oprt').show();" actionListener="#{cotizacionesConsultarBean.loadOportunidad}" update=":template:form-oportunidad-consultados:tablaOportunidadesAsesor" icon="ui-icon-search" value="" style="width: 15px; height:35px; text-align: right; display: inline-block !important"/>
+                </h:panelGroup>
+                <p:inputText id="oportunidadSeleccionada"  value="#{cotizacionesConsultarBean.oportunidadSelect.nombreOportunidad}"/>
+
+                <p:outputLabel value="Vencimiento:" styleClass="labelForm"/>
+                <p:selectOneMenu value="#{cotizacionesConsultarBean.vencimiento}">
+                    <f:selectItem itemLabel="" itemValue="" />
+                    <f:selectItem itemLabel="Vencidadas" itemValue="vencidas" />
+                    <f:selectItem itemLabel="Vigentes" itemValue="vigentes" />
+                </p:selectOneMenu>
+
+                <p:outputLabel value="Tipo de Consulta:" styleClass="labelForm"/>
+                <p:selectOneRadio id="tipo_consulta" value="#{cotizacionesConsultarBean.tipoConsulta}" >
+                    <f:selectItem itemLabel="Solicitudes cotización" itemValue="solicitud" />
+                    <f:selectItem itemLabel="Cotización" itemValue="cotizacion" />
+                </p:selectOneRadio>
+            </h:panelGrid>
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />
+            <h:panelGrid columns="2" cellpadding="5" styleClass="panelBotones">
+                <p:commandButton  id="btn_buscar" update="tablaCotizacionesXClientes,btn_buscar" value="Buscar Cotización" actionListener="#{cotizacionesConsultarBean.buscarAction}" styleClass="backGIntelcom" onclick="this.disabled=true;" oncomplete="this.disabled=false;"/>
+                <p:commandButton  id="btn_crear"  value="Crear Cotización" action="#{cotizacionesConsultarBean.redirectCrear}" immediate="true" styleClass="backGIntelcom" >
+                  
+                </p:commandButton>
+            </h:panelGrid>
+
+            <p:separator style="width:90%" />
+            <p:dataTable id="tablaCotizacionesXClientes" value="#{cotizacionesConsultarBean.cotizaciones}"  var="cotizacion" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                <p:column id="col_id_oportunidad" headerText="Oportunidad" styleClass="justificarIzquierda">                   
+                    <h:outputText id="ot_t_oportunidad" value="#{cotizacion.nombreOportunidad}"/>
+                </p:column>
+                <p:column id="col_cod_nombreproducto" headerText="Nombre de Producto"  >
+                     <h:outputText id="labelnombreproducto" value="Nombre de Producto" styleClass="labelRows "/>
+                     <h:outputText id="ot_cod_nombreproducto" value="#{cotizacion.nombreProducto}"  styleClass="detailRows"/>
+                </p:column> 
+                <p:column id="col_cod_cotizacion" headerText="Código Cotización"  >
+                     <h:outputText id="labelcodCotizacion" value="Código Cotización" styleClass="labelRows "/>
+                     <h:outputText id="ot_cod_nombre" value="#{cotizacion.codigo}"  styleClass="detailRows"/>
+                </p:column> 
+                               
+                <p:column id="col_nit_cliente" headerText="Nombre Cliente">
+                    <h:outputText id="labelNit" value="Nombre Cliente" styleClass="labelRows "/>
+                    <h:outputText id="ot_nit_cliente" value="#{cotizacion.nombreCliente}" styleClass="detailRows"/>
+                </p:column>
+               
+                <p:column id="col_id_estado" headerText="Estado">
+                    <h:outputText id="labelEstado" value="Estado" styleClass="labelRows "/>
+                    <h:outputText id="ot_t_estado" value="#{cotizacion.idEstadocotizacion.tipoValor}" styleClass="detailRows"/>
+                </p:column>
+                 <p:column id="col_fecha_solicitud" headerText="Fecha Solicitud">
+                     <h:outputText id="labelFechaSolicitud" value="Fecha Solicitud" styleClass="labelRows "/>
+                     <h:outputText id="ot_t_fecha_solictud" value="#{cotizacion.fechaSolicitudFormat}" styleClass="detailRows" />
+                </p:column>
+                <p:column id="col_fecha_vencimiento_ft" headerText="Fecha Vencimiento" style="background-color: #{cotizacion.backgroundColor}; color: #{cotizacion.textColor}; ">
+                    <h:outputText id="labelFechaVencimient" value="Fecha Vencimient" styleClass="labelRows "/> 
+                    <h:outputText id="ot_t_fecha_vencimiento_ft" value="#{cotizacion.fechaVencimientoFormat}" styleClass="detailRows"/>
+                </p:column>
+                <p:column id="col_id_aceptacion" headerText="Aceptado por Cliente">
+                    <h:outputText id="labelAceptadoCliente" value="Aceptado por Cliente" styleClass="labelRows "/> 
+                    <h:outputText id="ot_t_aceptacion" value="#{cotizacion.aceptacioncliente}" styleClass="detailRows"/>
+                </p:column>
+                <p:column id="col_id_detalle" headerText="Acción">
+                    <p:commandButton id="btn_t_detalle" styleClass="backGIntelcom" action="#{cotizacionesConsultarBean.redirectDetalle}" value="Detalle" process="@this" update="@form" >
+                        <f:setPropertyActionListener target="#{cotizacionesConsultarBean.cotizacionSelect}" value="#{cotizacion}" />
+                    </p:commandButton>
+                    <p:commandButton styleClass="backGIntelcom" action="#{cotizacionesConsultarBean.redirectVersion}" value="Versión" process="@this" update="@form" >
+                        <f:setPropertyActionListener target="#{cotizacionesConsultarBean.cotizacionSelect}" value="#{cotizacion}" />
+                    </p:commandButton>
+                    <p:commandButton styleClass="backGIntelcom" onclick="PF('wv_actualizar_competencia').show();" value="Competencia" update=":template:id_form_competencia" >                        
+                        <f:setPropertyActionListener target="#{cotizacionesConsultarBean.cotizacionSelect}" value="#{cotizacion}" />
+                    </p:commandButton>
+                </p:column>
+              <!--  <p:column id="col_id_actualizar" headerText="Actualizar">
+                    <p:commandButton id="btn_t_actualizar" styleClass="backGIntelcom" action="#{cotizacionesConsultarBean.redirectActualizar}" value="Actualizar" process="@this" update="@form" >
+                        <f:setPropertyActionListener target="#{cotizacionesConsultarBean.cotizacionSelect}" value="#{cotizacion}" />
+                    </p:commandButton>
+                </p:column> !-->
+            </p:dataTable>
+        </h:form>
+        <p:dialog header="Añadir Cliente" widgetVar="consulta_cli" showEffect="pop" styleClass="popupResponsive" >
+            <h:form >  
+                <pm:field>    
+                    <p:outputLabel value="Nombre Cliente" style="font-weight: bold" />
+                    <p:inputText id="it_nombre" value="#{clientesNombreNitFacesBean.nombre}"  />
+                </pm:field>    
+                <p:messages id="messagesPage_add_cliente" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+                <p:commandButton id="btn_buscar" value="Buscar" update="tablaClientes"  actionListener="#{clientesNombreNitFacesBean.buscarAction}" styleClass="backGIntelcom"  />
+                <p:separator style="width:90%" />
+                <p><h1>Consultar Clientes</h1></p> 
+                <p:dataTable  id="tablaClientes" var="cliente" value="#{clientesNombreNitFacesBean.listDatosCliente}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column id="col_nombre" headerText="Nombre Cliente" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_t_nombre" value="#{cliente.nombreCliente}" />
+                    </p:column>
+                    <p:column id="col_nit" headerText="NIT">
+                        <h:outputText id="labelEtapa" value="NIT" styleClass="labelRows "/>
+                        <h:outputText id="ot_t_nit" value="#{cliente.nitCliente}" styleClass="detailRows" />
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton value="Seleccionar"  process="@all" update=":template:cotizacion-consultar:nombre_cliente" styleClass="backGIntelcom" onclick="PF('consulta_cli').hide();">
+                            <f:setPropertyActionListener target="#{cotizacionesConsultarBean.idCliente}" value="#{cliente.nitCliente}" />
+                            <f:setPropertyActionListener target="#{cotizacionesConsultarBean.nombreCliente}" value="#{cliente.nombreCliente}" />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        <p:dialog header="Consultar Oportunidad" widgetVar="consulta_oprt" showEffect="pop"  >
+            <h:form id="form-oportunidad-consultados">
+                <p:dataTable  id="tablaOportunidadesAsesor" var="oportunidad" value="#{cotizacionesConsultarBean.oportunidades}" emptyMessage="Sin registros"  styleClass="tablaresultados" tableStyleClass="detailTable">
+                    <p:column id="col_nopor" headerText="Nombre Oportunidad" styleClass="justificarIzquierda">
+                        <h:outputText id="ot_st_nopor" value="#{oportunidad.nombreOportunidad}" />
+                    </p:column>
+                    <p:column id="col_ncliente" headerText="Nombre Cliente">
+                        <h:outputText id="labelCliente" value="Nombre Cliente" styleClass="labelRows "/>
+                        <h:outputText id="ot_st_ncliente" value="#{oportunidad.nombreCliente}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column id="col_etapa" headerText="Etapa">
+                        <h:outputText id="labelEtapa" value="Etapa" styleClass="labelRows "/>
+                        <h:outputText id="ot_etapa" value="#{oportunidad.etapaOportunidad}" styleClass="detailRows"/>
+                    </p:column>
+                    <p:column headerText="Acción">
+                        <p:commandButton value="Agregar" process="@all" update=":template:cotizacion-consultar:oportunidadSeleccionada" immediate="true" styleClass="backGIntelcom" onclick="PF('consulta_oprt').hide();">
+                            <f:setPropertyActionListener target="#{cotizacionesConsultarBean.oportunidadSelect}" value="#{oportunidad}"   />
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+        
+        <p:dialog header="Información de la Competencia" widgetVar="wv_actualizar_competencia" showEffect="pop" closeOnEscape="true" >
+            <h:form id="id_form_competencia">  
+                                
+                    <h:panelGrid columns="2"  cellpadding="4" width="90%" >    
+                        <h:panelGroup style="width: 100%" >
+                            <p:outputLabel value="Nombre de Competencia" styleClass="labelForm"/>  
+                        </h:panelGroup>               
+                        <p:inputText value="#{cotizacionesConsultarBean.cotizacionSelect.inteligenciaCompetencia}" maxlength="290" required="true" requiredMessage="El nombre de competencia es obligatorio" />
+
+                        <p:outputLabel value="Criterio de Competencia" styleClass="labelForm" />
+                        <p:inputText value="#{cotizacionesConsultarBean.cotizacionSelect.inteligenciaRazon}" maxlength="290" required="true" requiredMessage="El criterio de competencia es obligatorio" />                        
+
+                        <p:outputLabel value="Observación de la competencia" styleClass="labelForm"/>
+                        <p:inputTextarea value="#{cotizacionesConsultarBean.cotizacionSelect.inteligenciaObservaciones}" maxlength="1900" />         
+
+                    </h:panelGrid>
+                
+                <p:messages id="messagesPopup" showDetail="true" showSummary="false" autoUpdate="true" styleClass="messagesForm" />       
+
+
+                <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                    <p:commandButton id="btn_buscar" 
+                                     value="Guardar"                                     
+                                     actionListener="#{cotizacionesConsultarBean.guardarInformacionCompetenciaAction}" styleClass="backGIntelcom" />
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+        
+    </ui:define>
+
+</ui:composition>
+

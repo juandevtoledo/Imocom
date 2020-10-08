@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.5. -->
+<xs:schema xmlns:tns="http://com.imocom.intelcom.ws.ebs.interfaces/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0"
+           targetNamespace="http://com.imocom.intelcom.ws.ebs.interfaces/">
+  <xs:element name="ImocomWebFault" nillable="true" type="tns:ImocomWebFault"/>
+  <xs:element name="OportunidadResponseVO" type="tns:OportunidadResponseVO"/>
+  <xs:element name="detalleOportunidad" type="tns:detalleOportunidad"/>
+  <xs:element name="detalleOportunidadResponse"
+              type="tns:detalleOportunidadResponse"/>
+  <xs:element name="oportunidad" type="tns:OportunidadVO"/>
+  <xs:element name="oportunidadesClienteFiltros"
+              type="tns:oportunidadesClienteFiltros"/>
+  <xs:element name="oportunidadesClienteFiltrosResponse"
+              type="tns:oportunidadesClienteFiltrosResponse"/>
+  <xs:element name="oportunidadesNombreEtapa"
+              type="tns:oportunidadesNombreEtapa"/>
+  <xs:element name="oportunidadesNombreEtapaResponse"
+              type="tns:oportunidadesNombreEtapaResponse"/>
+  <xs:element name="oportunidadesPorIds" type="tns:oportunidadesPorIds"/>
+  <xs:element name="oportunidadesPorIdsResponse"
+              type="tns:oportunidadesPorIdsResponse"/>
+  <xs:element name="oportunidadesVisitas" type="tns:oportunidadesVisitas"/>
+  <xs:element name="oportunidadesVisitasResponse"
+              type="tns:oportunidadesVisitasResponse"/>
+   <xs:element name="oportunidadesNombreEtapaEstado" type="tns:oportunidadesNombreEtapaEstado"/>
+   <xs:element name="oportunidadesNombreEtapaEstadoResponse" type="tns:oportunidadesNombreEtapaEstadoResponse"/>
+  <xs:complexType name="oportunidadesVisitas">
+    <xs:sequence>
+      <xs:element name="idAsesor" type="xs:string" minOccurs="0"/>
+      <xs:element name="nitCliente" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oportunidadesVisitasResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:OportunidadResponseVO" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OportunidadResponseVO">
+    <xs:sequence>
+      <xs:element name="oportunidades" type="tns:OportunidadVO" minOccurs="0"
+                  maxOccurs="unbounded"/>
+      <xs:element name="resultadoOperacion" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="OportunidadVO">
+    <xs:sequence>
+      <xs:element name="idOportunidad" type="xs:string" minOccurs="0"/>
+      <xs:element name="nombreOportunidad" type="xs:string" minOccurs="0"/>
+      <xs:element name="descripcion" type="xs:string" minOccurs="0"/>
+      <xs:element name="etapaOportunidad" type="xs:string" minOccurs="0"/>
+      <xs:element name="nitCliente" type="xs:string" minOccurs="0"/>
+      <xs:element name="nombreCliente" type="xs:string" minOccurs="0"/>
+      <xs:element name="idAsesor" type="xs:string" minOccurs="0"/>
+      <xs:element name="tipoOportunidad" type="xs:string" minOccurs="0"/>
+      <xs:element name="incoterm" type="xs:string" minOccurs="0"/>
+      <xs:element name="moneda" type="xs:string" minOccurs="0"/>
+      <xs:element name="monto" type="xs:string" minOccurs="0"/>
+      <xs:element name="fechaCierre" type="xs:string" minOccurs="0"/>
+      <xs:element name="probabilidadEjecucion" type="xs:string" minOccurs="0"/>
+      <xs:element name="probabilidadExito" type="xs:string" minOccurs="0"/>
+      <xs:element name="canalEntrada" type="xs:string" minOccurs="0"/>
+      <xs:element name="observacion" type="xs:string" minOccurs="0"/>
+      <xs:element name="division" type="xs:string" minOccurs="0"/>
+      <xs:element name="estadoOportunidad" type="xs:string" minOccurs="0"/>
+      <xs:element name="fechaCierreMostrar" type="xs:string" minOccurs="0"/>
+	  <xs:element name="idArchivoOrdenCompra" type="xs:string" minOccurs="0"/>
+	  <xs:element name="nombreEtapaOportunidad" type="xs:string" minOccurs="0"/>
+	  <xs:element name="idMotivoCierre" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ImocomWebFault">
+    <xs:sequence>
+      <xs:element name="faultCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="faultString" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oportunidadesNombreEtapa">
+    <xs:sequence>
+      <xs:element name="idAsesor" type="xs:string" minOccurs="0"/>
+      <xs:element name="nombre" type="xs:string" minOccurs="0"/>
+      <xs:element name="etapa" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oportunidadesNombreEtapaResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:OportunidadResponseVO" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oportunidadesNombreEtapaEstado">
+	<xs:sequence>
+		<xs:element name="idAsesor" type="xs:string" minOccurs="0"/>
+		<xs:element name="nombre" type="xs:string" minOccurs="0"/>
+		<xs:element name="etapa" type="xs:string" minOccurs="0"/>
+		<xs:element name="estado" type="xs:string" minOccurs="0"/>
+	</xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="oportunidadesNombreEtapaEstadoResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:OportunidadResponseVO" minOccurs="0"/>
+		</xs:sequence>
+   </xs:complexType>
+
+  <xs:complexType name="oportunidadesPorIds">
+    <xs:sequence>
+      <xs:element name="idOportunidades" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oportunidadesPorIdsResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:OportunidadResponseVO" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oportunidadesClienteFiltros">
+    <xs:sequence>
+      <xs:element name="idAsesor" type="xs:string" minOccurs="0"/>
+      <xs:element name="nitCliente" type="xs:string" minOccurs="0"/>
+      <xs:element name="probabilidadEjecucion" type="xs:string" minOccurs="0"/>
+      <xs:element name="probabilidadExito" type="xs:string" minOccurs="0"/>
+      <xs:element name="idEtapaOportunidad" type="xs:string" minOccurs="0"/>
+      <xs:element name="idEstadoOportunidad" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="oportunidadesClienteFiltrosResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:OportunidadResponseVO" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="detalleOportunidad">
+    <xs:sequence>
+      <xs:element name="idOportunidad" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="detalleOportunidadResponse">
+    <xs:sequence>
+      <xs:element name="return" type="tns:OportunidadResponseVO" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

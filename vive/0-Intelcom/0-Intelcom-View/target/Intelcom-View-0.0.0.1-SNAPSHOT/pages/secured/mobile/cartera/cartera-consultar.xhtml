@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">    
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+    
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+
+    <ui:define name="content">
+        <h:form id="cartera-form">
+            <p><h1 align="center">Consulta de Cartera</h1></p> 
+            <p:separator style="width:90%" />   
+            <h:panelGrid columns="2" id="grid_nit"  styleClass="tablaDetalles" >
+
+                <p:outputLabel id="ol_nit" value="NIT" styleClass="labelDetalle" />
+                <p:outputLabel  value="#{carteraConsultarFacesBean.cartera.nit}" />
+
+                <p:outputLabel value="Nombre Cliente" styleClass="labelDetalle" />
+                <p:outputLabel  value="#{carteraConsultarFacesBean.cartera.nombreCliente}" />
+
+                <p:outputLabel value="Tipo Cliente de Cartera" styleClass="labelDetalle" />
+                <p:outputLabel  value="#{carteraConsultarFacesBean.cartera.tipoCliente}" />
+
+                <p:outputLabel value="Cupo de Crédito" styleClass="labelDetalle" />
+                <p:outputLabel  value="#{carteraConsultarFacesBean.cartera.cupoCredito}" />
+
+                <p:outputLabel value="Cupo de Crédito Disponible" styleClass="labelDetalle" />
+                <p:outputLabel  value="#{carteraConsultarFacesBean.cartera.cupoDisponible}" />
+
+                <p:outputLabel value="Total Cartera" styleClass="labelDetalle" />
+                <p:outputLabel  value="#{carteraConsultarFacesBean.cartera.totalCartera}" />
+
+                <p:outputLabel value="Total Cartera Asesor" styleClass="labelDetalle" />
+                <p:outputLabel  value="#{carteraConsultarFacesBean.cartera.totalCarteraAsesor}" />
+
+            </h:panelGrid>
+
+            <p:separator style="width:90%" />   
+
+            <p><h1>Facturas</h1></p> 
+
+            <p:dataTable  id="tablaFacturas" var="factura" value="#{carteraConsultarFacesBean.cartera.facturas}" emptyMessage="Sin registros" styleClass="tablaresultados" tableStyleClass="detailTable">
+
+                <p:column id="col_nro_factura" headerText="No Factura" styleClass="justificarIzquierda">
+                    <h:outputText id="labelEtapa" value="No Factura" styleClass="labelRows "/>
+                    <h:outputText id="ot_nro_factura" value="#{factura.numero}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_fecha_vencimiento" headerText="Fecha Vencimiento">
+                    <h:outputText id="labelFechaVencimiento" value="Fecha Vencimiento" styleClass="labelRows "/>
+                    <h:outputText id="ot_fecha_vencimiento" value="#{factura.fechaVencimiento}" styleClass="detailRows" />
+                </p:column>
+
+                <p:column id="col_dias_vencimiento" headerText="Días Vencimiento">
+                    <h:outputText id="labelDiasVencimiento" value="Días Vencimiento" styleClass="labelRows "/>
+                    <h:outputText id="ot_dias_vencimiento" value="#{factura.diasVencimiento}" styleClass="detailRows" />
+                </p:column>
+
+                <p:column id="col_valor" headerText="Valor Cartera">
+                    <h:outputText id="labelValorCartera" value="Valor Cartera" styleClass="labelRows "/>
+                    <h:outputText id="ot_valor" value="#{factura.valor}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_valor_vencido" headerText="Valor Vencido">
+                    <h:outputText id="labelValorVencido" value="Valor Vencido" styleClass="labelRows "/>
+                    <h:outputText id="ot_valor_vencido" value="#{factura.valorVencido}" styleClass="detailRows"/>
+                </p:column>
+                
+                <p:column id="col_valor_x_vencer" headerText="Valor por Vencer ">
+                    <h:outputText id="labelValorxVenc" value="Valor por Vencer" styleClass="labelRows "/>
+                    <h:outputText id="ot_valor_x_vencer" value="#{factura.valorPorVencer}" styleClass="detailRows"/>
+                </p:column>
+
+                <p:column id="col_centro_costo" headerText="Centro de Costo">
+                    <h:outputText id="labelLinea" value="Centro de Costo" styleClass="labelRows "/>
+                    <h:outputText id="ot_centro_costo" value="#{factura.centroCosto}" styleClass="detailRows"/>
+                </p:column>
+                
+                 <p:column id="col_centro_asesor" headerText="Asesor" >
+                     <h:outputText id="labelAsesor" value="Asesor" styleClass="labelRows "/>
+                     <h:outputText id="ot_centro_asesor" value="#{factura.asesor}" styleClass="detailRows"/>
+                </p:column>
+
+            </p:dataTable>
+
+        </h:form>
+    </ui:define>
+</ui:composition> 
