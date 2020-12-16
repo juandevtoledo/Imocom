@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (c) 2014 IMOCOM. All Rights Reserved.
+
+This software is the confidential and proprietary information of IMOCOM.
+("Confidential Information").
+It may not be copied or reproduced in any manner without the express
+written permission of IMOCOM.
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/facelets/templates/page-template_m.xhtml"
+                xmlns:pm="http://primefaces.org/mobile">
+    <ui:define name="content">
+        <h:form id="producto-crear-form" enctype="multipart/form-data" >  
+            <p><h1 align="center">Solicitud de Creación de Productos</h1></p> 
+            <p:separator style="width:90%" />
+            <h:panelGrid  columns="1" id="grid_crear_marca" cellpadding="5" width="90%" >
+                <h:panelGroup style="width: 100%" >
+                    <p:commandButton id="btn_crear_marca" value="CREAR MARCA / MODELO" update=":template:creacion-marcas-modelo-form:marcas_creacion_marca,:template:creacion-marcas-modelo-form:marcas_creacion_creacion_modelo_texto,:template:creacion-marcas-modelo-form:tipo_creacion" actionListener="#{crearProductosFacesBean.selectCreacionMarcasModelos}" onclick="PF('crear_marca_modelo').show();" immediate="true" styleClass="backGIntelcom" />
+                </h:panelGroup>
+            </h:panelGrid>
+            <h:panelGrid  columns="2" id="grid_nit" cellpadding="5" width="90%" >
+
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_tipo_producto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_tipo_producto" value="Tipo Producto" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="panel_tipo_producto">
+                    <p:selectOneMenu id="select-tipo_producto" value="#{crearProductosFacesBean.tipoProducto}" required="true" requiredMessage="Campo Tipo Producto es requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{crearProductosFacesBean.tipoProductosList}" 
+                                       var="m" itemLabel="#{m.nombre}" itemValue="#{m.idTipo}"  />  
+                    </p:selectOneMenu> 
+                </h:panelGroup>                
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_descripcion_producto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_descripcion_producto" value="Descripcion Producto" styleClass="labelForm" />
+                </h:panelGroup>
+                <p:inputText id="it_descripcion_producto" value="#{crearProductosFacesBean.descripcionProducto}"  required="true" requiredMessage="Campo Descripcion Producto es requerido" />
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_marca" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_marca" value="Marca" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup id="select_marcas_panel" style="width: 100%" >
+                    <p:selectOneMenu id="selectMarcas" value="#{crearProductosFacesBean.idMarca}"  required="true" requiredMessage="Campo Marcas Requerido">
+                        <p:ajax process="selectMarcas"  listener="#{crearProductosFacesBean.cargarModelos}" event="valueChange"  update="panel_id_modelo"/>
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{crearProductosFacesBean.marcas}" 
+                                       var="m" itemLabel="#{m.nombre}" itemValue="#{m.idMarca}"  />  
+                    </p:selectOneMenu>  
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_modelo" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_modelo" value="Modelo" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="panel_id_modelo">
+                    <p:selectOneMenu id="select-modelos" value="#{crearProductosFacesBean.idModelo}" required="true" requiredMessage="Campo Modelo Requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{crearProductosFacesBean.modelos}" 
+                                       var="m" itemLabel="#{m.nombre}" itemValue="#{m.idModelo}"  />  
+                    </p:selectOneMenu> 
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_precio_producto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_precio_producto" value="Precio" styleClass="labelForm" />
+                </h:panelGroup>                
+                <p:inputText id="it_incoterm_producto" value="#{crearProductosFacesBean.precio}"  required="true" requiredMessage="Campo Precio es requerido"/>
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_incoterm_producto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_incoterm_producto" value="Incoterm" styleClass="labelForm" />
+                </h:panelGroup>                
+                 <p:selectOneMenu id="select-tipo-inconterm" value="#{crearProductosFacesBean.incoterm}"   >
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{crearProductosFacesBean.listaIncoterm}" 
+                                   var="typIncoterm" itemLabel="#{typIncoterm.tipoEtiqueta}" itemValue="#{typIncoterm.tipoEtiqueta}"  />  
+                </p:selectOneMenu>                   
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_mpneda" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_moneda" value="Moneda" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="panel_id_moneda">
+                    <p:selectOneMenu id="select-moneda" value="#{crearProductosFacesBean.idMoneda}"  required="true" requiredMessage="Campo Moneda Requerido">
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{crearProductosFacesBean.monedas}" 
+                                       var="m" itemLabel="#{m.nombre}" itemValue="#{m.idMoneda}"  />  
+                    </p:selectOneMenu> 
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_cotizable" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_cotizable" value="Cotizable Automaticamente" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="panel_id_cotizable">
+                    <p:selectOneMenu id="select-cotizable" value="#{crearProductosFacesBean.cotizable}" required="true" requiredMessage="Campo Cotizable Requerido" >
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{crearProductosFacesBean.pertenceValues}" 
+                                       var="m" itemLabel="#{m}" itemValue="#{m}"  />  
+                    </p:selectOneMenu> 
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" >
+                    <p:outputLabel id="req_ol_catalogo_producto" value="(*)" styleClass="requerido" />
+                    <p:outputLabel id="ol_catalogo_producto" value="Catalogo de Productos" styleClass="labelForm" />
+                </h:panelGroup>
+                <h:panelGroup style="width: 100%" id="panel_id_catalogo_producto">
+                    <p:selectOneMenu id="select-catalogo_producto" value="#{crearProductosFacesBean.catalogoProducto}" required="true" requiredMessage="Campo Catalogo Requerido" >
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{crearProductosFacesBean.pertenceValues}" 
+                                       var="m" itemLabel="#{m}" itemValue="#{m}"  />  
+                    </p:selectOneMenu> 
+                </h:panelGroup>               
+            </h:panelGrid>
+            <p:separator style="width:90%" />
+            <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />  
+            <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
+                <p:commandButton id="btn_crear" value="#{crearProductosFacesBean.buttonName}"   ajax="false"  action="#{crearProductosFacesBean.enviarAction}" styleClass="backGIntelcom" onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"  />                
+                <p:commandButton id="btn_cancelar" value="Cancelar" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom" >
+                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:productos-consulta" />
+                </p:commandButton>
+            </h:panelGrid>
+        </h:form>  
+        <p:dialog header="Crear Marca / Modelo" widgetVar="crear_marca_modelo" showEffect="pop" styleClass="popupResponsive" >
+            <h:form id="creacion-marcas-modelo-form">
+                <h:panelGrid  columns="1" cellpadding="5" width="90%" >
+
+                </h:panelGrid>
+                <h:panelGrid  columns="2" id="grid_creacion_marca_modelo" cellpadding="5" width="90%" >
+                    <p:outputLabel id="ol_tipo_creacion" value="Tipo Creacion" styleClass="labelForm" />
+                    <p:selectOneRadio id="tipo_creacion" value="#{crearProductosFacesBean.tipoCreacion}" >
+                        <p:ajax process="tipo_creacion"  event="valueChange"  update="marcas_creacion_marca,marcas_creacion_creacion_modelo_texto,marcas_creacion_creacion_modelo"/>
+                        <f:selectItem itemLabel="MARCA" itemValue="marca" />
+                        <f:selectItem itemLabel="MODELO" itemValue="modelo" />
+                    </p:selectOneRadio>
+                    <h:panelGroup style="width: 100%" >
+                        <p:outputLabel id="req_ol_marca_creacion" value="(*)" styleClass="requerido" />
+                        <p:outputLabel id="ol_marca_creacion" value="Marca" styleClass="labelForm" />
+                    </h:panelGroup>
+                    <h:panelGroup id="marcas_creacion_marca" style="width: 100%"  >
+                        <p:selectOneMenu id="selectMarcasCreacion" value="#{crearProductosFacesBean.idMarcaCreacion}"  required="true" requiredMessage="Campo Marcas Requerido" rendered="${crearProductosFacesBean.isModelo}">                            
+                            <f:selectItem itemLabel="Seleccione" itemValue="" />
+                            <f:selectItems value="#{crearProductosFacesBean.marcas}" 
+                                           var="m" itemLabel="#{m.nombre}" itemValue="#{m.idMarca}"  />  
+                        </p:selectOneMenu>  
+                        <p:inputText id="it_creacion_marca_texto" value="#{crearProductosFacesBean.marcaCreacionTexto}"  rendered="${crearProductosFacesBean.isMarca}"/>
+                    </h:panelGroup>                 
+                    <h:panelGroup style="width: 100%" id="marcas_creacion_creacion_modelo_texto">
+                        <p:outputLabel id="req_ol_modelo_creacion" value="(*)" styleClass="requerido" rendered="${crearProductosFacesBean.isModelo}"/>
+                        <p:outputLabel id="ol_modelo_creacion" value="Modelo" styleClass="labelForm" rendered="${crearProductosFacesBean.isModelo}"/>
+                    </h:panelGroup>
+                    <h:panelGroup id="marcas_creacion_creacion_modelo" style="width: 100%">
+                        <p:inputText id="it_creacion_marca_modelo" value="#{crearProductosFacesBean.modeloCreacionTexto}" rendered="${crearProductosFacesBean.isModelo}" />
+                    </h:panelGroup>
+                </h:panelGrid>
+                <h:panelGrid  columns="2" id="btn_creacion_marca_modelo" cellpadding="5" styleClass="panelBotones" >
+                    <p:commandButton id="btn_crear_marca_modelo" value="Crear" ajax="false" action="#{crearProductosFacesBean.creacionMarcas}" styleClass="backGIntelcom" onclick="PF('crear_marca_modelo').hide();"  />                
+                    <p:commandButton id="btn_cancelar_marca_modelo" value="Cancelar"  immediate="true" styleClass="backGIntelcom" onclick="PF('crear_marca_modelo').hide();"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

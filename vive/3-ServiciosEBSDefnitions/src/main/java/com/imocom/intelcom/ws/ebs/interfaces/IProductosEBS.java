@@ -161,12 +161,12 @@ public interface IProductosEBS {
      * @param tipoProducto
      * @return
      * @throws ImocomWebserviceException
-     */
+     *
     @WebMethod(operationName = "getModelPorMarcaInventario")
     public TipoResponseVO getModelPorMarcaInventario(@WebParam(name = "idMarca") String idMarca,
             @WebParam(name = "linea") String linea,
             @WebParam(name = "tipoProducto") String tipoProducto
-    ) throws ImocomWebserviceException;
+    ) throws ImocomWebserviceException;*/
     
     /**
      * Servicio consulta los productos en la vista materializada de Inventario
@@ -183,7 +183,7 @@ public interface IProductosEBS {
      * @param catalogo
      * @return
      * @throws ImocomWebserviceException
-     */
+     *
     @WebMethod(operationName = "consultaProductosInventarioEBS")
     public ProductosResponseVO consultaProductosInventarioEBS(@WebParam(name = "tipoProducto") String tipoProducto,
             @WebParam(name = "marca") String marca,
@@ -194,6 +194,6 @@ public interface IProductosEBS {
             @WebParam(name = "subinventario") String subinventario,
             @WebParam(name = "linea") String linea,
             @WebParam(name = "catalogo") String catalogo
-    ) throws ImocomWebserviceException;
+    ) throws ImocomWebserviceException;*/
 
 }

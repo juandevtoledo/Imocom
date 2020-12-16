@@ -187,6 +187,7 @@ public abstract class AbstractService<K, E extends AbstractEntity> implements IS
                 }
             }
             query.setHint("javax.persistence.cache.storeMode", "REFRESH");
+            query.setMaxResults(1000);
             genericEntityList = query.getResultList();
             
             

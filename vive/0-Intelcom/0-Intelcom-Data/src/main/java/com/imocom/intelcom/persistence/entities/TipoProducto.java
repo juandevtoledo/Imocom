@@ -8,6 +8,8 @@
  */
 package com.imocom.intelcom.persistence.entities;
 
+import com.imocom.intelcom.persistence.AbstractEntity;
+import com.imocom.intelcom.persistence.IDataModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,14 +36,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "TipoProducto.findAll", query = "SELECT t FROM TipoProducto t"),
     @NamedQuery(name = "TipoProducto.findByIdTipo", query = "SELECT t FROM TipoProducto t WHERE t.idTipo = :idTipo"),
     @NamedQuery(name = "TipoProducto.findByNombre", query = "SELECT t FROM TipoProducto t WHERE t.nombre = :nombre")})
-public class TipoProducto implements Serializable {
+public class TipoProducto extends AbstractEntity implements Serializable, IDataModel {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
     @Basic(optional = false)
     @Column(name = "ID_TIPO")
-    private BigDecimal idTipo;
+    private Long idTipo;
     @Column(name = "NOMBRE")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipo")
@@ -50,15 +52,15 @@ public class TipoProducto implements Serializable {
     public TipoProducto() {
     }
 
-    public TipoProducto(BigDecimal idTipo) {
+    public TipoProducto(Long idTipo) {
         this.idTipo = idTipo;
     }
 
-    public BigDecimal getIdTipo() {
+    public Long getIdTipo() {
         return idTipo;
     }
 
-    public void setIdTipo(BigDecimal idTipo) {
+    public void setIdTipo(Long idTipo) {
         this.idTipo = idTipo;
     }
 
@@ -103,5 +105,12 @@ public class TipoProducto implements Serializable {
     public String toString() {
         return "com.imocom.intelcom.persistence.entities.TipoProducto[ idTipo=" + idTipo + " ]";
     }
-    
+
+    public String getKeyModel() {
+        if (this.idTipo != null) {
+            return String.valueOf(this.idTipo);
+        }
+        return null;
+    }
+
 }

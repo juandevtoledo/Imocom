@@ -15,13 +15,28 @@
                 <p:inputText id="it_descripcion_producto" value="#{consultaProductoFacesBean.descripcion}"/>
 
                 <p:outputLabel id="ol_tipo_producto" value="Tipo" styleClass="labelForm" />
-                <p:inputText id="it_tipo_producto" value="#{consultaProductoFacesBean.tipo}"/>
+                <p:selectOneMenu id="select-tipo_producto" value="#{consultaProductoFacesBean.tipo}">
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{crearProductosFacesBean.tipoProductosList}" 
+                                   var="m" itemLabel="#{m.nombre}" itemValue="#{m.idTipo}"  />  
+                </p:selectOneMenu> 
 
                 <p:outputLabel id="ol_marca_producto" value="Marca" styleClass="labelForm" />
-                <p:inputText id="it_marca_producto" value="#{consultaProductoFacesBean.marca}"/>
+                <p:selectOneMenu id="selectMarcas" value="#{consultaProductoFacesBean.idMarca}"  >
+                    <p:ajax process="selectMarcas"  listener="#{consultaProductoFacesBean.cargaModelos}" event="valueChange"  update="panel_id_modelo"/>
+                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                    <f:selectItems value="#{consultaProductoFacesBean.marcas}" 
+                                   var="m" itemLabel="#{m.nombre}" itemValue="#{m.idMarca}"  />  
+                </p:selectOneMenu>    
 
-                <p:outputLabel id="ol_modelo_producto" value="Marca" styleClass="labelForm" />
-                <p:inputText id="it_modelo_producto" value="#{consultaProductoFacesBean.modelo}"/>
+                <p:outputLabel id="ol_modelo_producto" value="Modelo" styleClass="labelForm" />
+                <h:panelGroup style="width: 100%" id="panel_id_modelo">
+                    <p:selectOneMenu id="select-modelos" value="#{consultaProductoFacesBean.idModelo}" >
+                        <f:selectItem itemLabel="Seleccione" itemValue="" />
+                        <f:selectItems value="#{consultaProductoFacesBean.modelos}" 
+                                       var="m" itemLabel="#{m.nombre}" itemValue="#{m.idModelo}"  />  
+                    </p:selectOneMenu> 
+                </h:panelGroup>
             </h:panelGrid>
 
             <p:messages id="messagesPage" showDetail="true" autoUpdate="true" styleClass="messagesForm" />       
@@ -29,8 +44,8 @@
 
             <h:panelGrid  columns="2" id="btn_Grid" cellpadding="5" styleClass="panelBotones" >
                 <p:commandButton id="btn_buscar" value="Buscar" onclick="this.disabled = true;" oncomplete="this.disabled=false;" update="tablaProductos,cantProductosText,btn_buscar"  actionListener="#{consultaProductoFacesBean.buscarAction}" styleClass="backGIntelcom" />
-                <p:commandButton id="btn_crear" value="Crear Nuevo Producto" action="#{menuFacesBean.redirect}" immediate="true" styleClass="backGIntelcom">
-                    <f:param name="#{navigationFaces.redirectParamName}" value="outcome:clientes-prospecto-crear" />
+                <p:commandButton id="btn_crear" value="Crear Producto" action="#{consultaProductoFacesBean.redirectCrear}" immediate="true" styleClass="backGIntelcom">                    
+                    
                 </p:commandButton>
             </h:panelGrid>
             <p:separator style="width:90%" />
@@ -46,13 +61,13 @@
                     <h:outputText id="ot_t_tipo_producto" value="#{producto.idTipo.nombre}"/>
                 </p:column> 
                 <p:column id="col_descripcion" headerText="Descripcion" styleClass="justificarIzquierda">                   
-                     <h:outputText id="ot_t_descripcion" value="#{producto.descripcion}"/>
+                    <h:outputText id="ot_t_descripcion" value="#{producto.descripcion}"/>
                 </p:column> 
                 <p:column id="col_marca" headerText="Marca" styleClass="justificarIzquierda">                   
                     <h:outputText id="ot_t_marca" value="#{producto.idModelo.idMarca.nombre}"/>
                 </p:column> 
                 <p:column id="col_modelo" headerText="Modelo" styleClass="justificarIzquierda">                   
-                    <h:outputText id="ot_t_modelo" value="#{producto.idModelo.idMarca.nombre}"/>
+                    <h:outputText id="ot_t_modelo" value="#{producto.idModelo.nombre}"/>
                 </p:column> 
                 <p:column id="col_moneda" headerText="Moneda" styleClass="justificarIzquierda">                   
                     <h:outputText id="ot_t_moneda" value="#{producto.idMoneda.nombre}"/>
@@ -60,16 +75,48 @@
                 <p:column id="col_precio" headerText="Precio" styleClass="justificarIzquierda">                   
                     <h:outputText id="ot_t_precio" value="#{producto.precio}"/>
                 </p:column> 
-                <p:column id="col_estado" headerText="Estado" styleClass="justificarIzquierda">                   
-                    <h:outputText id="ot_t_estado" value="#{producto.estado}"/>
-                </p:column> 
                 <p:column id="col_cotizable" headerText="Cotizable" styleClass="justificarIzquierda">                   
-                    <h:outputText id="ot_t_cotizable" value="#{producto.cotizable}"/>
+                    <h:outputText id="ot_t_cotizable" value="#{producto.cotizableString}"/>
                 </p:column> 
-                 <p:column id="col_catalogo" headerText="Catalogo" styleClass="justificarIzquierda">                   
-                     <h:outputText id="ot_t_catalogo" value="#{producto.catalogo}"/>
+                <p:column id="col_catalogo" headerText="Catalogo" styleClass="justificarIzquierda">                   
+                    <h:outputText id="ot_t_catalogo" value="#{producto.catalogoString}"/>
                 </p:column> 
+                 <p:column id="col_incotermn" headerText="Incoterm" styleClass="justificarIzquierda">                   
+                     <h:outputText id="ot_t_incoterm" value="#{producto.incoterm}"/>
+                </p:column> 
+                <p:column id="col_editar" headerText="Editar / Detalle">
+                    <p:commandButton id="btn_t_crear_producto" styleClass="backGIntelcom" action="#{consultaProductoFacesBean.redirectEditar}" value="Editar" process="@this" update="@form">
+                        <f:setPropertyActionListener target="#{consultaProductoFacesBean.productoSeleccionado}" value="#{producto}" />
+                    </p:commandButton>
+                    <p:commandButton id="btn_t_detalle_producto" styleClass="backGIntelcom" value="Detalle" onclick="PF('detalle_producto').show();" immediate="true"  update=":template:producto-detalle-form">
+                        <f:setPropertyActionListener target="#{consultaProductoFacesBean.productoSeleccionado}" value="#{producto}" />
+                    </p:commandButton>
+                </p:column>
             </p:dataTable>
         </h:form>
+        <p:dialog header="Detalle Producto" widgetVar="detalle_producto" showEffect="pop" styleClass="popupResponsive" >
+            <h:panelGrid columns="2" id="grid_nit"  cellpadding="5" width="90%" >
+                <h:form id="producto-detalle-form">
+                    <p:outputLabel id="lab_det_codigo_pr" value="Codigo" styleClass="labelForm" />
+                    <p:inputText id="it_det_codigo_pr" value="#{consultaProductoFacesBean.productoSeleccionado.codigo}" disabled="false"/>
+                    <p:outputLabel id="lab_det_tipo_pr" value="Tipo Producto" styleClass="labelForm" />
+                    <p:inputText id="it_det_tipo_pr" value="#{consultaProductoFacesBean.productoSeleccionado.idTipo.nombre}" disabled="false"/>
+                    <p:outputLabel id="lab_det_descripcion_pr" value="Descripcion" styleClass="labelForm" />
+                    <p:inputText id="it_det_descripcion_pr" value="#{consultaProductoFacesBean.productoSeleccionado.descripcion}" disabled="false"/>
+                    <p:outputLabel id="lab_det_marca_pr" value="Marca" styleClass="labelForm" />
+                    <p:inputText id="it_det_marca_pr" value="#{consultaProductoFacesBean.productoSeleccionado.idModelo.idMarca.nombre}" disabled="false"/>
+                    <p:outputLabel id="lab_det_modelo_pr" value="Modelo" styleClass="labelForm" />
+                    <p:inputText id="it_det_modelo_pr" value="#{consultaProductoFacesBean.productoSeleccionado.idModelo.nombre}" disabled="false"/>
+                    <p:outputLabel id="lab_det_precio_pr" value="Precio" styleClass="labelForm" />
+                    <p:inputText id="it_det_precio_pr" value="#{consultaProductoFacesBean.productoSeleccionado.precio}" disabled="false"/>              
+                    <p:outputLabel id="lab_det_cotizable_pr" value="Cotizable" styleClass="labelForm" />
+                    <p:inputText id="it_det_cotizable_pr" value="#{consultaProductoFacesBean.productoSeleccionado.cotizableString}" disabled="false"/>
+                    <p:outputLabel id="lab_det_catalogo_pr" value="Catalogo" styleClass="labelForm" />
+                    <p:inputText id="it_det_catalogo_pr" value="#{consultaProductoFacesBean.productoSeleccionado.catalogoString}" disabled="false"/>              
+                    <p:outputLabel id="lab_det_estado_pr" value="Estado" styleClass="labelForm" />
+                    <p:inputText id="it_det_estado_pr" value="#{consultaProductoFacesBean.productoSeleccionado.estado}" disabled="false"/>
+                </h:form>
+            </h:panelGrid>
+        </p:dialog>
     </ui:define>
 </ui:composition>

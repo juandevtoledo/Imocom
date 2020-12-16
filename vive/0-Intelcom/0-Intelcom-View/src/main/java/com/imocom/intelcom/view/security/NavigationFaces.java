@@ -92,8 +92,10 @@ public class NavigationFaces extends JSFUtils {
         navigation.put(getViewRedirect("redirect.view.page.cotizaciones.version"), "/pages/secured/mobile/cotizaciones/cotizaciones-crear_version.jsf?faces-redirect=true");
 
         navigation.put(getViewRedirect("redirect.view.page.oportunidad.actualizarprobabilidad"), toOportunidadActualizarProbabilidad());
-        
+
         navigation.put(getViewRedirect("redirect.view.page.productos.version"), "/pages/secured/mobile/productos/consultor-productos.jsf?faces-redirect=true");
+        navigation.put(getViewRedirect("redirect.view.page.productos.crear"), "/pages/secured/mobile/productos/crear_producto.jsf?faces-redirect=true");
+        navigation.put(getViewRedirect("redirect.view.page.modificacion.masiva"), "/pages/secured/mobile/modificacion-masiva/oportunida-cliente-editar.jsf?faces-redirect=true");
 
     }
 
@@ -177,7 +179,7 @@ public class NavigationFaces extends JSFUtils {
     private String toEventosCrearXOportunidadProbabilidad() {
         return toEventosCrear() + "&" + SPECIFIC_OPORTUNITY_PROBABILITY_ID_PARAM + "=true";
     }
-    
+
     private String toEventosCrearConResultado() {
         return "/pages/secured/mobile/eventos/eventos-crear-con-resultado.jsf?faces-redirect=true";
     }
@@ -261,7 +263,7 @@ public class NavigationFaces extends JSFUtils {
     private String toClientesVisitas() {
         return "/pages/secured/mobile/clientes/clientes-visitas.jsf?faces-redirect=true";
     }
-    
+
     private String toOportunidadActualizarProbabilidad() {
         return "/pages/secured/mobile/oportunidades/oportunidad-actualizarprobabilidad.jsf?faces-redirect=true";
     }

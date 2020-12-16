@@ -1,7 +1,7 @@
-C:\Users\juan.toledo\Documents\jtoledo\IMOCOM30082017\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\client\IntelcomWSClient.java
-C:\Users\juan.toledo\Documents\jtoledo\IMOCOM30082017\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareServiceResponse.java
-C:\Users\juan.toledo\Documents\jtoledo\IMOCOM30082017\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareServiceRequestVO.java
-C:\Users\juan.toledo\Documents\jtoledo\IMOCOM30082017\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareService.java
-C:\Users\juan.toledo\Documents\jtoledo\IMOCOM30082017\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\fault\IntelcomMiddlewareFault.java
-C:\Users\juan.toledo\Documents\jtoledo\IMOCOM30082017\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\IIntelcomMiddleware.java
-C:\Users\juan.toledo\Documents\jtoledo\IMOCOM30082017\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\exception\IntelcomMiddlewareException.java
+C:\Users\juan.toledo\Documents\jtoledo\Imocom\vive\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\IIntelcomMiddleware.java
+C:\Users\juan.toledo\Documents\jtoledo\Imocom\vive\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\fault\IntelcomMiddlewareFault.java
+C:\Users\juan.toledo\Documents\jtoledo\Imocom\vive\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareService.java
+C:\Users\juan.toledo\Documents\jtoledo\Imocom\vive\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\client\IntelcomWSClient.java
+C:\Users\juan.toledo\Documents\jtoledo\Imocom\vive\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareServiceRequestVO.java
+C:\Users\juan.toledo\Documents\jtoledo\Imocom\vive\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\exception\IntelcomMiddlewareException.java
+C:\Users\juan.toledo\Documents\jtoledo\Imocom\vive\2-IntelcomMiddleware-Client\src\main\java\com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareServiceResponse.java

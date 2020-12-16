@@ -8,17 +8,21 @@
  */
 package com.imocom.intelcom.persistence.entities;
 
+import com.imocom.intelcom.persistence.AbstractEntity;
+import com.imocom.intelcom.persistence.IDataModel;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -35,14 +39,15 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Marca.findByIdMarca", query = "SELECT m FROM Marca m WHERE m.idMarca = :idMarca"),
     @NamedQuery(name = "Marca.findByNombre", query = "SELECT m FROM Marca m WHERE m.nombre = :nombre"),
     @NamedQuery(name = "Marca.findByLinea", query = "SELECT m FROM Marca m WHERE m.linea = :linea")})
-public class Marca implements Serializable {
+public class Marca extends AbstractEntity implements Serializable, IDataModel {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "Marca_seq_gen")
+    @SequenceGenerator(name = "Marca_seq_gen", sequenceName = "SEQ_MARCA", allocationSize = 1)
     @Column(name = "ID_MARCA")
-    private BigDecimal idMarca;
+    private Long idMarca;
     @Column(name = "NOMBRE")
     private String nombre;
     @Column(name = "LINEA")
@@ -53,15 +58,15 @@ public class Marca implements Serializable {
     public Marca() {
     }
 
-    public Marca(BigDecimal idMarca) {
+    public Marca(Long idMarca) {
         this.idMarca = idMarca;
     }
 
-    public BigDecimal getIdMarca() {
+    public Long getIdMarca() {
         return idMarca;
     }
 
-    public void setIdMarca(BigDecimal idMarca) {
+    public void setIdMarca(Long idMarca) {
         this.idMarca = idMarca;
     }
 
@@ -114,5 +119,13 @@ public class Marca implements Serializable {
     public String toString() {
         return "com.imocom.intelcom.persistence.entities.Marca[ idMarca=" + idMarca + " ]";
     }
-    
+
+    public String getKeyModel() {
+        if (this.idMarca != null) {
+            return String.valueOf(this.idMarca);
+        }
+
+        return null;
+    }
+
 }

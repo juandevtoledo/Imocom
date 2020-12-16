@@ -237,7 +237,7 @@ public class InventarioConsultaFacesBean extends AbstractFacesBean implements Se
     /**
      * Metodo que carga las modelos por marcas de la vista de inventario
      */
-    public void listaModeloXMarcasInventario() {
+    /*public void listaModeloXMarcasInventario() {
         try {
             
             String[] paramsService = new String[numeroParametrosWSModelosPorMarcaInventario];
@@ -256,7 +256,7 @@ public class InventarioConsultaFacesBean extends AbstractFacesBean implements Se
         } catch (IntelcomMiddlewareException ex) {
             logger.error(ex.getMessage());
         }
-    }
+    }*/
 
     /**
      * Se reinicia tabla de listado de oportunidades
@@ -281,6 +281,7 @@ public class InventarioConsultaFacesBean extends AbstractFacesBean implements Se
             String[] paramsService = new String[numeroParametrosWSMarcas];
             paramsService[0] = this.linea;
             requestMarcas.setParams(paramsService);
+            System.out.println("Requested Marcas .... -> "+requestMarcas.getEndpoint()+" , "+requestMarcas.getMethod()+", "+requestMarcas.getServiceName()+" , "+requestMarcas.getWsdlUrl());
             String responseStr = userSession.getClientWs().consumeService(requestMarcas);
             logger.info("responseStr: " + responseStr);
             TipoResponseVO response = (TipoResponseVO) Utils.unmarshal(TipoResponseVO.class, responseStr);

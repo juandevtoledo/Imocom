@@ -37,9 +37,9 @@ written permission of IMOCOM.
     <class>com.imocom.intelcom.persistence.entities.Modelo</class>
     <properties>
       <property name="eclipselink.target-server" value="WebLogic_10"/>
-      <!--      <property name="eclipselink.logging.level" value="FINE"/>      
+      <property name="eclipselink.logging.level" value="FINE"/>      
       <property name="eclipselink.logging.parameters" value="FINE"/>
-      <property name="eclipselink.logging.logger" value="DefaultLogger"/>-->
+      <property name="eclipselink.logging.logger" value="DefaultLogger"/>
       <property name="eclipselink.query-results-cache" value="false"/>
       <property name="eclipselink.ddl.table-creation-suffix" value="JPA_STORED_PROC"/>
     </properties>

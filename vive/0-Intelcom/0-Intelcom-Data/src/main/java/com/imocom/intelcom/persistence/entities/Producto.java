@@ -13,15 +13,18 @@ import com.imocom.intelcom.persistence.IDataModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -45,7 +48,8 @@ public class Producto extends AbstractEntity implements Serializable, IDataModel
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Id
-    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "Producto_seq_gen")
+    @SequenceGenerator(name = "Producto_seq_gen", sequenceName = "SEQ_PRODUCTO", allocationSize = 1)
     @Column(name = "ID_PRODUCTO")
     private Long idProducto;
     @Column(name = "CODIGO")
@@ -59,7 +63,7 @@ public class Producto extends AbstractEntity implements Serializable, IDataModel
     @Column(name = "COTIZABLE")
     private BigInteger cotizable;
     @Column(name = "CATALOGO")
-    private String catalogo;
+    private BigInteger catalogo;
     @JoinColumn(name = "ID_MODELO", referencedColumnName = "ID_MODELO")
     @ManyToOne(optional = false)
     private Modelo idModelo;
@@ -69,6 +73,12 @@ public class Producto extends AbstractEntity implements Serializable, IDataModel
     @JoinColumn(name = "ID_TIPO", referencedColumnName = "ID_TIPO")
     @ManyToOne(optional = false)
     private TipoProducto idTipo;
+    @Column(name = "INCOTERM")
+    private String incoterm;
+    @Transient
+    private String cotizableString;
+    @Transient
+    private String catalogoString;
 
     public Producto() {
     }
@@ -125,11 +135,11 @@ public class Producto extends AbstractEntity implements Serializable, IDataModel
         this.cotizable = cotizable;
     }
 
-    public String getCatalogo() {
+    public BigInteger getCatalogo() {
         return catalogo;
     }
 
-    public void setCatalogo(String catalogo) {
+    public void setCatalogo(BigInteger catalogo) {
         this.catalogo = catalogo;
     }
 
@@ -183,10 +193,45 @@ public class Producto extends AbstractEntity implements Serializable, IDataModel
     }
 
     public String getKeyModel() {
-         if (this.idProducto != null)
+        if (this.idProducto != null) {
             return String.valueOf(this.idProducto);
-        
+        }
+
         return null;
     }
+
+    public String getCotizableString() {
+        if (this.cotizable.intValue() == 1) {
+            return "SI";
+        } else {
+            return "NO";
+        }
+    }
+
+    public void setCotizableString(String cotizableString) {
+        this.cotizableString = cotizableString;
+    }
+
+    public String getCatalogoString() {
+        if (this.catalogo.intValue() == 1) {
+            return "SI";
+        } else {
+            return "NO";
+        }
+    }
+
+    public void setCatalogoString(String catalogoString) {
+        this.catalogoString = catalogoString;
+    }
+
+    public String getIncoterm() {
+        return incoterm;
+    }
+
+    public void setIncoterm(String incoterm) {
+        this.incoterm = incoterm;
+    }
     
+    
+
 }

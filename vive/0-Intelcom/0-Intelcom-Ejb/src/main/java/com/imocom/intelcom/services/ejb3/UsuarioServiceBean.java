@@ -5,8 +5,7 @@
 * ("Confidential Information").
 * It may not be copied or reproduced in any manner without the express
 * written permission of IMOCOM.
-*/
-
+ */
 package com.imocom.intelcom.services.ejb3;
 
 import com.imocom.intelcom.persistence.entities.Usuario;
@@ -22,78 +21,79 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 /**
- * <strong>Aplicación</strong>     : IMOCOM Sistema de Inteligancia comercial.
+ * <strong>Aplicación</strong> : IMOCOM Sistema de Inteligancia comercial.
  * <br/>
  * <br/>
- * <strong>Date</strong>           : Oct 28, 2014
+ * <strong>Date</strong> : Oct 28, 2014
  * <br/><br/>
- * <strong>Target</strong>         :
+ * <strong>Target</strong> :
  *
- * @author Carlos Guzman (cguzman) - PointMind S.A.S. - carlos.guzman@pointmind.com
+ * @author Carlos Guzman (cguzman) - PointMind S.A.S. -
+ * carlos.guzman@pointmind.com
  *
  */
 @Stateless
 public class UsuarioServiceBean extends AbstractService<Long, Usuario> implements IUsuarioServiceLocal {
-    
+
     private static final Logger logger = Logger.getLogger(UsuarioServiceBean.class);
-    
+
     public UsuarioServiceBean() {
         super(Usuario.class);
     }
-    
-    public Usuario findByIdUsuario (Long idUsuario) throws ServiceException{
-        try{
+
+    public Usuario findByIdUsuario(Long idUsuario) throws ServiceException {
+        try {
             return findById(idUsuario);
         } catch (PersistenceException ex) {
             logger.error(ex.getMessage());
             throw new ServiceException(ex, Level.ERROR);
         }
     }
-    
-    public Usuario findByUsuario (String nombre) throws ServiceException{
+
+    public Usuario findByUsuario(String nombre) throws ServiceException {
         /*
         MODIFICACION 24-ene-2018 - Debido a que pueden haber usuarios con mas de un rol,
         por ejemplo, usuarios jefes de linea de varias lineas, y necesitan autenticarse en VIVE
         como asesores, se debe modificar el método para poder autenticar
-        */
-        
-        /*return em.createNamedQuery("Usuario.findByUsuario", entityClass)
+         */
+
+ /*return em.createNamedQuery("Usuario.findByUsuario", entityClass)
                 .setParameter("usuario", nombre)
                 .getSingleResult();*/
         return em.createNamedQuery("Usuario.findByUsuario", entityClass)
                 .setParameter("usuario", nombre)
                 .getResultList().get(0);
-    
+
     }
 
-    public void updateUsuario(Usuario usuario) throws ServiceException{
-        try{
+    public void updateUsuario(Usuario usuario) throws ServiceException {
+        try {
             update(usuario);
             //em.refresh(usuario);
         } catch (PersistenceException ex) {
             logger.error(ex.getMessage());
             throw new ServiceException(ex, Level.ERROR);
         }
-        
+
     }
-    
+
     /**
      * Metodo que consulta un usuario por nombre usuario
+     *
      * @param nombre
      * @return
-     * @throws ServiceException 
+     * @throws ServiceException
      */
-    public List<Usuario> findByNombreParcialUsuario(String nombre) throws ServiceException{
-        if(nombre!=null){
+    public List<Usuario> findByNombreParcialUsuario(String nombre) throws ServiceException {
+        if (nombre != null) {
             return em.createNamedQuery("Usuario.findByNombreParcial", entityClass)
                     .setParameter("nombre", "%" + nombre.toUpperCase() + "%")
                     .getResultList();
         }
         return null;
-        
+
     }
-    
-    
+
     /**
      *
      * @param passwd
@@ -104,9 +104,9 @@ public class UsuarioServiceBean extends AbstractService<Long, Usuario> implement
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("password", passwd);
-            
+
             List results = (List) executeStoredFunction("Usuario.encryptFunction", params);
-            
+
             if (results != null && !results.isEmpty()) {
                 return (String) results.get(0);
             } else {
@@ -117,5 +117,18 @@ public class UsuarioServiceBean extends AbstractService<Long, Usuario> implement
             logger.error(ex.getMessage());
             throw new ServiceException(ex, Level.ERROR);
         }
-    }  
+    }
+
+    public List<Usuario> findByLineaAndRole(String linea, Long role) throws ServiceException {
+        String qlString = "SELECT u FROM Usuario u WHERE u.linea = :linea and u.rolUsuario.idRol.idRol = :role ";
+        HashMap<String, Object> paramaters = new HashMap<String, Object>();
+        paramaters.put("linea", linea);
+        paramaters.put("role", role);
+        try {
+            return (List<Usuario>) findResulQuerytList(qlString, paramaters);
+        } catch (PersistenceException ex) {
+            logger.error(ex.getMessage());
+            throw new ServiceException(ex, Level.ERROR);
+        }
+    }
 }

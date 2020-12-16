@@ -61,7 +61,7 @@ public class RolUsuario extends AbstractEntity implements Serializable, IDataMod
     @ManyToOne(optional = false)
     private Rol idRol;
     
-    @JoinColumn(name = "ID_ROL_USUARIO", referencedColumnName = "ID_USUARIO", insertable = false, updatable = false)
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Usuario usuario;
 

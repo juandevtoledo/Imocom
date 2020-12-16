@@ -6,17 +6,29 @@
 package com.imocom.intelcom.view.vo;
 
 import com.imocom.intelcom.persistence.entities.Cotizacion;
+import com.imocom.intelcom.persistence.entities.Marca;
+import com.imocom.intelcom.persistence.entities.Modelo;
+import com.imocom.intelcom.persistence.entities.Producto;
 import com.imocom.intelcom.persistence.entities.Visita;
+import com.imocom.intelcom.services.interfaces.IProductoServiceLocal;
+import com.imocom.intelcom.services.interfaces.ImodeloServiceLocal;
+import com.imocom.intelcom.services.util.ServiceException;
+import com.imocom.intelcom.view.util.DateOracleFormate;
+import com.imocom.intelcom.ws.ebs.vo.entities.OportunidadMasivoVO;
 import com.imocom.intelcom.ws.ebs.vo.entities.OportunidadVO;
 import com.imocom.intelcom.ws.ebs.vo.entities.ProductoVO;
+import java.util.ArrayList;
+import java.util.Date;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Usuario
  */
-public class Oportunidad {
+public final class Oportunidad {
 
     private String idOportunidad;
     private String nombreOportunidad;
@@ -46,30 +58,106 @@ public class Oportunidad {
     private String nombreMotivoCierre;
     private String notaCierre;
     private String observacionPedido;
-     private String idArchivoOrdenCompra;
+    private String idArchivoOrdenCompra;
     private String nombreEtapaOportunidad;
-    
-    
+    private String fechaCierreMostrar;
+    private String probabilidadEjecucion;
+    private String probabilidadExito;
 
     private List<ProductoVO> productos;
     private List<Observacion> observaciones;
     private List<Visita> eventos;
     private List<Cotizacion> cotizaciones;
+    private List<Modelo> modelos;
+
+    //Hard Fixed Code
+    private String concecutivoCotizacion;
+    private String producto;
+    private String marca;
+    private String modelo;
+    private String moneda;
+    private String trmOportunidad;
+    private String valorOriginal;
+    private String fechaEstimadaFacturacion;
+    private String probabilidadNegocio;
+    //
+    private Marca idMarca;
+    private Modelo idModelo;
+    private Producto idProducto;
+    private ImodeloServiceLocal imodeloServiceLocal;
+    private IProductoServiceLocal iProductoServiceLocal;
+    private List<Producto> productosOp;
+    private Date fechaCierreDate;
 
     public Oportunidad() {
     }
-    
+
+    public Oportunidad(OportunidadVO vo, ImodeloServiceLocal imodeloServiceLocal, IProductoServiceLocal iProductoServiceLocal) {
+        this(vo);
+        this.imodeloServiceLocal = imodeloServiceLocal;
+        this.iProductoServiceLocal = iProductoServiceLocal;
+    }
+
+    public Oportunidad(OportunidadMasivoVO vo, ImodeloServiceLocal imodeloServiceLocal, IProductoServiceLocal iProductoServiceLocal) {
+        this.imodeloServiceLocal = imodeloServiceLocal;
+        this.iProductoServiceLocal = iProductoServiceLocal;
+        setOportunidad(vo);
+
+    }
+
+    private void setOportunidad(OportunidadMasivoVO vo) {
+        this.idOportunidad = vo.getIdOportunidad();
+        this.nombreOportunidad = vo.getDescripcion();
+        this.idEstadoOportunidad = vo.getEstadoOportunidad();
+        this.nombreEtapa = vo.getEtapaOportunidad();
+        this.fechaCierre = vo.getFechaCierre();
+        this.idIncoterm = vo.getIncoterm();
+        this.idMoneda = vo.getMoneda();
+        this.monto = vo.getMonto();
+        this.valorOriginal = vo.getMonto();                
+        this.nit = vo.getNitCliente();
+        this.nombreCliente = vo.getNombreCliente();
+        this.nombreOportunidad = vo.getNombreOportunidad();
+        this.idProbabilidadEjecucion = vo.getProbabilidadEjecucion();
+        this.idProbabilidadExito = vo.getProbabilidadExito();
+        this.idTipoOportunidad = vo.getTipoOportunidad();
+        this.idCanalEntrada = vo.getCanalEntrada();
+        this.fechaCierreMostrar = vo.getFechaCierre();
+        this.producto = vo.getProducto();
+        this.marca = vo.getMarca();
+        this.modelo = vo.getModelo();
+        this.moneda = vo.getMoneda();
+        this.fechaCierreDate = DateOracleFormate.convertToDate(vo.getFechaCierre());
+        setMarcaModeloByProductEntity();
+        calcularProbalidad();
+
+    }
+
+    private void setMarcaModeloByProductEntity() throws NumberFormatException {
+        try {
+            Producto productoEntity = iProductoServiceLocal.buscarProducto(Long.valueOf(this.producto));
+            this.idMarca = new Marca();
+            this.idMarca.setNombre(productoEntity.getIdModelo().getIdMarca().getNombre());
+            this.idModelo = new Modelo();
+            this.idModelo.setNombre(productoEntity.getIdModelo().getNombre());
+            this.idProducto = new Producto();
+            this.idProducto.setDescripcion(productoEntity.getDescripcion());
+        } catch (ServiceException ex) {
+            Logger.getLogger(Oportunidad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public Oportunidad(OportunidadVO vo) {
         idOportunidad = vo.getIdOportunidad();
         nombreOportunidad = vo.getDescripcion();
-        
+
         idEstadoOportunidad = vo.getEstadoOportunidad();
         nombreEtapa = vo.getEtapaOportunidad();
-        
+
         fechaCierre = vo.getFechaCierre();
-        
+
         idIncoterm = vo.getIncoterm();
-        idMoneda= vo.getMoneda();
+        idMoneda = vo.getMoneda();
         monto = vo.getMonto();
         nit = vo.getNitCliente();
         nombreCliente = vo.getNombreCliente();
@@ -78,15 +166,74 @@ public class Oportunidad {
         idProbabilidadEjecucion = vo.getProbabilidadEjecucion();
         idProbabilidadExito = vo.getProbabilidadExito();
         idTipoOportunidad = vo.getTipoOportunidad();
-        idCanalEntrada=vo.getCanalEntrada();
-        if(vo.getIdArchivoOrdenCompra()!=null){
-            idArchivoOrdenCompra=vo.getIdArchivoOrdenCompra().trim();
+        idCanalEntrada = vo.getCanalEntrada();
+        if (vo.getIdArchivoOrdenCompra() != null) {
+            idArchivoOrdenCompra = vo.getIdArchivoOrdenCompra().trim();
         }
-        
+        fechaCierreMostrar = vo.getFechaCierre();
+        this.concecutivoCotizacion = "01-COT";
+        this.producto = "PR-01-MAC-APPLE";
+        this.marca = "DELL";
+        this.modelo = "Model";
+        this.moneda = "COP";
+        this.trmOportunidad = "0.1";
+        this.valorOriginal = "200000";
+        this.fechaEstimadaFacturacion = vo.getFechaCierre();
+        this.probabilidadNegocio = "Baja";
+        this.idMarca = new Marca();
+        this.idMarca.setNombre("DELL");
+        this.idModelo = new Modelo();
+        this.idModelo.setNombre("Model1");
+        this.idProducto = new Producto();
+        this.idProducto.setDescripcion("PR-01-MAC-APPLE");
+        calcularProbalidad();
         //vo.getDivision();
         //vo.getIdAsesor();
     }
-    
+
+    public void cargarModelos() {
+        System.out.println("Cargando Modelos by marcas " + this.idMarca.getIdMarca());
+        try {
+            modelos = imodeloServiceLocal.buscarModeloPorMarca(this.idMarca.getIdMarca());
+        } catch (ServiceException ex) {
+            System.out.println("Error cargando modelo msg : " + ex.getMessage());
+            modelos = new ArrayList<Modelo>();
+        }
+    }
+
+    public void cargarProducto() {
+
+        try {
+            productosOp = iProductoServiceLocal.buscarProductos(idMarca.getLinea(), "", null, idMarca.getIdMarca(), idModelo.getIdModelo());
+        } catch (ServiceException ex) {
+            System.out.println("Error cargando modelo msg : " + ex.getMessage());
+            productos = new ArrayList<ProductoVO>();
+        }
+
+    }
+
+    public void calcularProbalidad() {
+        System.out.println("probabilidadEjecucion -> " + this.probabilidadEjecucion);
+        System.out.println("probabilidadExito -> " + this.probabilidadExito);
+        if (idProbabilidadEjecucion == null || this.idProbabilidadExito == null) {
+            this.probabilidadNegocio = "0%";
+        } else {
+            System.out.println("probabilidadEjecucion-> " + this.idProbabilidadEjecucion);
+            System.out.println("probabilidadExito-> " + this.idProbabilidadExito);
+            if (this.idProbabilidadEjecucion.toLowerCase().contains("alta") && this.idProbabilidadExito.toLowerCase().contains("alta")) {
+                this.probabilidadNegocio = "80%";
+            } else if (this.idProbabilidadEjecucion.toLowerCase().contains("alta") && this.idProbabilidadExito.toLowerCase().contains("media")) {
+                this.probabilidadNegocio = "50%";
+            } else if (this.idProbabilidadEjecucion.toLowerCase().contains("media") && this.idProbabilidadExito.toLowerCase().contains("alta")) {
+                this.probabilidadNegocio = "50%";
+            } else if (this.idProbabilidadEjecucion.toLowerCase().contains("media") && this.idProbabilidadExito.toLowerCase().contains("media")) {
+                this.probabilidadNegocio = "50%";
+            } else {
+                this.probabilidadNegocio = "10%";
+            }
+            System.out.println(" probabilidadNegocio " + probabilidadNegocio);
+        }
+    }
 
     public String getIdOportunidad() {
         return idOportunidad;
@@ -350,6 +497,150 @@ public class Oportunidad {
 
     public void setNombreEtapaOportunidad(String nombreEtapaOportunidad) {
         this.nombreEtapaOportunidad = nombreEtapaOportunidad;
+    }
+
+    public String getFechaCierreMostrar() {
+        return DateOracleFormate.formatToGrid(this.fechaCierreDate);
+    }
+
+    public void setFechaCierreMostrar(String fechaCierreMostrar) {
+        this.fechaCierreMostrar = fechaCierreMostrar;
+    }
+
+    public String getProbabilidadEjecucion() {
+        return probabilidadEjecucion;
+    }
+
+    public void setProbabilidadEjecucion(String probabilidadEjecucion) {
+        this.probabilidadEjecucion = probabilidadEjecucion;
+    }
+
+    public String getProbabilidadExito() {
+        return probabilidadExito;
+    }
+
+    public void setProbabilidadExito(String probabilidadExito) {
+        this.probabilidadExito = probabilidadExito;
+    }
+
+    public String getConcecutivoCotizacion() {
+        return concecutivoCotizacion;
+    }
+
+    public void setConcecutivoCotizacion(String concecutivoCotizacion) {
+        this.concecutivoCotizacion = concecutivoCotizacion;
+    }
+
+    public String getProducto() {
+        return producto;
+    }
+
+    public void setProducto(String producto) {
+        this.producto = producto;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public String getTrmOportunidad() {
+        return trmOportunidad;
+    }
+
+    public void setTrmOportunidad(String trmOportunidad) {
+        this.trmOportunidad = trmOportunidad;
+    }
+
+    public String getValorOriginal() {
+        return valorOriginal;
+    }
+
+    public void setValorOriginal(String valorOriginal) {
+        this.valorOriginal = valorOriginal;
+    }
+
+    public String getFechaEstimadaFacturacion() {
+        return fechaEstimadaFacturacion;
+    }
+
+    public void setFechaEstimadaFacturacion(String fechaEstimadaFacturacion) {
+        this.fechaEstimadaFacturacion = fechaEstimadaFacturacion;
+    }
+
+    public String getProbabilidadNegocio() {
+        return probabilidadNegocio;
+    }
+
+    public void setProbabilidadNegocio(String probabilidadNegocio) {
+        this.probabilidadNegocio = probabilidadNegocio;
+    }
+
+    public Marca getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(Marca idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    public List<Modelo> getModelos() {
+        return modelos;
+    }
+
+    public void setModelos(List<Modelo> modelos) {
+        this.modelos = modelos;
+    }
+
+    public Modelo getIdModelo() {
+        return idModelo;
+    }
+
+    public void setIdModelo(Modelo idModelo) {
+        this.idModelo = idModelo;
+    }
+
+    public Producto getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Producto idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public List<Producto> getProductosOp() {
+        return productosOp;
+    }
+
+    public void setProductosOp(List<Producto> productosOp) {
+        this.productosOp = productosOp;
+    }
+
+    public Date getFechaCierreDate() {
+        return fechaCierreDate;
+    }
+
+    public void setFechaCierreDate(Date fechaCierreDate) {
+        this.fechaCierreDate = fechaCierreDate;
     }
     
     

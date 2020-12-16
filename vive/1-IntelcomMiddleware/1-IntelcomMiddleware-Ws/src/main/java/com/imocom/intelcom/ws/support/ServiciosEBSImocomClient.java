@@ -104,24 +104,31 @@ public class ServiciosEBSImocomClient {
             return response;
 
         } catch (MalformedURLException ex) {
+            System.out.println("error mdw "+ex.getMessage());
             logger.error(ex.getMessage());
             throw new CommonException(ex.getMessage(), ex);
         } catch (IllegalAccessException ex) {
+            System.out.println("error mdw "+ex.getMessage());
             logger.error(ex.getMessage());
             throw new CommonException(ex.getMessage(), ex);
         } catch (IllegalArgumentException ex) {
+            System.out.println("error mdw "+ex.getMessage());
             logger.error(ex.getMessage());
             throw new CommonException(ex.getMessage(), ex);
         } catch (InvocationTargetException ex) {
+            System.out.println("error mdw "+ex.getMessage());
             logger.error(ex.getMessage());
             throw new CommonException(ex.getMessage(), ex);
         } catch (ClassNotFoundException ex) {
+            System.out.println("error mdw "+ex.getMessage());
             logger.error(ex.getMessage());
             throw new CommonException(ex.getMessage(), ex);
         }  catch (SecurityException ex) {
+            System.out.println("error mdw "+ex.getMessage());
             logger.error(ex.getMessage());
             throw new CommonException(ex.getMessage(), ex);
         } catch (Exception ex) {
+            System.out.println("error mdw "+ex.getMessage());
             ex.printStackTrace();
             logger.error(ex.getMessage());
             throw new CommonException(ex.getMessage(), ex);

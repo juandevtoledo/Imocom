@@ -1,0 +1,7 @@
+com\imocom\intelcom\ws\fault\IntelcomMiddlewareFault.class
+com\imocom\intelcom\ws\exception\IntelcomMiddlewareException.class
+com\imocom\intelcom\ws\client\IntelcomWSClient.class
+com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareService.class
+com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareServiceRequestVO.class
+com\imocom\intelcom\ws\interfaces\jaxws\MiddlewareServiceResponse.class
+com\imocom\intelcom\ws\interfaces\IIntelcomMiddleware.class

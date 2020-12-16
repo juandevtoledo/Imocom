@@ -8,6 +8,8 @@
  */
 package com.imocom.intelcom.persistence.entities;
 
+import com.imocom.intelcom.persistence.AbstractEntity;
+import com.imocom.intelcom.persistence.IDataModel;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Moneda.findAll", query = "SELECT m FROM Moneda m"),
     @NamedQuery(name = "Moneda.findByIdMoneda", query = "SELECT m FROM Moneda m WHERE m.idMoneda = :idMoneda"),
     @NamedQuery(name = "Moneda.findByNombre", query = "SELECT m FROM Moneda m WHERE m.nombre = :nombre")})
-public class Moneda implements Serializable {
+public class Moneda extends AbstractEntity implements Serializable, IDataModel {
 
     private static final long serialVersionUID = 1L;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -102,6 +104,14 @@ public class Moneda implements Serializable {
     @Override
     public String toString() {
         return "com.imocom.intelcom.persistence.entities.Moneda[ idMoneda=" + idMoneda + " ]";
+    }
+
+    public String getKeyModel() {
+         if (this.idMoneda != null) {
+            return String.valueOf(this.idMoneda);
+        }
+
+        return null;
     }
     
 }

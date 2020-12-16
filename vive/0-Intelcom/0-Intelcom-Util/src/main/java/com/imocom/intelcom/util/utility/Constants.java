@@ -146,6 +146,10 @@ public interface Constants {
     String WS_CLIENTE_CONSULTA_EXISTE = "EBS_WS_CLIENT_CONS_EXISTE";
     String WS_EBS_MODEL_X_MARCA_INVENTARIO = "EBS_WS_MODEL_X_MARCA_INV";
     String WS_EBS_CONSULTA_PRODUCTOS_INVENTARIO = "EBS_WS_CONSULTA_PROD_INV";
+    String WS_OPORTUNIDADESCONSULTAASESORMASIVO = "EBS_WS_OPORTUNIDADESCONSULTAASESORMASIVO";
+    String WS_OPORTUNIDADESASIGNARASESOR = "EBS_WS_OPORTUNIDADESASIGNARASESOR";
+    String WS_CLIENTEASIGNARASESOR = "EBS_WS_CLIENTEASIGNARASESOR";
+    String WS_OPORTUNIDADACTUALIZAR = "EBS_WS_OPORTUNIDADACTUALIZAR";
     
     // Constantes de navegabilidad
     String REDIRECT_PARAM = "REDIRECT";
@@ -212,6 +216,9 @@ public interface Constants {
     
     String PAGE_LEAD_CONSULTAR_KEY = "redirect.view.page.leads.consultar";
     String PAGE_LEAD_EDITAR_KEY = "redirect.view.page.leads.crear";
+    
+    String PAGE_PRODUCTO_CONSULTAR_KEY = "redirect.view.page.productos.version";
+     String PAGE_PRODUCTO_CREAR_KEY = "redirect.view.page.productos.crear";
     
     String WS_PROCESS_ENTITY_RESULTADO_VISITA = "com.imocom.intelcom.ws.ebs.vo.entities.ResultadoVisitaVO";
     String WS_PROCESS_ENTITY_RESULTADO_COTIZACION = "com.imocom.intelcom.ws.ebs.vo.entities.CotizacionesVO";

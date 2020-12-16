@@ -47,16 +47,19 @@ public class IntelcomMiddlewareService implements IIntelcomMiddleware {
     public String doProcess(MiddlewareServiceRequestVO request) throws IntelcomMiddlewareException {
         
         try {
+            System.out.println("request "+request);
             Object response = _client.consumeService(request);
             String responseString="";
+            logger.info("responseString "+response);
             if(response!=null){
                 responseString = WebserviceUtil.marshal(response);
             }
             return responseString;
         } catch (CommonException ex) {
             ex.printStackTrace();
+            System.out.println("Error middelware "+ex.getMessage());
             //logger.error(MENSAJE_LOG.concat(", detalles: ".concat(ex.getMessage())));
-            logger.error(MENSAJE_LOG  + "(, detalles:" + ex.getMessage());
+            logger.error(MENSAJE_LOG  + "(, detalles:" + ex.getMessage(),ex);
             
             IntelcomMiddlewareFault fault = new IntelcomMiddlewareFault();
             fault.setFaultCode("MID-001");
@@ -64,8 +67,8 @@ public class IntelcomMiddlewareService implements IIntelcomMiddleware {
             
             throw new IntelcomMiddlewareException(MENSAJE_LOG, fault); 
         } catch (JAXBException ex) {
-            logger.error(MENSAJE_LOG + ", detalles: " + ex.getMessage());
-            
+            System.out.println("Error middelware "+ex.getMessage());
+            logger.error(MENSAJE_LOG + ", detalles: " + ex.getMessage(),ex);            
             IntelcomMiddlewareFault fault = new IntelcomMiddlewareFault();
             fault.setFaultCode("MID-002");
             fault.setFaultInfo("detalles: " + ex.getMessage());

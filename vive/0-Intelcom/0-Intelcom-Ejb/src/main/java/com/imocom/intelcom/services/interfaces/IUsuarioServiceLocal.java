@@ -70,5 +70,13 @@ public interface IUsuarioServiceLocal extends IService<Long, Usuario> {
      * @throws ServiceException 
      */
     List<Usuario> findByNombreParcialUsuario(String nombre) throws ServiceException;
+    /**
+     * Metodo para buscar usuarios x linea x asesor
+     * @param linea
+     * @param role
+     * @return
+     * @throws ServiceException 
+     */
+    List<Usuario> findByLineaAndRole(String linea, Long role) throws ServiceException;
     
 }

@@ -5,8 +5,10 @@
  */
 package com.imocom.intelcom.view.beans;
 
+import com.imocom.intelcom.persistence.entities.Moneda;
 import com.imocom.intelcom.persistence.entities.ServiciosEbs;
 import com.imocom.intelcom.persistence.entities.Tipo;
+import com.imocom.intelcom.services.interfaces.IMonedaServiceLocal;
 import com.imocom.intelcom.services.interfaces.IServiciosEBSLocal;
 import com.imocom.intelcom.services.interfaces.ITipoServiceLocal;
 import com.imocom.intelcom.services.util.ServiceException;
@@ -88,6 +90,7 @@ public class OportunidadesClientesFacesBean extends AbstractFacesBean implements
     private int numeroParametrosWS = 0;
     private MiddlewareServiceRequestVO requestActualizarOportunidad;
     private int numeroParametrosActualizarOportunidadWS = 0;
+    private List<Moneda> listaMonedas;
 
     private ClienteVO clienteSeleccionado;
 
@@ -96,6 +99,8 @@ public class OportunidadesClientesFacesBean extends AbstractFacesBean implements
 
     @EJB
     private IServiciosEBSLocal iServiciosESB;
+    @EJB
+    private IMonedaServiceLocal imonedaServiceLocal;
 
     @Override
     protected void build() {
@@ -111,6 +116,8 @@ public class OportunidadesClientesFacesBean extends AbstractFacesBean implements
 
             //Consulta de tipos de Estado de la oportunidad
             listaEstadosOportunidad = iTipoService.findByTipoNombre(TIPO_OPORTUNIDAD_ESTADO_FILTRO);
+            //Monedas
+            listaMonedas = imonedaServiceLocal.buscarMonedas();
 
             clienteSeleccionado = (ClienteVO) getSessionMap().get(CLIENT_ID_PARAM);
             if (clienteSeleccionado == null || (getRequest().getParameter(SPECIFIC_MENU_OP_REQUEST_ID_PARAM) != null)) {
@@ -274,9 +281,9 @@ public class OportunidadesClientesFacesBean extends AbstractFacesBean implements
                 }
             });
         } catch (IntelcomMiddlewareException ex) {
-            logger.error(ex.getMessage());
+            logger.error("Mdw error " + ex.getMessage(),ex);
         } catch (UtilException ex) {
-            logger.error(ex.getMessage());
+            logger.error("Mdw error " + ex.getMessage(),ex);
         }
 
     }
@@ -517,5 +524,15 @@ public class OportunidadesClientesFacesBean extends AbstractFacesBean implements
     public void setListaEstadosOportunidad(List<Tipo> listaEstadosOportunidad) {
         this.listaEstadosOportunidad = listaEstadosOportunidad;
     }
+
+    public List<Moneda> getListaMonedas() {
+        return listaMonedas;
+    }
+
+    public void setListaMonedas(List<Moneda> listaMonedas) {
+        this.listaMonedas = listaMonedas;
+    }
+    
+    
 
 }

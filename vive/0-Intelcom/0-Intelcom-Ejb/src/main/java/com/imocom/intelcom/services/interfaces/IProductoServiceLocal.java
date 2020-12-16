@@ -8,7 +8,6 @@
  */
 package com.imocom.intelcom.services.interfaces;
 
-import com.imocom.intelcom.persistence.entities.ContadorCotLinea;
 import com.imocom.intelcom.persistence.entities.Producto;
 import com.imocom.intelcom.services.util.ServiceException;
 import java.util.List;
@@ -20,7 +19,13 @@ import javax.ejb.Local;
  */
 @Local
 public interface IProductoServiceLocal {
+
+    public List<Producto> buscarProductos(String linea, String descripcion, Long tipo, Long idMarca, Long Modelo) throws ServiceException;
+
+    public Producto crear(Producto producto) throws ServiceException;
     
-    public List<Producto> buscarProductos(String descripcion) throws ServiceException;
+    public Producto editar(Producto producto) throws ServiceException;
     
+     public Producto buscarProducto(Long idProducto) throws ServiceException;
+
 }

@@ -218,9 +218,9 @@ public class OportunidadesDetalleFacesBean extends AbstractFacesBean implements 
             productos = response.getProductos();
 
         } catch (IntelcomMiddlewareException ex) {
-            logger.error("Error al busar productos de una oportunidad, " + ex.getMessage());
+            logger.error("Error al busar productos de una oportunidad, " + ex.getMessage(),ex);
         } catch (UtilException ex) {
-            logger.error("Error al busar productos de una oportunidad, " + ex.getMessage());
+            logger.error("Error al busar productos de una oportunidad, " + ex.getMessage(),ex);
         }
     }
 
